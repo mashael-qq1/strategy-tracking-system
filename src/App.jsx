@@ -607,8 +607,12 @@ const HealthGauge = ({ health, weights }) => {
 /* ============================================================================
    FILTER BAR
 ============================================================================ */
-function FilterBar({ filters, setFilters, objectives, streams }) {
+function FilterBar({ filters, setFilters, objectives, streams, lockedOwner }) {
   const owners = useMemo(() => Array.from(new Set(objectives.map(o => o.owner))).sort(), [objectives]);
+  const objectiveOptions = useMemo(
+    () => (lockedOwner ? objectives.filter(o => o.owner === lockedOwner) : objectives),
+    [objectives, lockedOwner]
+  );
   const statuses = ["On Track", "At Risk", "Delayed", "Completed", "Not Started"];
   const Select = ({ label, value, onChange, options }) => (
     <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 128 }}>
@@ -624,7 +628,8 @@ function FilterBar({ filters, setFilters, objectives, streams }) {
       </select>
     </div>
   );
-  const active = Object.values(filters).some(v => v);
+  const resetTarget = { stream: "", objective: "", owner: lockedOwner || "", status: "" };
+  const active = Object.entries(filters).some(([k, v]) => v && !(lockedOwner && k === "owner"));
   return (
     <div style={{
       display: "flex", alignItems: "flex-end", gap: 14, padding: "14px 24px",
@@ -632,11 +637,13 @@ function FilterBar({ filters, setFilters, objectives, streams }) {
     }}>
       <Filter size={15} color={T.inkFaint} style={{ marginBottom: 9 }} />
       <Select label="Stream" value={filters.stream} onChange={v => setFilters(f => ({ ...f, stream: v }))} options={streams.map(s => s.name)} />
-      <Select label="Objective" value={filters.objective} onChange={v => setFilters(f => ({ ...f, objective: v }))} options={objectives.map(o => `O${o.number} · ${o.title}`)} />
-      <Select label="Owner" value={filters.owner} onChange={v => setFilters(f => ({ ...f, owner: v }))} options={owners} />
+      <Select label="Objective" value={filters.objective} onChange={v => setFilters(f => ({ ...f, objective: v }))} options={objectiveOptions.map(o => `O${o.number} · ${o.title}`)} />
+      {!lockedOwner && (
+        <Select label="Owner" value={filters.owner} onChange={v => setFilters(f => ({ ...f, owner: v }))} options={owners} />
+      )}
       <Select label="Status" value={filters.status} onChange={v => setFilters(f => ({ ...f, status: v }))} options={statuses} />
       {active && (
-        <button onClick={() => setFilters({ stream: "", objective: "", owner: "", status: "" })}
+        <button onClick={() => setFilters(resetTarget)}
           style={{
             display: "flex", alignItems: "center", gap: 5, border: `1px solid ${T.border}`, background: T.bg,
             borderRadius: 8, padding: "7px 12px", fontSize: 12.5, fontWeight: 600, color: T.inkMuted, cursor: "pointer", marginBottom: 1,
@@ -1779,25 +1786,18 @@ export default function App() {
       <Sidebar page={page} setPage={setPage} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <TopBar forecastMode={forecastMode} setForecastMode={setForecastMode} />
-        {initialOwner && filters.owner === initialOwner && (
+        {initialOwner && (
           <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
+            display: "flex", alignItems: "center", gap: 8,
             padding: "10px 24px", background: T.plumSoft, borderBottom: `1px solid ${T.border}`,
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: T.navy, fontWeight: 600 }}>
-              <Users size={15} color={T.plum} />
+            <Users size={15} color={T.plum} />
+            <span style={{ fontSize: 13, color: T.navy, fontWeight: 600 }}>
               Personal view for <span style={{ color: T.plum }}>{initialOwner}</span> — showing only their objectives
-            </div>
-            <button onClick={() => setFilters(f => ({ ...f, owner: "" }))}
-              style={{
-                border: `1px solid ${T.plum}`, background: T.bg, color: T.plum, borderRadius: 7,
-                padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
-              }}>
-              View all objectives
-            </button>
+            </span>
           </div>
         )}
-        <FilterBar filters={filters} setFilters={setFilters} objectives={liveObjectives} streams={RAW.streams} />
+        <FilterBar filters={filters} setFilters={setFilters} objectives={liveObjectives} streams={RAW.streams} lockedOwner={initialOwner} />
         <div style={{ flex: 1, overflow: "auto", padding: 24, background: T.surface2 }}>
           {forecastMode && (
             <div style={{ marginBottom: 18 }}>
