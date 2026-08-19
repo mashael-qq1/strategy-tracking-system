@@ -1538,6 +1538,7 @@ function MilestonesCard({ objectives }) {
 function RisksPage({ objectives, forecastOverrides }) {
   const items = buildAttentionItems(objectives, forecastOverrides);
   const objById = Object.fromEntries(objectives.map(o => [o.id, o]));
+  const scopedRisks = RAW.risks.filter(r => objById[r.objective]);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <SectionLabel icon={AlertTriangle}>Needs Your Attention — {items.length} items</SectionLabel>
@@ -1546,7 +1547,9 @@ function RisksPage({ objectives, forecastOverrides }) {
       </Card>
       <SectionLabel icon={AlertTriangle}>Logged Risks & Blockers</SectionLabel>
       <Card style={{ padding: 0 }}>
-        {RAW.risks.map((r, i) => {
+        {scopedRisks.length === 0 ? (
+          <div style={{ padding: 16, fontSize: 13, color: T.inkMuted }}>No logged risks for the current view.</div>
+        ) : scopedRisks.map((r, i) => {
           const o = objById[r.objective];
           return (
             <div key={r.id} style={{ display: "grid", gridTemplateColumns: "90px 1fr 100px 100px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
