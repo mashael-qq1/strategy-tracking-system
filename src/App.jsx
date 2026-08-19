@@ -1700,11 +1700,30 @@ function ForecastPanel({ objectives, streams, forecastOverrides, setForecastOver
 }
 
 /* ============================================================================
+   URL-BASED OWNER LINKS  (?owner=Leen / ?owner=Yasser / ?owner=Baghdady / ?owner=Randa)
+   Lets each objective owner get a personal link that auto-filters to their
+   own objectives — no separate deploy needed, same repo & same Vercel project.
+============================================================================ */
+const KNOWN_OWNERS = ["Yasser", "Leen", "Baghdady", "Randa"];
+function getOwnerFromUrl() {
+  if (typeof window === "undefined") return "";
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("owner");
+    if (!raw) return "";
+    return KNOWN_OWNERS.find(o => o.toLowerCase() === raw.trim().toLowerCase()) || "";
+  } catch {
+    return "";
+  }
+}
+
+/* ============================================================================
    ROOT APP
 ============================================================================ */
 export default function App() {
-  const [page, setPage] = useState("overview");
-  const [filters, setFilters] = useState({ stream: "", objective: "", owner: "", status: "" });
+  const initialOwner = useMemo(() => getOwnerFromUrl(), []);
+  const [page, setPage] = useState(initialOwner ? "objectives" : "overview");
+  const [filters, setFilters] = useState({ stream: "", objective: "", owner: initialOwner, status: "" });
   const [selectedObjective, setSelectedObjective] = useState(null);
   const [forecastMode, setForecastMode] = useState(false);
   const [forecastOverrides, setForecastOverrides] = useState({});
@@ -1760,6 +1779,24 @@ export default function App() {
       <Sidebar page={page} setPage={setPage} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <TopBar forecastMode={forecastMode} setForecastMode={setForecastMode} />
+        {initialOwner && filters.owner === initialOwner && (
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "10px 24px", background: T.plumSoft, borderBottom: `1px solid ${T.border}`,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: T.navy, fontWeight: 600 }}>
+              <Users size={15} color={T.plum} />
+              Personal view for <span style={{ color: T.plum }}>{initialOwner}</span> — showing only their objectives
+            </div>
+            <button onClick={() => setFilters(f => ({ ...f, owner: "" }))}
+              style={{
+                border: `1px solid ${T.plum}`, background: T.bg, color: T.plum, borderRadius: 7,
+                padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+              }}>
+              View all objectives
+            </button>
+          </div>
+        )}
         <FilterBar filters={filters} setFilters={setFilters} objectives={liveObjectives} streams={RAW.streams} />
         <div style={{ flex: 1, overflow: "auto", padding: 24, background: T.surface2 }}>
           {forecastMode && (
