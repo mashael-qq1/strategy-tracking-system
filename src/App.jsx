@@ -678,7 +678,8 @@ const NAV_ITEMS = [
   { id: "compliance", label: "Update Compliance", icon: CheckSquare },
 ];
 
-function Sidebar({ page, setPage, collapsedMobile }) {
+function Sidebar({ page, setPage, lockedOwner }) {
+  const items = lockedOwner ? NAV_ITEMS.filter(i => i.id !== "overview") : NAV_ITEMS;
   return (
     <div style={{
       width: 240, minWidth: 240, background: T.navyDeep, height: "100%",
@@ -689,7 +690,7 @@ function Sidebar({ page, setPage, collapsedMobile }) {
         <div style={{ fontSize: 17, fontWeight: 800, color: "#fff", fontFamily: FONT, lineHeight: 1.25 }}>Strategy Command<br/>Center</div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
-        {NAV_ITEMS.map(item => {
+        {items.map(item => {
           const Icon = item.icon;
           const activeItem = page === item.id;
           return (
@@ -1783,7 +1784,7 @@ export default function App() {
 
   return (
     <div style={{ fontFamily: FONT, color: T.ink, height: "100%", minHeight: 640, display: "flex", background: T.bg, borderRadius: 12, overflow: "hidden", border: `1px solid ${T.border}` }}>
-      <Sidebar page={page} setPage={setPage} />
+      <Sidebar page={page} setPage={setPage} lockedOwner={initialOwner} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <TopBar forecastMode={forecastMode} setForecastMode={setForecastMode} />
         {initialOwner && (
