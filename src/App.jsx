@@ -4,7 +4,8 @@ import {
   CalendarRange, AlertTriangle, CheckSquare, Lightbulb, X, ChevronRight,
   ChevronDown, Search, RotateCcw, Bell, Clock, Users, TrendingUp, TrendingDown,
   Minus, Link2, MessageSquare, Paperclip, History, Sliders, Check, ArrowRight,
-  Filter, ExternalLink
+  Filter, ExternalLink, Settings as SettingsIcon, Download, Upload, AlertCircle,
+  Pencil, Trash2, Plus
 } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RTooltip,
@@ -57,6 +58,7 @@ const MONO = `'IBM Plex Mono', 'SFMono-Regular', monospace`;
    JSON DATA MODEL  (kept separate from presentation logic)
 ============================================================================ */
 const TODAY = new Date("2026-08-17");
+const TODAY_STR = "2026-08-17";
 const d = (s) => new Date(s);
 const daysBetween = (a, b) => Math.round((b - a) / 86400000);
 
@@ -106,24 +108,70 @@ const O1 = {
       history:[
         {date:"2026-08-05", prev:80, next:100, summary:"Final review incorporated; standard published.", blockers:"None", next2:"Roll into training workshop.", by:"Yasser"},
         {date:"2026-07-22", prev:40, next:80, summary:"Draft circulated for stakeholder review.", blockers:"Waiting on Leen's traceability alignment.", next2:"Close review loop.", by:"Yasser"},
+      ],
+      activities: [
+        { id:"act-1-1-1", name:"Review existing discovery templates", phase:"As-Is Scan", date:"2026-07-10", quarter:"Q1", plannedStart:"2026-07-10", plannedEnd:"2026-07-24", subActivities:[
+          { id:"sub-1-1-1-1", name:"Collect last 5 discovery docs", done:true },
+          { id:"sub-1-1-1-2", name:"Identify gaps vs current standard", done:true },
+        ]},
+        { id:"act-1-1-2", name:"Draft the discovery output standard", phase:"Standard", date:"2026-07-20", quarter:"Q1", plannedStart:"2026-07-20", plannedEnd:"2026-08-03", subActivities:[
+          { id:"sub-1-1-2-1", name:"Write structure & required sections", done:true },
+          { id:"sub-1-1-2-2", name:"Circulate for review", done:true },
+        ]},
+        { id:"act-1-1-3", name:"Publish & socialize standard", phase:"Scale", date:"2026-08-05", quarter:"Q1", plannedStart:"2026-08-05", plannedEnd:"2026-08-19", subActivities:[
+          { id:"sub-1-1-3-1", name:"Announce in team meeting", done:true },
+        ]},
       ]},
     { id:"i1-2", name:"Pre-Sales Discovery with BD", owner:"Sara", start:"2026-08-01", due:"2026-09-15", progress:55, priority:"High", phase:"Pilot", nextMilestone:"First joint discovery call", deps:["BD calendar alignment"], risks:"BD availability limited in Q3.", comments:"Piloting with one active opportunity.", evidence:"drive://pre-sales-pilot", updatedBy:"Sara",
       history:[
         {date:"2026-08-11", prev:35, next:55, summary:"Pilot kicked off with BD team on Acme opportunity.", blockers:"BD calendar constraints.", next2:"Run second pilot call.", by:"Sara"},
+      ],
+      activities: [
+        { id:"act-1-2-1", name:"Map current pre-sales discovery gaps", phase:"As-Is Scan", date:"2026-07-15", quarter:"Q1", plannedStart:"2026-07-15", plannedEnd:"2026-07-29", subActivities:[
+          { id:"sub-1-2-1-1", name:"Interview BD lead", done:true },
+        ]},
+        { id:"act-1-2-2", name:"Define standard pre-sales discovery flow", phase:"Standard", date:"2026-08-01", quarter:"Q1", plannedStart:"2026-08-01", plannedEnd:"2026-08-15", subActivities:[
+          { id:"sub-1-2-2-1", name:"Draft flow doc", done:true },
+          { id:"sub-1-2-2-2", name:"Get BD sign-off", plannedStart:"2026-08-05", plannedEnd:"2026-08-19", done:false },
+        ]},
+        { id:"act-1-2-3", name:"Run pilot on Acme opportunity", phase:"Pilot", date:"2026-10-10", quarter:"Q2", plannedStart:"2026-10-10", plannedEnd:"2026-10-24", subActivities:[
+          { id:"sub-1-2-3-1", name:"Schedule joint discovery call", done:true },
+          { id:"sub-1-2-3-2", name:"Debrief & capture learnings", plannedStart:"2026-10-12", plannedEnd:"2026-10-19", done:false },
+        ]},
       ]},
     { id:"i1-3", name:"Discovery Sign-off SLA", owner:"Yasser", start:"2026-08-15", due:"2026-09-30", progress:30, priority:"Medium", phase:"Design", nextMilestone:"SLA draft to leadership", deps:["Discovery Output Standard"], risks:"None", comments:"Drafting turnaround targets per engagement size.", evidence:"—", updatedBy:"Yasser",
       history:[
         {date:"2026-08-01", prev:10, next:30, summary:"SLA tiers drafted for small/medium/large engagements.", blockers:"None", next2:"Circulate for feedback.", by:"Yasser"},
+      ],
+      activities: [
+        { id:"act-1-3-1", name:"Baseline current sign-off turnaround", phase:"As-Is Scan", date:"2026-07-25", quarter:"Q1", plannedStart:"2026-07-25", plannedEnd:"2026-08-08", subActivities:[
+          { id:"sub-1-3-1-1", name:"Pull last 10 engagement sign-off dates", done:true },
+        ]},
+        { id:"act-1-3-2", name:"Draft SLA tiers", phase:"Standard", date:"2026-08-10", quarter:"Q1", plannedStart:"2026-08-10", plannedEnd:"2026-08-24", subActivities:[
+          { id:"sub-1-3-2-1", name:"Define small/medium/large tiers", done:true },
+          { id:"sub-1-3-2-2", name:"Circulate to leadership", plannedStart:"2026-08-11", plannedEnd:"2026-08-25", done:false },
+        ]},
       ]},
     { id:"i1-4", name:"Discovery Repository", owner:"Fahad", start:"2026-08-01", due:"2026-08-20", progress:100, priority:"Medium", phase:"Closed", nextMilestone:"—", deps:[], risks:"None", comments:"Central repository live on SharePoint.", evidence:"sp://ba/discovery-repo", updatedBy:"Fahad", history:[
         {date:"2026-08-08", prev:70, next:100, summary:"Repository launched with folder taxonomy.", blockers:"None", next2:"Backfill historical discoveries.", by:"Fahad"},
+      ],
+      activities: [
+        { id:"act-1-4-1", name:"Assess current document sprawl", phase:"As-Is Scan", date:"2026-07-12", quarter:"Q1", plannedStart:"2026-07-12", plannedEnd:"2026-07-26", subActivities:[
+          { id:"sub-1-4-1-1", name:"Inventory existing folders", done:true },
+        ]},
+        { id:"act-1-4-2", name:"Build repository structure", phase:"Standard", date:"2026-07-28", quarter:"Q1", plannedStart:"2026-07-28", plannedEnd:"2026-08-11", subActivities:[
+          { id:"sub-1-4-2-1", name:"Design taxonomy", done:true },
+        ]},
+        { id:"act-1-4-3", name:"Roll out & measure usage", phase:"Scale", date:"2026-10-05", quarter:"Q2", plannedStart:"2026-10-05", plannedEnd:"2026-10-19", subActivities:[
+          { id:"sub-1-4-3-1", name:"Track monthly repo visits", done:true },
+        ]},
       ]},
-    { id:"i1-5", name:"Discovery Training Workshop", owner:"Noura", start:"2026-10-01", due:"2026-11-15", progress:0, priority:"Low", phase:"Not Started", nextMilestone:"Workshop agenda", deps:["Discovery Output Standard"], risks:"None", comments:"Scheduled for Q4 once standard is stable.", evidence:"—", updatedBy:"Noura", history:[]},
+    { id:"i1-5", name:"Discovery Training Workshop", owner:"Noura", start:"2026-10-01", due:"2026-11-15", progress:0, priority:"Low", phase:"Not Started", nextMilestone:"Workshop agenda", deps:["Discovery Output Standard"], risks:"None", comments:"Scheduled for Q4 once standard is stable.", evidence:"—", updatedBy:"Noura", history:[], activities: [] },
   ],
   milestones: [
-    { date:"2026-08-20", name:"Discovery Repository live", status:"Completed" },
-    { date:"2026-09-30", name:"Sign-off SLA approved", status:"Upcoming" },
-    { date:"2026-11-15", name:"Training workshop delivered", status:"Upcoming" },
+    { id:"ms1", date:"2026-08-20", name:"Discovery Repository live", status:"Completed" },
+    { id:"ms2", date:"2026-09-30", name:"Sign-off SLA approved", status:"Upcoming" },
+    { id:"ms3", date:"2026-11-15", name:"Training workshop delivered", status:"Upcoming" },
   ],
 };
 
@@ -155,8 +203,8 @@ const O2 = {
     { id:"i2-5", name:"Change enablement & phased rollout", owner:"Noura", start:"2026-10-01", due:"2026-12-15", progress:0, priority:"Medium", phase:"Not Started", nextMilestone:"Rollout plan", deps:["Stakeholder onboarding & adoption"], risks:"None", comments:"Not yet started.", evidence:"—", updatedBy:"Noura", history:[]},
   ],
   milestones: [
-    { date:"2026-08-31", name:"All engagements baselined", status:"Upcoming" },
-    { date:"2026-10-15", name:"Automated reporting live", status:"Upcoming" },
+    { id:"ms4", date:"2026-08-31", name:"All engagements baselined", status:"Upcoming" },
+    { id:"ms5", date:"2026-10-15", name:"Automated reporting live", status:"Upcoming" },
   ],
 };
 
@@ -188,8 +236,8 @@ const O3 = {
     { id:"i3-5", name:"Value Signals into the Dashboard", owner:"Baghdady", start:"2026-10-15", due:"2026-12-15", progress:0, priority:"Low", phase:"Not Started", nextMilestone:"Integration spec", deps:["Value Realization Pilot"], risks:"None", comments:"Not yet started.", evidence:"—", updatedBy:"Baghdady", history:[]},
   ],
   milestones: [
-    { date:"2026-09-10", name:"Check instruments piloted", status:"Upcoming" },
-    { date:"2026-10-31", name:"Value realization pilot complete", status:"Upcoming" },
+    { id:"ms6", date:"2026-09-10", name:"Check instruments piloted", status:"Upcoming" },
+    { id:"ms7", date:"2026-10-31", name:"Value realization pilot complete", status:"Upcoming" },
   ],
 };
 
@@ -221,8 +269,8 @@ const O4 = {
     { id:"i4-5", name:"Opportunity Mindset Training", owner:"Noura", start:"2026-11-01", due:"2026-12-15", progress:0, priority:"Low", phase:"Not Started", nextMilestone:"Training curriculum", deps:["Opportunity Capture Process"], risks:"None", comments:"Not yet started.", evidence:"—", updatedBy:"Noura", history:[]},
   ],
   milestones: [
-    { date:"2026-08-31", name:"Opportunity Log live", status:"Upcoming" },
-    { date:"2026-10-15", name:"BD collaboration agreement signed", status:"Upcoming" },
+    { id:"ms8", date:"2026-08-31", name:"Opportunity Log live", status:"Upcoming" },
+    { id:"ms9", date:"2026-10-15", name:"BD collaboration agreement signed", status:"Upcoming" },
   ],
 };
 
@@ -252,8 +300,8 @@ const O5 = {
       ]},
   ],
   milestones: [
-    { date:"2026-09-15", name:"Delivery discipline fully rolled out", status:"Upcoming" },
-    { date:"2026-11-30", name:"Continuous monitoring live", status:"Upcoming" },
+    { id:"ms10", date:"2026-09-15", name:"Delivery discipline fully rolled out", status:"Upcoming" },
+    { id:"ms11", date:"2026-11-30", name:"Continuous monitoring live", status:"Upcoming" },
   ],
 };
 
@@ -284,8 +332,8 @@ const O6 = {
     { id:"i6-5", name:"Health Baseline + First Cycle", owner:"Baghdady", start:"2026-10-01", due:"2026-11-15", progress:0, priority:"Low", phase:"Not Started", nextMilestone:"Baseline measurement", deps:["Governance & Refresh Cycle"], risks:"None", comments:"Not yet started.", evidence:"—", updatedBy:"Baghdady", history:[]},
   ],
   milestones: [
-    { date:"2026-08-25", name:"Core standard set published", status:"Upcoming" },
-    { date:"2026-09-30", name:"Governance cadence approved", status:"Upcoming" },
+    { id:"ms12", date:"2026-08-25", name:"Core standard set published", status:"Upcoming" },
+    { id:"ms13", date:"2026-09-30", name:"Governance cadence approved", status:"Upcoming" },
   ],
 };
 
@@ -315,8 +363,8 @@ const O7 = {
       ]},
   ],
   milestones: [
-    { date:"2026-08-15", name:"Use-case repository structure agreed", status:"Overdue" },
-    { date:"2026-09-30", name:"Baseline report to leadership", status:"Overdue" },
+    { id:"ms14", date:"2026-08-15", name:"Use-case repository structure agreed", status:"Overdue" },
+    { id:"ms15", date:"2026-09-30", name:"Baseline report to leadership", status:"Overdue" },
   ],
 };
 
@@ -344,8 +392,8 @@ const O8 = {
     { id:"i8-4", name:"Leadership Rollout & Adoption", owner:"Leen", start:"2026-10-01", due:"2026-11-30", progress:0, priority:"Medium", phase:"Not Started", nextMilestone:"Rollout plan", deps:["Analyst Performance & Workload View"], risks:"None", comments:"Not yet started.", evidence:"—", updatedBy:"Leen", history:[]},
   ],
   milestones: [
-    { date:"2026-09-15", name:"Engagement-health view fully live", status:"Upcoming" },
-    { date:"2026-11-30", name:"Leadership rollout complete", status:"Upcoming" },
+    { id:"ms16", date:"2026-09-15", name:"Engagement-health view fully live", status:"Upcoming" },
+    { id:"ms17", date:"2026-11-30", name:"Leadership rollout complete", status:"Upcoming" },
   ],
 };
 
@@ -375,8 +423,8 @@ const O9 = {
     { id:"i9-4", name:"Talent Pipeline & Quarterly Reviews", owner:"Yasser", start:"2026-10-01", due:"2026-12-15", progress:5, priority:"Medium", phase:"Not Started", nextMilestone:"Pipeline review cadence set", deps:["Career Framework & Conversations"], risks:"None", comments:"Not meaningfully started.", evidence:"—", updatedBy:"Yasser", history:[]},
   ],
   milestones: [
-    { date:"2026-10-15", name:"Onboarding playbook complete", status:"Upcoming" },
-    { date:"2026-12-15", name:"First quarterly talent review", status:"Upcoming" },
+    { id:"ms18", date:"2026-10-15", name:"Onboarding playbook complete", status:"Upcoming" },
+    { id:"ms19", date:"2026-12-15", name:"First quarterly talent review", status:"Upcoming" },
   ],
 };
 
@@ -389,13 +437,6 @@ RAW.risks = [
   { id:"r4", severity:"Medium", objective:"o1", initiative:"i1-2", owner:"Sara", issue:"BD calendar availability is constraining the pre-sales discovery pilot.", action:"Agree a fixed weekly slot with BD lead.", due:"2026-09-01" },
   { id:"r5", severity:"Medium", objective:"o8", initiative:"i8-3", owner:"Leen", issue:"Analyst workload view needs sign-off on sensitive-data handling.", action:"Get data governance sign-off from department heads.", due:"2026-08-25" },
   { id:"r6", severity:"Low", objective:"o4", initiative:"i4-3", owner:"Yasser", issue:"Analysts not yet trained on opportunity capture triggers.", action:"Schedule a 30-min capture-process walkthrough.", due:"2026-09-05" },
-];
-
-RAW.updateCompliance = [
-  { owner:"Yasser", objectives:["o1","o4","o9"], expected:"2026-08-15", actual:"2026-08-12", status:"Submitted" },
-  { owner:"Leen", objectives:["o2","o5","o8"], expected:"2026-08-15", actual:"2026-08-14", status:"Submitted" },
-  { owner:"Baghdady", objectives:["o3","o6"], expected:"2026-08-15", actual:"2026-08-11", status:"Submitted" },
-  { owner:"Randa", objectives:["o7"], expected:"2026-08-15", actual:null, status:"Late" },
 ];
 
 /* ============================================================================
@@ -418,6 +459,15 @@ function isOverdue(dueStr, progress) {
   return d(dueStr) < TODAY && progress < 100;
 }
 function initiativeStatus(init) {
+  const activities = init.activities || [];
+  if (activities.length) {
+    const statuses = activities.map(a => activityStatus(a));
+    if (statuses.every(s => s === "Completed")) return "Completed";
+    if (statuses.some(s => s === "Delayed")) return "Delayed";
+    if (statuses.some(s => s === "At Risk")) return "At Risk";
+    if (statuses.every(s => s === "Not Started")) return "Not Started";
+    return "On Track";
+  }
   if (init.progress >= 100) return "Completed";
   if (init.phase === "Not Started" && init.progress === 0) return isOverdue(init.due, init.progress) ? "Delayed" : "Not Started";
   return timelineStatus(init.start, init.due, init.progress);
@@ -463,6 +513,81 @@ function strategyProgress(streams, objectives, forecastOverrides) {
   if (!streams.length) return 0;
   return Math.round(streams.reduce((a, s) => a + streamProgress(s, objectives, forecastOverrides), 0) / streams.length);
 }
+/* ============================================================================
+   ACTIVITY & SUB-ACTIVITY → INITIATIVE → OBJECTIVE KPI ROLL-UP
+   Both Activities and Sub-Activities can record a measured value against the
+   objective's KPI and/or any of its Sub-Metrics (kpiRecords: { kpi: 82,
+   "sm1-1": 70, ... }). Whenever activities exist, the initiative's progress
+   and the objective's live KPI/sub-metric current values are derived
+   automatically from all of these recorded values — this is what makes the
+   Activity/Sub-Activity forms "reflect on the dashboard".
+============================================================================ */
+function subProgress(sub) {
+  return sub.progress != null ? sub.progress : (sub.done ? 100 : 0);
+}
+function effectiveActivityProgress(a) {
+  const subs = a.subActivities || [];
+  if (subs.length) return Math.round(subs.reduce((acc, s) => acc + subProgress(s), 0) / subs.length);
+  return a.progress ?? 0;
+}
+/* Activity/Sub-Activity status: driven by Planned Start/End vs progress
+   (via the same timelineStatus() used for objectives/initiatives), with an
+   explicit Actual End marking it Completed regardless of the math. */
+function activityStatus(a) {
+  if (a.actualEnd) return "Completed";
+  const start = a.plannedStart || effectiveDate(a);
+  const end = a.plannedEnd || start;
+  return timelineStatus(start, end, effectiveActivityProgress(a));
+}
+function subActivityStatus(s) {
+  if (s.actualEnd) return "Completed";
+  const start = s.plannedStart || "2026-07-01";
+  const end = s.plannedEnd || start;
+  return timelineStatus(start, end, subProgress(s));
+}
+function avgOf(nums) {
+  return nums.length ? Math.round((nums.reduce((a, b) => a + b, 0) / nums.length) * 10) / 10 : null;
+}
+/* Most recent lastUpdated timestamp across an objective's Activities,
+   Sub-Activities, and Milestones — the real signal of "the owner did
+   something in the Timeline", used to drive Update Compliance. */
+function lastActivityUpdate(o) {
+  const dates = [];
+  o.initiatives.forEach(i => {
+    (i.activities || []).forEach(a => {
+      if (a.lastUpdated) dates.push(a.lastUpdated);
+      (a.subActivities || []).forEach(s => { if (s.lastUpdated) dates.push(s.lastUpdated); });
+    });
+  });
+  (o.milestones || []).forEach(m => { if (m.lastUpdated) dates.push(m.lastUpdated); });
+  if (!dates.length) return null;
+  return dates.sort().slice(-1)[0];
+}
+
+function enrichObjectives(objs) {
+  return objs.map(o => {
+    const initiatives = o.initiatives.map(i => {
+      const activities = i.activities || [];
+      if (!activities.length) return i;
+      const progress = Math.round(activities.reduce((a, act) => a + effectiveActivityProgress(act), 0) / activities.length);
+      return { ...i, progress };
+    });
+    const allActivities = initiatives.flatMap(i => i.activities || []);
+    const allSubs = allActivities.flatMap(a => a.subActivities || []);
+    const recordsFor = (key) => [...allActivities, ...allSubs, ...o.milestones]
+      .map(x => x.kpiRecords?.[key])
+      .filter(v => v !== undefined && v !== null && v !== "" && !Number.isNaN(Number(v)))
+      .map(Number);
+    const kpiAvg = avgOf(recordsFor("kpi"));
+    const subMetrics = o.subMetrics.map(sm => {
+      const avg = avgOf(recordsFor(sm.id));
+      return avg == null ? sm : { ...sm, current: avg };
+    });
+    const kpi = kpiAvg == null ? o.kpi : { ...o.kpi, current: kpiAvg };
+    return { ...o, initiatives, kpi, subMetrics };
+  });
+}
+
 function strategyHealth(streams, objectives, weights, forecastOverrides) {
   const kpiAch = Math.round(objectives.reduce((a, o) => a + Math.min(100, achievementPct(o.kpi)), 0) / objectives.length);
   const initComplete = Math.round(
@@ -676,10 +801,19 @@ const NAV_ITEMS = [
   { id: "timeline", label: "Timeline", icon: CalendarRange },
   { id: "risks", label: "Risks & Blockers", icon: AlertTriangle },
   { id: "compliance", label: "Update Compliance", icon: CheckSquare },
+  { id: "settings", label: "Settings & Data", icon: SettingsIcon },
 ];
 
-function Sidebar({ page, setPage, lockedOwner }) {
-  const items = lockedOwner ? NAV_ITEMS.filter(i => i.id !== "overview") : NAV_ITEMS;
+// Which nav tabs are hidden per role
+const HIDDEN_FOR_ROLE = {
+  admin: [],
+  owner: ["overview"],
+  lead: ["settings"],
+};
+
+function Sidebar({ page, setPage, role }) {
+  const hidden = HIDDEN_FOR_ROLE[role] || [];
+  const items = NAV_ITEMS.filter(i => !hidden.includes(i.id));
   return (
     <div style={{
       width: 240, minWidth: 240, background: T.navyDeep, height: "100%",
@@ -718,7 +852,7 @@ function Sidebar({ page, setPage, lockedOwner }) {
 /* ============================================================================
    TOP BAR
 ============================================================================ */
-function TopBar({ forecastMode, setForecastMode }) {
+function TopBar({ forecastMode, setForecastMode, canEdit }) {
   return (
     <div style={{
       display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -729,15 +863,23 @@ function TopBar({ forecastMode, setForecastMode }) {
         <div style={{ fontSize: 12.5, color: T.inkMuted, marginTop: 1 }}>From Depth to Value — Strategy 2026</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        <button onClick={() => setForecastMode(v => !v)}
-          style={{
-            display: "flex", alignItems: "center", gap: 7, padding: "8px 14px", borderRadius: 8,
-            border: `1px solid ${forecastMode ? T.plum : T.border}`, cursor: "pointer",
-            background: forecastMode ? T.plumSoft : T.bg, color: forecastMode ? T.plum : T.inkMuted,
-            fontSize: 13, fontWeight: 700, fontFamily: FONT,
-          }}>
-          <Sliders size={14} /> {forecastMode ? "Forecast Mode: ON" : "Forecast Strategy"}
-        </button>
+        {canEdit && (
+          <button onClick={() => setForecastMode(v => !v)}
+            style={{
+              display: "flex", alignItems: "center", gap: 7, padding: "8px 14px", borderRadius: 8,
+              border: `1px solid ${forecastMode ? T.plum : T.border}`, cursor: "pointer",
+              background: forecastMode ? T.plumSoft : T.bg, color: forecastMode ? T.plum : T.inkMuted,
+              fontSize: 13, fontWeight: 700, fontFamily: FONT,
+            }}>
+            <Sliders size={14} /> {forecastMode ? "Forecast Mode: ON" : "Forecast Strategy"}
+          </button>
+        )}
+        {!canEdit && (
+          <span style={{
+            display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 20,
+            background: T.graySoft, color: T.inkMuted, fontSize: 12, fontWeight: 700,
+          }}>View only</span>
+        )}
         <div style={{ display: "flex", alignItems: "center", gap: 5, color: T.inkMuted, fontSize: 12.5 }}>
           <Bell size={15} />
         </div>
@@ -1005,13 +1147,13 @@ function AttentionTable({ items, onSelect }) {
       {items.map((it, i) => (
         <div key={i} onClick={() => onSelect(it.objective.id)}
           style={{
-            display: "grid", gridTemplateColumns: "90px 1fr 130px 100px", gap: 12, alignItems: "center",
+            display: "grid", gridTemplateColumns: "90px minmax(0, 1fr) 130px 100px", gap: 12, alignItems: "center",
             padding: "11px 6px", borderTop: i === 0 ? "none" : `1px solid ${T.border}`, cursor: "pointer",
           }}>
           <StatusChip status={it.severity} />
-          <div>
-            <div style={{ fontSize: 13.5, color: T.ink, fontWeight: 600 }}>{it.issue}</div>
-            <div style={{ fontSize: 12, color: T.inkMuted, marginTop: 1 }}>O{it.objective.number} · {it.objective.title}{it.initiative ? ` — ${it.initiative.name}` : ""} · {it.action}</div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 13.5, color: T.ink, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it.issue}</div>
+            <div style={{ fontSize: 12, color: T.inkMuted, marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>O{it.objective.number} · {it.objective.title}{it.initiative ? ` — ${it.initiative.name}` : ""} · {it.action}</div>
           </div>
           <div style={{ fontSize: 12.5, color: T.inkMuted, display: "flex", alignItems: "center", gap: 5 }}><Users size={12} />{it.owner}</div>
           <div style={{ fontSize: 12.5, color: T.inkMuted, fontFamily: MONO }}>{it.due}</div>
@@ -1240,8 +1382,8 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose }) {
                 const expanded = expandedSM === sm.id;
                 return (
                   <div key={sm.id} style={{ borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
-                    <div onClick={() => setExpandedSM(expanded ? null : sm.id)} style={{ display: "grid", gridTemplateColumns: "1fr 70px 70px 90px 20px", gap: 8, alignItems: "center", padding: "11px 14px", cursor: "pointer" }}>
-                      <div style={{ fontSize: 12.5, fontWeight: 600, color: T.ink }}>{obj.number}.{i+1} {sm.name}</div>
+                    <div onClick={() => setExpandedSM(expanded ? null : sm.id)} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 70px 70px 90px 20px", gap: 8, alignItems: "center", padding: "11px 14px", cursor: "pointer" }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 600, color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{obj.number}.{i+1} {sm.name}</div>
                       <Num size={12.5}>{sm.current}{sm.unit}</Num>
                       <span style={{ fontSize: 11.5, color: T.inkMuted }}>/ {sm.target}{sm.unit}</span>
                       <StatusChip status={ach >= 90 ? "On Track" : ach >= 65 ? "At Risk" : "Delayed"} />
@@ -1267,12 +1409,16 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose }) {
         </div>
 
         <div>
-          <SectionLabel icon={CalendarRange}>Milestones</SectionLabel>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <SectionLabel icon={CalendarRange}>Milestones</SectionLabel>
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {obj.milestones.length === 0 && <div style={{ fontSize: 13, color: T.inkMuted }}>No milestones added yet.</div>}
             {obj.milestones.map((m, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 13, padding: "8px 4px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
+              <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 13, padding: "8px 4px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
                 <Num size={12.5} color={T.navy}>{m.date}</Num>
                 <span style={{ color: T.ink, flex: 1 }}>{m.name}</span>
+                {m.fileName && <Paperclip size={13} color={T.inkMuted} />}
                 <StatusChip status={m.status === "Overdue" ? "Delayed" : m.status === "Completed" ? "Completed" : "Not Started"} />
               </div>
             ))}
@@ -1345,15 +1491,14 @@ function InitiativeTable({ initiatives, onHistory, onEdit, showObjective, object
 }
 
 function EditInitiativeModal({ initiative, onClose, onSave }) {
+  const [owner, setOwner] = useState(initiative.owner || "");
   const [progress, setProgress] = useState(initiative.progress);
-  const [status, setStatus] = useState(initiativeStatus(initiative));
-  const [blockers, setBlockers] = useState(initiative.risks === "None" ? "" : initiative.risks);
   const [nextStep, setNextStep] = useState(initiative.nextMilestone);
   const [comment, setComment] = useState("");
   const [saved, setSaved] = useState(false);
 
   const save = () => {
-    onSave(initiative.id, { progress: Number(progress), blockers, nextStep, comment });
+    onSave(initiative.id, { owner: owner.trim(), progress: Number(progress), nextStep, comment });
     setSaved(true);
     setTimeout(() => { setSaved(false); onClose(); }, 900);
   };
@@ -1367,12 +1512,12 @@ function EditInitiativeModal({ initiative, onClose, onSave }) {
         </div>
         <div style={{ fontSize: 13, color: T.inkMuted, marginBottom: 18 }}>{initiative.name}</div>
 
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Owner</label>
+        <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
         <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Progress ({progress}%)</label>
         <input type="range" min={0} max={100} value={progress} onChange={e => setProgress(e.target.value)} style={{ width: "100%", margin: "8px 0 16px", accentColor: T.plum }} />
-
-        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Blockers</label>
-        <input value={blockers} onChange={e => setBlockers(e.target.value)} placeholder="None"
-          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
 
         <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Next Step</label>
         <input value={nextStep} onChange={e => setNextStep(e.target.value)}
@@ -1412,19 +1557,19 @@ function InitiativesPage({ objectives, onEdit }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        <div style={{ position: "relative", flex: 1, maxWidth: 320 }}>
+      <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ position: "relative", flex: "1 1 220px", minWidth: 200, maxWidth: 320 }}>
           <Search size={15} style={{ position: "absolute", left: 10, top: 10, color: T.inkFaint }} />
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search initiatives or owners…"
-            style={{ width: "100%", padding: "9px 10px 9px 32px", border: `1px solid ${T.border}`, borderRadius: 9, fontSize: 13, fontFamily: FONT }} />
+            style={{ width: "100%", boxSizing: "border-box", padding: "9px 10px 9px 32px", border: `1px solid ${T.border}`, borderRadius: 9, fontSize: 13, fontFamily: FONT }} />
         </div>
         <select value={sortBy} onChange={e => setSortBy(e.target.value)}
-          style={{ border: `1px solid ${T.border}`, borderRadius: 9, padding: "9px 10px", fontSize: 13, fontFamily: FONT }}>
+          style={{ flexShrink: 0, border: `1px solid ${T.border}`, borderRadius: 9, padding: "9px 10px", fontSize: 13, fontFamily: FONT, background: T.bg }}>
           <option value="due">Sort: Due date</option>
           <option value="progress">Sort: Lowest progress</option>
           <option value="owner">Sort: Owner</option>
         </select>
-        <div style={{ fontSize: 12.5, color: T.inkMuted, marginLeft: "auto" }}>{all.length} initiatives</div>
+        <div style={{ fontSize: 12.5, color: T.inkMuted, marginLeft: "auto", flexShrink: 0 }}>{all.length} initiatives</div>
       </div>
       <InitiativeTable initiatives={all} onHistory={setHistoryFor} onEdit={onEdit} showObjective objectivesById={objectivesById} />
       {historyFor && <HistoryModal initiative={historyFor} onClose={() => setHistoryFor(null)} />}
@@ -1435,13 +1580,786 @@ function InitiativesPage({ objectives, onEdit }) {
 /* ============================================================================
    TIMELINE PAGE
 ============================================================================ */
-function TimelinePage({ objectives, streams }) {
+/* ============================================================================
+   TIMELINE TEMPLATE
+   4 quarters + Initiatives + a 5-stage phase pipeline that every Activity
+   (and its Sub-Activities) moves through. Objective owners add their own
+   Activities/Sub-Activities under their initiatives using this same template.
+============================================================================ */
+const QUARTERS = [
+  { id: "Q1", label: "Q1", range: "Jul – Sep 2026" },
+  { id: "Q2", label: "Q2", range: "Oct – Dec 2026" },
+  { id: "Q3", label: "Q3", range: "Jan – Mar 2027" },
+  { id: "Q4", label: "Q4", range: "Apr – Jun 2027" },
+];
+const PHASES = ["As-Is Scan", "Standard", "Pilot", "Baseline & Measure", "Scale"];
+const ACTIVITY_VIEWS = ["Quarterly", "List"];
+
+/* Scheduling helpers — an Activity's `date` is the source of truth for
+   sorting in the List view; legacy activities that only have a `quarter`
+   fall back to that quarter's start date. */
+function quarterStartDate(q) {
+  return { Q1: "2026-07-01", Q2: "2026-10-01", Q3: "2027-01-01", Q4: "2027-04-01" }[q] || "2026-07-01";
+}
+function effectiveDate(a) {
+  return a.plannedStart || a.date || quarterStartDate(a.quarter);
+}
+function quarterFromDate(dateStr) {
+  const dt = d(dateStr);
+  if (dt < d("2026-10-01")) return "Q1";
+  if (dt < d("2027-01-01")) return "Q2";
+  if (dt < d("2027-04-01")) return "Q3";
+  return "Q4";
+}
+function monthLabel(dateStr) {
+  return d(dateStr).toLocaleString("en-US", { month: "short", year: "numeric" });
+}
+
+function PhaseTracker({ phase, onChange, editable }) {
+  const idx = Math.max(0, PHASES.indexOf(phase));
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+      {PHASES.map((p, i) => {
+        const state = i < idx ? "done" : i === idx ? "current" : "pending";
+        const dot = (
+          <span key={p} title={p} onClick={editable ? () => onChange(p) : undefined}
+            style={{
+              width: 9, height: 9, borderRadius: "50%", cursor: editable ? "pointer" : "default",
+              background: state === "pending" ? T.graySoft : (state === "current" ? T.plum : T.blue),
+              border: state === "current" ? `2px solid ${T.plum}` : "none",
+              boxSizing: "border-box",
+            }} />
+        );
+        return (
+          <React.Fragment key={p}>
+            {dot}
+            {i < PHASES.length - 1 && <span style={{ width: 12, height: 2, background: i < idx ? T.blue : T.graySoft }} />}
+          </React.Fragment>
+        );
+      })}
+      <span style={{ fontSize: 11, color: T.inkMuted, marginLeft: 6, whiteSpace: "nowrap" }}>{phase}</span>
+    </div>
+  );
+}
+
+/* Read-only quarter badge, derived from the activity's target date.
+   The underlying date is edited via the Activity form, not inline. */
+function SchedBadge({ activity }) {
+  const dt = effectiveDate(activity);
+  return <span style={{ fontSize: 10.5, fontWeight: 700, color: T.blue, background: T.blueSoft, borderRadius: 6, padding: "2px 7px", whiteSpace: "nowrap" }}>{quarterFromDate(dt)}</span>;
+}
+
+function SubActivityRow({ sub, editable, onToggle, onDelete, onRequestEdit }) {
+  const progress = subProgress(sub);
+  const hasKpi = sub.kpiRecords && Object.keys(sub.kpiRecords).length > 0;
+  const status = subActivityStatus(sub);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0 6px 34px" }}>
+      <input type="checkbox" checked={progress >= 100} disabled={!editable} onChange={onToggle}
+        style={{ width: 14, height: 14, accentColor: T.green, cursor: editable ? "pointer" : "default" }} />
+      <span style={{ flex: 1, fontSize: 12.5, color: progress >= 100 ? T.inkMuted : T.ink, textDecoration: progress >= 100 ? "line-through" : "none" }}>{sub.name}</span>
+      {hasKpi && <GaugeIcon size={11} color={T.plum} />}
+      <StatusChip status={status} size="sm" />
+      <span style={{ fontSize: 10.5, color: T.inkMuted, minWidth: 30, textAlign: "right" }}>{progress}%</span>
+      {editable && (
+        <>
+          <button onClick={onRequestEdit} title="Edit sub-activity" style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+            <Pencil size={11} />
+          </button>
+          <button onClick={onDelete} title="Delete sub-activity" style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+            <X size={12} />
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* Shared KPI-contribution field list used by both the Activity and
+   Sub-Activity forms — the objective's KPI plus all its Sub-Metrics. */
+function KpiContributionFields({ kpi, subMetrics, kpiRecords, setMetricValue }) {
+  const metrics = [
+    { id: "kpi", label: kpi.name, target: kpi.target, unit: kpi.unit },
+    ...subMetrics.map(sm => ({ id: sm.id, label: sm.name, target: sm.target, unit: sm.unit })),
+  ];
+  return (
+    <>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 6 }}>KPI Contribution</div>
+      <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 10 }}>
+        Record what this item measured for the objective's KPI and/or Sub-Metrics. Leave blank if it doesn't measure a given metric — the objective's live value is the average across everything that did.
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
+        {metrics.map(m => (
+          <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, background: T.surface, borderRadius: 8, padding: "8px 10px" }}>
+            <div style={{ flex: 1, fontSize: 12.5, color: T.ink, fontWeight: 600 }}>{m.label}</div>
+            <div style={{ fontSize: 11, color: T.inkMuted }}>target {m.target}{m.unit}</div>
+            <input type="number" value={kpiRecords[m.id] ?? ""} onChange={e => setMetricValue(m.id, e.target.value)}
+              placeholder="—" style={{ width: 72, padding: "5px 7px", border: `1px solid ${T.border}`, borderRadius: 6, fontSize: 12.5, fontFamily: MONO, textAlign: "right" }} />
+            <span style={{ fontSize: 11, color: T.inkMuted, minWidth: 18 }}>{m.unit}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/* ============================================================================
+   SUB-ACTIVITY FORM MODAL — add or edit a sub-activity: name, its own
+   progress, and the same KPI-contribution fields as the Activity form.
+============================================================================ */
+function SubActivityFormModal({ mode, sub, kpi, subMetrics, onSave, onDelete, onClose }) {
+  const [name, setName] = useState(sub?.name || "");
+  const [plannedStart, setPlannedStart] = useState(sub?.plannedStart || "2026-07-15");
+  const [plannedEnd, setPlannedEnd] = useState(sub?.plannedEnd || sub?.plannedStart || "2026-07-22");
+  const [actualStart, setActualStart] = useState(sub?.actualStart || "");
+  const [actualEnd, setActualEnd] = useState(sub?.actualEnd || "");
+  const [progress, setProgress] = useState(sub ? subProgress(sub) : 0);
+  const [kpiRecords, setKpiRecords] = useState({ ...(sub?.kpiRecords || {}) });
+
+  const setMetricValue = (id, v) => setKpiRecords(prev => {
+    const next = { ...prev };
+    if (v === "") delete next[id];
+    else next[id] = Number(v);
+    return next;
+  });
+
+  const handleSave = () => {
+    if (!name.trim()) return;
+    onSave({ name: name.trim(), plannedStart, plannedEnd, actualStart: actualStart || null, actualEnd: actualEnd || null, progress: Number(progress), kpiRecords });
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 480, maxWidth: "100%", maxHeight: "85vh", overflow: "auto", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>{mode === "add" ? "Add Sub-Activity" : "Edit Sub-Activity"}</div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Sub-Activity Name</label>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Collect last 5 discovery docs"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
+        <PlannedActualDateFields
+          plannedStart={plannedStart} plannedEnd={plannedEnd} actualStart={actualStart} actualEnd={actualEnd}
+          setPlannedStart={setPlannedStart} setPlannedEnd={setPlannedEnd} setActualStart={setActualStart} setActualEnd={setActualEnd}
+        />
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Progress</label>
+        <input type="range" min={0} max={100} value={progress} onChange={e => setProgress(e.target.value)} style={{ width: "100%", margin: "8px 0 4px", accentColor: T.plum }} />
+        <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 16 }}>{progress}%</div>
+
+        <KpiContributionFields kpi={kpi} subMetrics={subMetrics} kpiRecords={kpiRecords} setMetricValue={setMetricValue} />
+
+        <div style={{ display: "flex", gap: 10 }}>
+          {mode === "edit" && onDelete && (
+            <button onClick={onDelete}
+              style={{ display: "flex", alignItems: "center", gap: 6, border: `1px solid ${T.red}`, background: T.redSoft, color: T.red, borderRadius: 9, padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+              <Trash2 size={14} /> Delete
+            </button>
+          )}
+          <button onClick={handleSave}
+            style={{ flex: 1, padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
+            {mode === "add" ? "Add Sub-Activity" : "Save Changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================================
+   ACTIVITY FORM MODAL — add or edit an activity: name, phase, quarter,
+   progress (auto-computed from sub-activities when present), and the
+   objective's own KPI + Sub-Metrics so each activity can record the value
+   it measured. These recorded values are what feed the automatic roll-up.
+============================================================================ */
+/* Shared Planned/Actual date fields used by both the Activity and
+   Sub-Activity forms. Planned dates + progress drive the computed status
+   (On Track/At Risk/Delayed); an Actual End marks it Completed outright. */
+function PlannedActualDateFields({ plannedStart, plannedEnd, actualStart, actualEnd, setPlannedStart, setPlannedEnd, setActualStart, setActualEnd }) {
+  const Field = ({ label, value, onChange }) => (
+    <div>
+      <label style={{ fontSize: 10.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>{label}</label>
+      <input type="date" value={value || ""} onChange={e => onChange(e.target.value)}
+        style={{ width: "100%", padding: "7px 9px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 12.5, margin: "5px 0 0", fontFamily: FONT }} />
+    </div>
+  );
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 6 }}>Planned</div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+        <Field label="Start" value={plannedStart} onChange={setPlannedStart} />
+        <Field label="End" value={plannedEnd} onChange={setPlannedEnd} />
+      </div>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 6 }}>Actual</div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <Field label="Start" value={actualStart} onChange={setActualStart} />
+        <Field label="End" value={actualEnd} onChange={setActualEnd} />
+      </div>
+      <div style={{ fontSize: 10.5, color: T.inkMuted, marginTop: 6 }}>
+        Leave Actual dates blank until they happen — status is computed from Planned dates vs. progress until then.
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================================
+   MILESTONE FORM MODAL — same pattern as the Activity form: name, date,
+   status, plus a file-upload field (stored as a data URL so the attachment
+   works fully client-side — download/view it straight from the browser).
+============================================================================ */
+const MILESTONE_STATUSES = ["Upcoming", "Completed", "Overdue"];
+
+/* ============================================================================
+   RISK FORM MODAL — add or edit a logged risk/blocker: severity, which
+   objective (and optionally which initiative) it's tied to, owner, the
+   issue, the required action, and a due date.
+============================================================================ */
+const RISK_SEVERITIES = ["Critical", "High", "Medium", "Low"];
+
+function RiskFormModal({ mode, risk, objectives, onSave, onDelete, onClose }) {
+  const [severity, setSeverity] = useState(risk?.severity || "Medium");
+  const [objectiveId, setObjectiveId] = useState(risk?.objective || objectives[0]?.id || "");
+  const [initiativeId, setInitiativeId] = useState(risk?.initiative || "");
+  const [owner, setOwner] = useState(risk?.owner || "");
+  const [issue, setIssue] = useState(risk?.issue || "");
+  const [action, setAction] = useState(risk?.action || "");
+  const [due, setDue] = useState(risk?.due || "2026-09-01");
+
+  const selectedObjective = objectives.find(o => o.id === objectiveId);
+  const initiatives = selectedObjective?.initiatives || [];
+
+  const handleSave = () => {
+    if (!issue.trim() || !objectiveId) return;
+    onSave({ severity, objective: objectiveId, initiative: initiativeId || null, owner: owner.trim(), issue: issue.trim(), action: action.trim(), due });
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 520, maxWidth: "100%", maxHeight: "85vh", overflow: "auto", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>{mode === "add" ? "Add Risk / Blocker" : "Edit Risk / Blocker"}</div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Issue</label>
+        <input value={issue} onChange={e => setIssue(e.target.value)} placeholder="e.g. Use-case repository is blocked pending baseline report"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Severity</label>
+            <select value={severity} onChange={e => setSeverity(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }}>
+              {RISK_SEVERITIES.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Due Date</label>
+            <input type="date" value={due} onChange={e => setDue(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Objective</label>
+            <select value={objectiveId} onChange={e => { setObjectiveId(e.target.value); setInitiativeId(""); }}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }}>
+              {objectives.map(o => <option key={o.id} value={o.id}>O{o.number} · {o.title}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Initiative (optional)</label>
+            <select value={initiativeId} onChange={e => setInitiativeId(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }}>
+              <option value="">— None —</option>
+              {initiatives.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Owner</label>
+        <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Randa"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Required Action</label>
+        <textarea value={action} onChange={e => setAction(e.target.value)} rows={3} placeholder="e.g. Escalate resourcing; unblock baseline report this week."
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 18px", fontFamily: FONT, resize: "vertical" }} />
+
+        <div style={{ display: "flex", gap: 10 }}>
+          {mode === "edit" && onDelete && (
+            <button onClick={onDelete}
+              style={{ display: "flex", alignItems: "center", gap: 6, border: `1px solid ${T.red}`, background: T.redSoft, color: T.red, borderRadius: 9, padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+              <Trash2 size={14} /> Delete
+            </button>
+          )}
+          <button onClick={handleSave}
+            style={{ flex: 1, padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
+            {mode === "add" ? "Add Risk" : "Save Changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MilestoneFormModal({ mode, milestone, objectives, defaultObjectiveId, onSave, onDelete, onClose }) {
+  const [name, setName] = useState(milestone?.name || "");
+  const [objectiveId, setObjectiveId] = useState(defaultObjectiveId || objectives[0]?.id || "");
+  const [activityId, setActivityId] = useState(milestone?.activity || "");
+  const [date, setDate] = useState(milestone?.date || "2026-08-01");
+  const [status, setStatus] = useState(milestone?.status || "Upcoming");
+  const [fileName, setFileName] = useState(milestone?.fileName || "");
+  const [fileData, setFileData] = useState(milestone?.fileData || "");
+  const [fileError, setFileError] = useState("");
+  const [kpiRecords, setKpiRecords] = useState({ ...(milestone?.kpiRecords || {}) });
+
+  const selectedObjective = objectives.find(o => o.id === objectiveId);
+  const activityOptions = (selectedObjective?.initiatives || []).flatMap(init =>
+    (init.activities || []).map(a => ({ id: a.id, label: `${init.name} — ${a.name}` }))
+  );
+
+  const setMetricValue = (id, v) => setKpiRecords(prev => {
+    const next = { ...prev };
+    if (v === "") delete next[id];
+    else next[id] = Number(v);
+    return next;
+  });
+
+  const handleFile = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFileError("");
+    if (file.size > 5 * 1024 * 1024) {
+      setFileError("File is too large (max 5MB).");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => { setFileName(file.name); setFileData(reader.result); };
+    reader.onerror = () => setFileError("Could not read this file.");
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const handleSave = () => {
+    if (!name.trim() || !objectiveId) return;
+    onSave({ name: name.trim(), objective: objectiveId, activity: activityId || null, date, status, fileName, fileData, kpiRecords });
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 480, maxWidth: "100%", maxHeight: "85vh", overflow: "auto", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>{mode === "add" ? "Add Milestone" : "Edit Milestone"}</div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Milestone Name</label>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Discovery Repository live"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Objective</label>
+        <select value={objectiveId} onChange={e => { setObjectiveId(e.target.value); setActivityId(""); }}
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }}>
+          {objectives.map(o => <option key={o.id} value={o.id}>O{o.number} · {o.title}</option>)}
+        </select>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Activity (optional)</label>
+        <select value={activityId} onChange={e => setActivityId(e.target.value)}
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }}>
+          <option value="">— None —</option>
+          {activityOptions.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
+        </select>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Date</label>
+            <input type="date" value={date} onChange={e => setDate(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+          </div>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Status</label>
+            <select value={status} onChange={e => setStatus(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }}>
+              {MILESTONE_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {selectedObjective && (
+          <KpiContributionFields kpi={selectedObjective.kpi} subMetrics={selectedObjective.subMetrics} kpiRecords={kpiRecords} setMetricValue={setMetricValue} />
+        )}
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Attachment</label>
+        <div style={{ margin: "6px 0 16px" }}>
+          {fileName ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, background: T.surface, borderRadius: 8, padding: "8px 10px" }}>
+              <Paperclip size={13} color={T.inkMuted} />
+              <a href={fileData} download={fileName} style={{ flex: 1, fontSize: 12.5, color: T.blue, textDecoration: "none", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{fileName}</a>
+              <button onClick={() => { setFileName(""); setFileData(""); }} title="Remove attachment"
+                style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, display: "flex" }}>
+                <X size={13} />
+              </button>
+            </div>
+          ) : (
+            <label style={{
+              display: "flex", alignItems: "center", gap: 8, border: `1px dashed ${T.borderStrong}`, borderRadius: 8,
+              padding: "9px 12px", cursor: "pointer", color: T.navy, fontSize: 12.5, fontWeight: 600,
+            }}>
+              <Paperclip size={13} /> Upload evidence / document
+              <input type="file" onChange={handleFile} style={{ display: "none" }} />
+            </label>
+          )}
+          {fileError && <div style={{ fontSize: 11.5, color: T.red, marginTop: 6 }}>{fileError}</div>}
+        </div>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          {mode === "edit" && onDelete && (
+            <button onClick={onDelete}
+              style={{ display: "flex", alignItems: "center", gap: 6, border: `1px solid ${T.red}`, background: T.redSoft, color: T.red, borderRadius: 9, padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+              <Trash2 size={14} /> Delete
+            </button>
+          )}
+          <button onClick={handleSave}
+            style={{ flex: 1, padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
+            {mode === "add" ? "Add Milestone" : "Save Changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityFormModal({ mode, activity, kpi, subMetrics, onSave, onDelete, onClose }) {
+  const [name, setName] = useState(activity?.name || "");
+  const [owner, setOwner] = useState(activity?.owner || "");
+  const [phase, setPhase] = useState(activity?.phase || PHASES[0]);
+  const [plannedStart, setPlannedStart] = useState(activity ? effectiveDate(activity) : "2026-07-15");
+  const [plannedEnd, setPlannedEnd] = useState(activity?.plannedEnd || (activity ? effectiveDate(activity) : "2026-07-29"));
+  const [actualStart, setActualStart] = useState(activity?.actualStart || "");
+  const [actualEnd, setActualEnd] = useState(activity?.actualEnd || "");
+  const subs = activity?.subActivities || [];
+  const autoProgress = subs.length ? Math.round((subs.filter(s => s.done).length / subs.length) * 100) : null;
+  const [progress, setProgress] = useState(activity?.progress ?? 0);
+  const [kpiRecords, setKpiRecords] = useState({ ...(activity?.kpiRecords || {}) });
+
+  const metrics = [
+    { id: "kpi", label: kpi.name, target: kpi.target, unit: kpi.unit },
+    ...subMetrics.map(sm => ({ id: sm.id, label: sm.name, target: sm.target, unit: sm.unit })),
+  ];
+
+  const setMetricValue = (id, v) => setKpiRecords(prev => {
+    const next = { ...prev };
+    if (v === "") delete next[id];
+    else next[id] = Number(v);
+    return next;
+  });
+
+  const handleSave = () => {
+    if (!name.trim()) return;
+    onSave({
+      name: name.trim(), owner: owner.trim(), phase,
+      plannedStart, plannedEnd, actualStart: actualStart || null, actualEnd: actualEnd || null,
+      date: plannedStart, quarter: quarterFromDate(plannedStart),
+      progress: autoProgress != null ? autoProgress : Number(progress), kpiRecords,
+    });
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 520, maxWidth: "100%", maxHeight: "85vh", overflow: "auto", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>{mode === "add" ? "Add Activity" : "Edit Activity"}</div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Activity Name</label>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Review existing discovery templates"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Owner</label>
+            <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+          </div>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Phase</label>
+            <select value={phase} onChange={e => setPhase(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }}>
+              {PHASES.map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <PlannedActualDateFields
+          plannedStart={plannedStart} plannedEnd={plannedEnd} actualStart={actualStart} actualEnd={actualEnd}
+          setPlannedStart={setPlannedStart} setPlannedEnd={setPlannedEnd} setActualStart={setActualStart} setActualEnd={setActualEnd}
+        />
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>
+          Progress {autoProgress != null && <span style={{ color: T.inkFaint, fontWeight: 500, textTransform: "none" }}>(auto from sub-activities)</span>}
+        </label>
+        {autoProgress != null ? (
+          <div style={{ margin: "8px 0 16px" }}>
+            <ProgressBar value={autoProgress} />
+            <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: 4 }}>{autoProgress}% complete</div>
+          </div>
+        ) : (
+          <>
+            <input type="range" min={0} max={100} value={progress} onChange={e => setProgress(e.target.value)} style={{ width: "100%", margin: "8px 0 4px", accentColor: T.plum }} />
+            <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 16 }}>{progress}%</div>
+          </>
+        )}
+
+        <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 6 }}>KPI Contribution</div>
+        <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 10 }}>
+          Record what this activity measured for the objective's KPI and/or Sub-Metrics. Leave blank if this activity doesn't measure a given metric — the objective's live value is the average across all activities that did.
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
+          {metrics.map(m => (
+            <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, background: T.surface, borderRadius: 8, padding: "8px 10px" }}>
+              <div style={{ flex: 1, fontSize: 12.5, color: T.ink, fontWeight: 600 }}>{m.label}</div>
+              <div style={{ fontSize: 11, color: T.inkMuted }}>target {m.target}{m.unit}</div>
+              <input type="number" value={kpiRecords[m.id] ?? ""} onChange={e => setMetricValue(m.id, e.target.value)}
+                placeholder="—" style={{ width: 72, padding: "5px 7px", border: `1px solid ${T.border}`, borderRadius: 6, fontSize: 12.5, fontFamily: MONO, textAlign: "right" }} />
+              <span style={{ fontSize: 11, color: T.inkMuted, minWidth: 18 }}>{m.unit}</span>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          {mode === "edit" && onDelete && (
+            <button onClick={onDelete}
+              style={{ display: "flex", alignItems: "center", gap: 6, border: `1px solid ${T.red}`, background: T.redSoft, color: T.red, borderRadius: 9, padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+              <Trash2 size={14} /> Delete
+            </button>
+          )}
+          <button onClick={handleSave}
+            style={{ flex: 1, padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
+            {mode === "add" ? "Add Activity" : "Save Changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityBlock({ activity, editable, viewMode, onUpdatePhase, onToggleSub, onDeleteSub, onRequestEdit, onRequestEditSub, onRequestAddSub }) {
+  const [open, setOpen] = useState(false);
+  const subs = activity.subActivities || [];
+  const doneCount = subs.filter(s => subProgress(s) >= 100).length;
+  const hasKpiRecords = activity.kpiRecords && Object.keys(activity.kpiRecords).length > 0;
+  return (
+    <div style={{ borderTop: `1px solid ${T.border}` }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0 9px 20px" }}>
+        <button onClick={() => setOpen(o => !o)} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted, padding: 0 }}>
+          {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+        </button>
+        <span style={{ fontSize: 12.5, fontWeight: 600, color: T.ink, flex: 1 }}>
+          {activity.name}
+          {activity.owner && <span style={{ fontSize: 11, color: T.inkMuted, fontWeight: 500 }}> · {activity.owner}</span>}
+        </span>
+        {hasKpiRecords && <GaugeIcon size={12} color={T.plum} />}
+        {subs.length > 0 && <span style={{ fontSize: 11, color: T.inkMuted }}>{doneCount}/{subs.length}</span>}
+        <StatusChip status={activityStatus(activity)} size="sm" />
+        <SchedBadge activity={activity} />
+        <PhaseTracker phase={activity.phase} editable={editable} onChange={onUpdatePhase} />
+        {editable && (
+          <button onClick={onRequestEdit} title="Edit activity" style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+            <Pencil size={13} />
+          </button>
+        )}
+      </div>
+      {open && (
+        <div style={{ paddingBottom: 8 }}>
+          {subs.map(sub => (
+            <SubActivityRow key={sub.id} sub={sub} editable={editable}
+              onToggle={() => onToggleSub(sub.id)} onDelete={() => onDeleteSub(sub.id)}
+              onRequestEdit={() => onRequestEditSub(sub)} />
+          ))}
+          {editable && (
+            <div style={{ paddingLeft: 34, paddingTop: 4 }}>
+              <button onClick={onRequestAddSub}
+                style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: "none", color: T.navy, borderRadius: 7, padding: "5px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>
+                <Plus size={12} /> Add Sub-Activity
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function InitiativeTimelineBlock({ initiative, editable, viewMode, onToggleSub, onDeleteSub, onRequestAdd, onRequestEdit, onRequestAddSub, onRequestEditSub, onQuickUpdate }) {
+  const [open, setOpen] = useState(true);
+  const activitiesAll = initiative.activities || [];
+  const activities = viewMode === "List" ? [] : activitiesAll;
+  const status = initiativeStatus(initiative);
+  return (
+    <Card style={{ padding: 0, marginBottom: 12 }}>
+      <div onClick={() => setOpen(o => !o)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", cursor: "pointer", background: T.surface }}>
+        {open ? <ChevronDown size={15} color={T.inkMuted} /> : <ChevronRight size={15} color={T.inkMuted} />}
+        <span style={{ fontSize: 13.5, fontWeight: 700, color: T.navy, flex: 1 }}>{initiative.name}</span>
+        <span style={{ fontSize: 11.5, color: T.inkMuted }}>{initiative.owner}</span>
+        <StatusChip status={status} />
+        <div style={{ width: 90 }}><ProgressBar value={initiative.progress} height={6} /></div>
+        <span style={{ fontSize: 11, color: T.inkMuted, minWidth: 30, textAlign: "right" }}>{activitiesAll.length} act.</span>
+      </div>
+      {open && (
+        <div style={{ padding: "4px 16px 14px" }}>
+          {activitiesAll.length === 0 && <div style={{ fontSize: 12, color: T.inkMuted, padding: "10px 0" }}>No activities added yet.</div>}
+          {activities.map(a => (
+            <ActivityBlock key={a.id} activity={a} editable={editable} viewMode={viewMode}
+              onUpdatePhase={(phase) => onQuickUpdate(a.id, { phase })}
+              onToggleSub={(subId) => onToggleSub(a.id, subId)}
+              onDeleteSub={(subId) => onDeleteSub(a.id, subId)}
+              onRequestEdit={() => onRequestEdit(a)}
+              onRequestEditSub={(sub) => onRequestEditSub(a.id, sub)}
+              onRequestAddSub={() => onRequestAddSub(a.id)}
+            />
+          ))}
+          {editable && (
+            <div style={{ paddingTop: 10, borderTop: activitiesAll.length ? `1px solid ${T.border}` : "none", marginTop: activitiesAll.length ? 6 : 0 }}>
+              <button onClick={onRequestAdd}
+                style={{ display: "flex", alignItems: "center", gap: 6, border: `1px dashed ${T.borderStrong}`, background: "none", color: T.navy, borderRadius: 7, padding: "7px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                <Plus size={13} /> Add Activity
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function QuarterLegend() {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+      {QUARTERS.map(q => (
+        <div key={q.id} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 9, padding: "8px 12px", textAlign: "center" }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: T.navy }}>{q.label}</div>
+          <div style={{ fontSize: 10.5, color: T.inkMuted }}>{q.range}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+/* Flat, date-sorted list of every activity across the current objectives —
+   the "List" view. */
+function ActivityListView({ objectives, streams, editable, onRequestEdit }) {
+  const rows = objectives.flatMap(o => o.initiatives.flatMap(init =>
+    (init.activities || []).map(a => ({ activity: a, objective: o, initiative: init }))
+  )).sort((x, y) => d(effectiveDate(x.activity)) - d(effectiveDate(y.activity)));
+
+  if (!rows.length) return <div style={{ fontSize: 13, color: T.inkMuted, padding: "16px 4px" }}>No activities added yet.</div>;
+
+  return (
+    <Card style={{ padding: 0, overflow: "auto" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ background: T.surface }}>
+            {["Date", "Objective", "Initiative", "Activity", "Owner", "Phase", "Status", "Progress", ""].map(h => (
+              <th key={h} style={{ padding: "10px 12px", fontSize: 10.5, fontWeight: 700, color: T.inkMuted, textAlign: "left", textTransform: "uppercase", borderBottom: `1px solid ${T.border}` }}>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ activity, objective, initiative }) => {
+            const stream = streams.find(s => s.id === objective.streamId);
+            return (
+              <tr key={activity.id} style={{ borderBottom: `1px solid ${T.border}` }}>
+                <td style={{ padding: "10px 12px", fontFamily: MONO, fontSize: 12 }}>{effectiveDate(activity)}</td>
+                <td style={{ padding: "10px 12px", fontSize: 12 }}>
+                  <span style={{ color: stream?.color, fontWeight: 700 }}>O{objective.number}</span> <span style={{ color: T.inkMuted }}>{objective.title}</span>
+                </td>
+                <td style={{ padding: "10px 12px", fontSize: 12, color: T.inkMuted }}>{initiative.name}</td>
+                <td style={{ padding: "10px 12px", fontSize: 12.5, fontWeight: 600 }}>{activity.name}</td>
+                <td style={{ padding: "10px 12px", fontSize: 12, color: T.inkMuted }}>{activity.owner || "—"}</td>
+                <td style={{ padding: "10px 12px" }}><PhaseTracker phase={activity.phase} editable={false} /></td>
+                <td style={{ padding: "10px 12px" }}><StatusChip status={activityStatus(activity)} /></td>
+                <td style={{ padding: "10px 12px", minWidth: 110 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ flex: 1 }}><ProgressBar value={effectiveActivityProgress(activity)} height={6} /></div>
+                    <span style={{ fontSize: 11, color: T.inkMuted }}>{effectiveActivityProgress(activity)}%</span>
+                  </div>
+                </td>
+                <td style={{ padding: "10px 12px" }}>
+                  {editable && (
+                    <button onClick={() => onRequestEdit(objective.id, initiative.id, activity)} title="Edit activity"
+                      style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                      <Pencil size={13} />
+                    </button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </Card>
+  );
+}
+
+
+function TimelinePage({ objectives, streams, editable, onAddActivity, onUpdateActivity, onDeleteActivity, onAddSub, onUpdateSub, onToggleSub, onDeleteSub, onAddMilestone, onUpdateMilestone, onDeleteMilestone }) {
   const [view, setView] = useState("Month");
-  const months = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const rangeStart = d("2026-07-01"), rangeEnd = d("2027-01-01");
+  const [activityView, setActivityView] = useState("Quarterly");
+  const [modalCtx, setModalCtx] = useState(null); // { mode, kind, objectiveId, initiativeId, activity/activityId/sub, kpi, subMetrics }
+  const [hoverIdx, setHoverIdx] = useState(null);
+
+  const isQuarterAxis = view === "Quarter";
+  // Always span the full planning horizon (Jul 2026 – Jun 2027 / all 4
+  // quarters), even where a given view has no data yet in later quarters.
+  const columns = isQuarterAxis
+    ? QUARTERS.map(q => `${q.label} · ${q.range}`)
+    : ["Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", "Dec 2026", "Jan 2027", "Feb 2027", "Mar 2027", "Apr 2027", "May 2027", "Jun 2027"];
+  const rangeStart = d("2026-07-01");
+  const rangeEnd = d("2027-07-01");
   const totalDays = daysBetween(rangeStart, rangeEnd);
   const pct = (dateStr) => (daysBetween(rangeStart, d(dateStr)) / totalDays) * 100;
   const todayPct = pct("2026-08-17");
+  const fmtDate = (dateStr) => d(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+  // Build the Gantt rows for the selected view.
+  let ganttRows = [];
+  if (view === "Objective") {
+    objectives.forEach(o => {
+      const stream = streams.find(s => s.id === o.streamId);
+      ganttRows.push({ type: "header", label: `O${o.number} · ${o.title}`, color: stream.color });
+      o.initiatives.forEach(init => {
+        ganttRows.push({
+          type: "bar", label: init.name, start: init.start, end: init.due, color: stream.color,
+          progress: init.progress, status: initiativeStatus(init), indent: true,
+        });
+      });
+    });
+  } else if (view === "Stream") {
+    streams.forEach(s => {
+      const objs = objectives.filter(o => o.streamId === s.id);
+      if (!objs.length) return;
+      const start = objs.reduce((min, o) => (o.start < min ? o.start : min), objs[0].start);
+      const end = objs.reduce((max, o) => (o.end > max ? o.end : max), objs[0].end);
+      const streamProg = streamProgress(s, objectives);
+      ganttRows.push({
+        type: "bar", label: s.name, start, end, color: s.color,
+        progress: streamProg, status: timelineStatus(start, end, streamProg),
+      });
+    });
+  } else {
+    objectives.forEach(o => {
+      const stream = streams.find(s => s.id === o.streamId);
+      ganttRows.push({
+        type: "bar", label: `O${o.number} · ${o.title}`, start: o.start, end: o.end, color: stream.color,
+        progress: objectiveProgress(o), status: objectiveStatus(o),
+      });
+    });
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1454,31 +2372,66 @@ function TimelinePage({ objectives, streams }) {
             }}>{v} view</button>
         ))}
       </div>
-      <Card style={{ padding: 20, overflowX: "auto" }}>
-        <div style={{ position: "relative", minWidth: 760 }}>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${months.length}, 1fr)`, marginBottom: 10, paddingLeft: 200 }}>
-            {months.map(m => <div key={m} style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textAlign: "center" }}>{m} 2026</div>)}
+      <Card style={{ padding: 20, overflowX: "auto", overflowY: "visible" }}>
+        <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 12 }}>
+          {view === "Month" && "Monthly columns (Jul 2026 – Jun 2027), one bar per objective. Hover a bar for dates and progress."}
+          {view === "Quarter" && "All four quarters (Jul 2026 – Jun 2027), one bar per objective. Hover a bar for dates and progress."}
+          {view === "Objective" && "Monthly columns (Jul 2026 – Jun 2027), broken down into each objective's initiatives. Hover a bar for dates and progress."}
+          {view === "Stream" && "Monthly columns (Jul 2026 – Jun 2027), rolled up to one bar per stream. Hover a bar for dates and progress."}
+        </div>
+        <div style={{ position: "relative", minWidth: isQuarterAxis ? 760 : 1180 }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${columns.length}, 1fr)`, marginBottom: 10, paddingLeft: 200 }}>
+            {columns.map(c => <div key={c} style={{ fontSize: 11, fontWeight: 700, color: T.inkMuted, textAlign: "center" }}>{c}</div>)}
           </div>
           <div style={{ position: "relative" }}>
-            <div style={{ position: "absolute", left: `calc(200px + ${todayPct}% * (100% - 200px) / 100)`, top: 0, bottom: 0, width: 2, background: T.plum, zIndex: 2 }}>
-              <div style={{ fontSize: 10, color: T.plum, fontWeight: 700, position: "absolute", top: -16, left: -14, whiteSpace: "nowrap" }}>TODAY</div>
-            </div>
-            {objectives.map(o => {
-              const stream = streams.find(s => s.id === o.streamId);
-              const left = pct(o.start), width = pct(o.end) - pct(o.start);
-              const status = objectiveStatus(o);
+            <div style={{ position: "absolute", left: `calc(200px + (100% - 200px) * ${todayPct / 100})`, top: 0, bottom: 0, width: 1.5, background: T.plum, zIndex: 2 }} />
+            {ganttRows.map((row, i) => {
+              if (row.type === "header") {
+                return (
+                  <div key={`h-${i}`} style={{ display: "flex", alignItems: "center", gap: 8, marginTop: i === 0 ? 0 : 14, marginBottom: 6 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: row.color }} />
+                    <span style={{ fontSize: 12.5, fontWeight: 800, color: T.navy }}>{row.label}</span>
+                  </div>
+                );
+              }
+              const left = pct(row.start), width = Math.max(pct(row.end) - pct(row.start), 1.5);
+              const hovered = hoverIdx === i;
+              const tooltipBelow = i < 2;
               return (
-                <div key={o.id} style={{ display: "flex", alignItems: "center", marginBottom: 10, height: 30 }}>
-                  <div style={{ width: 200, minWidth: 200, fontSize: 12, color: T.ink, fontWeight: 600, paddingRight: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    O{o.number} · {o.title}
+                <div key={`b-${i}`} style={{ display: "flex", alignItems: "center", marginBottom: 10, height: 30 }}>
+                  <div style={{
+                    width: 200, minWidth: 200, fontSize: 12, color: T.ink, fontWeight: row.indent ? 500 : 600,
+                    paddingRight: 10, paddingLeft: row.indent ? 16 : 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                  }}>
+                    {row.label}
                   </div>
                   <div style={{ position: "relative", flex: 1, height: 20 }}>
-                    <div style={{
-                      position: "absolute", left: `${left}%`, width: `${width}%`, height: "100%", borderRadius: 6,
-                      background: STATUS_SOFT[status], border: `1px solid ${stream.color}`, display: "flex", alignItems: "center", overflow: "hidden",
-                    }}>
-                      <div style={{ height: "100%", width: `${objectiveProgress(o)}%`, background: stream.color, opacity: 0.85 }} />
+                    <div
+                      onMouseEnter={() => setHoverIdx(i)}
+                      onMouseLeave={() => setHoverIdx(null)}
+                      style={{
+                        position: "absolute", left: `${left}%`, width: `${width}%`, height: "100%", borderRadius: 6,
+                        background: STATUS_SOFT[row.status], border: `1px solid ${row.color}`, display: "flex", alignItems: "center", overflow: "hidden",
+                        cursor: "pointer", boxShadow: hovered ? `0 0 0 2px ${row.color}` : "none",
+                      }}>
+                      <div style={{ height: "100%", width: `${row.progress}%`, background: row.color, opacity: 0.85 }} />
                     </div>
+                    {hovered && (
+                      <div style={{
+                        position: "absolute", left: `${Math.min(left, 70)}%`, zIndex: 10,
+                        ...(tooltipBelow ? { top: "calc(100% + 8px)" } : { bottom: "calc(100% + 8px)" }),
+                        background: T.navy, color: "#fff", borderRadius: 8, padding: "8px 11px", minWidth: 170,
+                        boxShadow: "0 8px 20px rgba(8,26,46,0.25)", pointerEvents: "none",
+                      }}>
+                        <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>{row.label}</div>
+                        <div style={{ fontSize: 11, color: "#C7D6E8" }}>{fmtDate(row.start)} – {fmtDate(row.end)}</div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 5 }}>
+                          <span style={{ fontSize: 11, color: "#C7D6E8" }}>Progress</span>
+                          <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700 }}>{row.progress}%</span>
+                        </div>
+                        <div style={{ marginTop: 5 }}><StatusChip status={row.status} /></div>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -1492,14 +2445,96 @@ function TimelinePage({ objectives, streams }) {
         </div>
       </Card>
 
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+        <SectionLabel icon={ListChecks}>Activity Template — Initiatives × Phases</SectionLabel>
+        <div style={{ display: "flex", gap: 6 }}>
+          {ACTIVITY_VIEWS.map(v => (
+            <button key={v} onClick={() => setActivityView(v)}
+              style={{
+                border: `1px solid ${activityView === v ? T.navy : T.border}`, background: activityView === v ? T.navy : T.bg,
+                color: activityView === v ? "#fff" : T.inkMuted, borderRadius: 8, padding: "6px 13px", fontSize: 12, fontWeight: 600, cursor: "pointer",
+              }}>{v}</button>
+          ))}
+        </div>
+      </div>
+      {activityView === "Quarterly" && <QuarterLegend />}
+      <div style={{ fontSize: 12, color: T.inkMuted, margin: "-6px 0 4px" }}>
+        Every activity moves through: <b style={{ color: T.ink }}>As-Is Scan → Standard → Pilot → Baseline & Measure → Scale</b>.
+        Progress and KPI values recorded per activity roll up automatically into the initiative, objective, and dashboard{editable ? "" : " (view only)"}.
+      </div>
+
+      {activityView === "List" ? (
+        <ActivityListView objectives={objectives} streams={streams} editable={editable}
+          onRequestEdit={(objectiveId, initiativeId, activity) => {
+            const o = objectives.find(x => x.id === objectiveId);
+            setModalCtx({ mode: "edit", kind: "activity", objectiveId, initiativeId, activity, kpi: o.kpi, subMetrics: o.subMetrics });
+          }}
+        />
+      ) : objectives.map(o => {
+        const stream = streams.find(s => s.id === o.streamId);
+        return (
+          <div key={o.id} style={{ marginTop: 6 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: stream.color }} />
+              <span style={{ fontSize: 13.5, fontWeight: 800, color: T.navy }}>O{o.number} · {o.title}</span>
+              <span style={{ fontSize: 11.5, color: T.inkMuted }}>{o.owner}</span>
+            </div>
+            {o.initiatives.map(init => (
+              <InitiativeTimelineBlock key={init.id} initiative={init} editable={editable} viewMode={activityView}
+                onToggleSub={(activityId, subId) => onToggleSub(o.id, init.id, activityId, subId)}
+                onDeleteSub={(activityId, subId) => onDeleteSub(o.id, init.id, activityId, subId)}
+                onQuickUpdate={(activityId, patch) => onUpdateActivity(o.id, init.id, activityId, patch)}
+                onRequestAdd={() => setModalCtx({ mode: "add", kind: "activity", objectiveId: o.id, initiativeId: init.id, activity: null, kpi: o.kpi, subMetrics: o.subMetrics })}
+                onRequestEdit={(activity) => setModalCtx({ mode: "edit", kind: "activity", objectiveId: o.id, initiativeId: init.id, activity, kpi: o.kpi, subMetrics: o.subMetrics })}
+                onRequestAddSub={(activityId) => setModalCtx({ mode: "add", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub: null, kpi: o.kpi, subMetrics: o.subMetrics })}
+                onRequestEditSub={(activityId, sub) => setModalCtx({ mode: "edit", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub, kpi: o.kpi, subMetrics: o.subMetrics })}
+              />
+            ))}
+          </div>
+        );
+      })}
+
       <SectionLabel icon={Clock}>Upcoming Milestones</SectionLabel>
-      <MilestonesCard objectives={objectives} />
+      <MilestonesCard objectives={objectives} editable={editable} onAddMilestone={onAddMilestone} onUpdateMilestone={onUpdateMilestone} onDeleteMilestone={onDeleteMilestone} />
+
+      {modalCtx && modalCtx.kind === "activity" && (
+        <ActivityFormModal
+          mode={modalCtx.mode} activity={modalCtx.activity} kpi={modalCtx.kpi} subMetrics={modalCtx.subMetrics}
+          onClose={() => setModalCtx(null)}
+          onSave={(payload) => {
+            if (modalCtx.mode === "add") onAddActivity(modalCtx.objectiveId, modalCtx.initiativeId, payload);
+            else onUpdateActivity(modalCtx.objectiveId, modalCtx.initiativeId, modalCtx.activity.id, payload);
+            setModalCtx(null);
+          }}
+          onDelete={modalCtx.mode === "edit" ? () => {
+            onDeleteActivity(modalCtx.objectiveId, modalCtx.initiativeId, modalCtx.activity.id);
+            setModalCtx(null);
+          } : undefined}
+        />
+      )}
+
+      {modalCtx && modalCtx.kind === "sub" && (
+        <SubActivityFormModal
+          mode={modalCtx.mode} sub={modalCtx.sub} kpi={modalCtx.kpi} subMetrics={modalCtx.subMetrics}
+          onClose={() => setModalCtx(null)}
+          onSave={(payload) => {
+            if (modalCtx.mode === "add") onAddSub(modalCtx.objectiveId, modalCtx.initiativeId, modalCtx.activityId, payload);
+            else onUpdateSub(modalCtx.objectiveId, modalCtx.initiativeId, modalCtx.activityId, modalCtx.sub.id, payload);
+            setModalCtx(null);
+          }}
+          onDelete={modalCtx.mode === "edit" ? () => {
+            onDeleteSub(modalCtx.objectiveId, modalCtx.initiativeId, modalCtx.activityId, modalCtx.sub.id);
+            setModalCtx(null);
+          } : undefined}
+        />
+      )}
     </div>
   );
 }
 
-function MilestonesCard({ objectives }) {
+function MilestonesCard({ objectives, editable, onAddMilestone, onUpdateMilestone, onDeleteMilestone }) {
   const [range, setRange] = useState(30);
+  const [milestoneModal, setMilestoneModal] = useState(null); // { mode, objectiveId, milestone }
   const all = objectives.flatMap(o => o.milestones.map(m => ({ ...m, objective: o })));
   const withinRange = all.filter(m => {
     const days = daysBetween(TODAY, d(m.date));
@@ -1509,25 +2544,64 @@ function MilestonesCard({ objectives }) {
     <Card style={{ padding: 18 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: T.navy }}>Next {range} Days</div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {[7, 30, 90].map(r => (
-            <button key={r} onClick={() => setRange(r)}
-              style={{
-                border: `1px solid ${range === r ? T.navy : T.border}`, background: range === r ? T.navy : T.bg,
-                color: range === r ? "#fff" : T.inkMuted, borderRadius: 7, padding: "4px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: 600,
-              }}>{r}d</button>
-          ))}
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 6 }}>
+            {[7, 30, 90].map(r => (
+              <button key={r} onClick={() => setRange(r)}
+                style={{
+                  border: `1px solid ${range === r ? T.navy : T.border}`, background: range === r ? T.navy : T.bg,
+                  color: range === r ? "#fff" : T.inkMuted, borderRadius: 7, padding: "4px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: 600,
+                }}>{r}d</button>
+            ))}
+          </div>
+          {editable && (
+            <button onClick={() => setMilestoneModal({ mode: "add", objectiveId: objectives[0]?.id, milestone: null })}
+              style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: "none", color: T.navy, borderRadius: 7, padding: "5px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>
+              <Plus size={12} /> Add Milestone
+            </button>
+          )}
         </div>
       </div>
       {withinRange.length === 0 ? <div style={{ color: T.inkMuted, fontSize: 13 }}>No milestones in this window.</div> :
         withinRange.map((m, i) => (
-          <div key={i} style={{ display: "grid", gridTemplateColumns: "90px 1fr 90px 90px", gap: 10, alignItems: "center", padding: "9px 4px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
+          <div key={i} style={{ display: "grid", gridTemplateColumns: editable ? "90px minmax(0, 1fr) 90px 100px 28px" : "90px minmax(0, 1fr) 90px 100px", gap: 10, alignItems: "center", padding: "9px 4px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
             <Num size={12} color={T.navy}>{m.date}</Num>
-            <div style={{ fontSize: 13, color: T.ink }}>{m.name}<div style={{ fontSize: 11, color: T.inkMuted }}>O{m.objective.number} · {m.objective.title}</div></div>
-            <div style={{ fontSize: 12, color: T.inkMuted }}>{m.objective.owner}</div>
+            <div style={{ fontSize: 13, color: T.ink, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {m.name}
+              <div style={{ fontSize: 11, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>O{m.objective.number} · {m.objective.title}</div>
+            </div>
+            <div style={{ fontSize: 12, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.objective.owner}</div>
             <StatusChip status={m.status === "Overdue" ? "Delayed" : "Not Started"} />
+            {editable && (
+              <button onClick={() => setMilestoneModal({ mode: "edit", objectiveId: m.objective.id, milestone: m })} title="Edit milestone"
+                style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                <Pencil size={13} />
+              </button>
+            )}
           </div>
         ))}
+      {milestoneModal && (
+        <MilestoneFormModal
+          mode={milestoneModal.mode} milestone={milestoneModal.milestone} objectives={objectives} defaultObjectiveId={milestoneModal.objectiveId}
+          onClose={() => setMilestoneModal(null)}
+          onSave={(payload) => {
+            const { objective: newObjectiveId, ...rest } = payload;
+            if (milestoneModal.mode === "add") {
+              onAddMilestone(newObjectiveId, rest);
+            } else if (newObjectiveId !== milestoneModal.objectiveId) {
+              onDeleteMilestone(milestoneModal.objectiveId, milestoneModal.milestone.id);
+              onAddMilestone(newObjectiveId, rest);
+            } else {
+              onUpdateMilestone(milestoneModal.objectiveId, milestoneModal.milestone.id, rest);
+            }
+            setMilestoneModal(null);
+          }}
+          onDelete={milestoneModal.mode === "edit" ? () => {
+            onDeleteMilestone(milestoneModal.objectiveId, milestoneModal.milestone.id);
+            setMilestoneModal(null);
+          } : undefined}
+        />
+      )}
     </Card>
   );
 }
@@ -1535,35 +2609,62 @@ function MilestonesCard({ objectives }) {
 /* ============================================================================
    RISKS PAGE
 ============================================================================ */
-function RisksPage({ objectives, forecastOverrides }) {
+function RisksPage({ objectives, forecastOverrides, risks, editable, onAddRisk, onUpdateRisk, onDeleteRisk }) {
+  const [riskModal, setRiskModal] = useState(null); // { mode, risk }
   const items = buildAttentionItems(objectives, forecastOverrides);
   const objById = Object.fromEntries(objectives.map(o => [o.id, o]));
-  const scopedRisks = RAW.risks.filter(r => objById[r.objective]);
+  const scopedRisks = risks.filter(r => objById[r.objective]);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <SectionLabel icon={AlertTriangle}>Needs Your Attention — {items.length} items</SectionLabel>
       <Card style={{ padding: 8 }}>
         <AttentionTable items={items} onSelect={() => {}} />
       </Card>
-      <SectionLabel icon={AlertTriangle}>Logged Risks & Blockers</SectionLabel>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <SectionLabel icon={AlertTriangle}>Logged Risks & Blockers</SectionLabel>
+        {editable && (
+          <button onClick={() => setRiskModal({ mode: "add", risk: null })}
+            style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: "none", color: T.navy, borderRadius: 7, padding: "5px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", marginBottom: 14 }}>
+            <Plus size={12} /> Add Risk
+          </button>
+        )}
+      </div>
       <Card style={{ padding: 0 }}>
         {scopedRisks.length === 0 ? (
           <div style={{ padding: 16, fontSize: 13, color: T.inkMuted }}>No logged risks for the current view.</div>
         ) : scopedRisks.map((r, i) => {
           const o = objById[r.objective];
           return (
-            <div key={r.id} style={{ display: "grid", gridTemplateColumns: "90px 1fr 100px 100px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
+            <div key={r.id} style={{ display: "grid", gridTemplateColumns: "90px minmax(0, 1fr) 100px 100px 32px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
               <StatusChip status={r.severity} />
-              <div>
-                <div style={{ fontSize: 13.5, color: T.ink, fontWeight: 600 }}>{r.issue}</div>
-                <div style={{ fontSize: 12, color: T.inkMuted, marginTop: 2 }}>O{o.number} · {o.title} · Action: {r.action}</div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, color: T.ink, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.issue}</div>
+                <div style={{ fontSize: 12, color: T.inkMuted, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>O{o.number} · {o.title} · Action: {r.action}</div>
               </div>
-              <div style={{ fontSize: 12.5, color: T.inkMuted }}>{r.owner}</div>
+              <div style={{ fontSize: 12.5, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.owner}</div>
               <div style={{ fontSize: 12.5, color: T.inkMuted, fontFamily: MONO }}>{r.due}</div>
+              {editable && (
+                <button onClick={() => setRiskModal({ mode: "edit", risk: r })} title="Edit risk"
+                  style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                  <Pencil size={13} />
+                </button>
+              )}
             </div>
           );
         })}
       </Card>
+      {riskModal && (
+        <RiskFormModal
+          mode={riskModal.mode} risk={riskModal.risk} objectives={objectives}
+          onClose={() => setRiskModal(null)}
+          onSave={(payload) => {
+            if (riskModal.mode === "add") onAddRisk(payload);
+            else onUpdateRisk(riskModal.risk.id, payload);
+            setRiskModal(null);
+          }}
+          onDelete={riskModal.mode === "edit" ? () => { onDeleteRisk(riskModal.risk.id); setRiskModal(null); } : undefined}
+        />
+      )}
     </div>
   );
 }
@@ -1571,39 +2672,53 @@ function RisksPage({ objectives, forecastOverrides }) {
 /* ============================================================================
    COMPLIANCE PAGE
 ============================================================================ */
+const CYCLE_START = "2026-08-01";
+const CYCLE_EXPECTED = "2026-08-15";
+
 function CompliancePage({ objectives }) {
-  const submitted = RAW.updateCompliance.filter(u => u.status === "Submitted").length;
+  const owners = Array.from(new Set(objectives.map(o => o.owner))).sort();
+  const rows = owners.map(owner => {
+    const objs = objectives.filter(o => o.owner === owner);
+    const lastDates = objs.map(o => lastActivityUpdate(o)).filter(Boolean);
+    const actual = lastDates.length ? lastDates.sort().slice(-1)[0] : null;
+    let status;
+    if (actual && actual >= CYCLE_START) status = "Submitted";
+    else if (TODAY_STR > CYCLE_EXPECTED) status = "Late";
+    else status = "Pending";
+    return { owner, objs, actual, status };
+  });
+  const submitted = rows.filter(r => r.status === "Submitted").length;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <Card style={{ padding: 20, display: "flex", alignItems: "center", gap: 18 }}>
         <div style={{
           width: 62, height: 62, borderRadius: "50%", border: `5px solid ${T.green}`,
           display: "flex", alignItems: "center", justifyContent: "center", fontFamily: MONO, fontWeight: 700, fontSize: 15, color: T.navy,
-        }}>{submitted}/{RAW.updateCompliance.length}</div>
+        }}>{submitted}/{rows.length}</div>
         <div>
           <div style={{ fontSize: 15, fontWeight: 700, color: T.navy }}>Update Compliance — This Cycle</div>
-          <div style={{ fontSize: 13, color: T.inkMuted }}>{submitted} of {RAW.updateCompliance.length} objective owners submitted this cycle.</div>
+          <div style={{ fontSize: 13, color: T.inkMuted }}>{submitted} of {rows.length} objective owners have made a Timeline update since {CYCLE_START}.</div>
         </div>
       </Card>
       <Card style={{ padding: 0 }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr style={{ background: T.surface }}>
-              {["Owner", "Objectives", "Expected Date", "Actual Date", "Status"].map(h => (
+              {["Owner", "Objectives", "Expected By", "Last Timeline Update", "Status"].map(h => (
                 <th key={h} style={{ padding: "10px 12px", fontSize: 10.5, fontWeight: 700, color: T.inkMuted, textAlign: "left", textTransform: "uppercase", borderBottom: `1px solid ${T.border}` }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {RAW.updateCompliance.map((u, i) => (
-              <tr key={i} style={{ borderBottom: `1px solid ${T.border}` }}>
-                <td style={{ padding: "12px", fontSize: 13, fontWeight: 600 }}>{u.owner}</td>
+            {rows.map((r, i) => (
+              <tr key={r.owner} style={{ borderBottom: `1px solid ${T.border}` }}>
+                <td style={{ padding: "12px", fontSize: 13, fontWeight: 600 }}>{r.owner}</td>
                 <td style={{ padding: "12px", fontSize: 12.5, color: T.inkMuted }}>
-                  {u.objectives.map(id => `O${objectives.find(o => o.id === id)?.number}`).join(", ")}
+                  {r.objs.map(o => `O${o.number}`).join(", ")}
                 </td>
-                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 12.5 }}>{u.expected}</td>
-                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 12.5 }}>{u.actual || "—"}</td>
-                <td style={{ padding: "12px" }}><StatusChip status={u.status} /></td>
+                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 12.5 }}>{CYCLE_EXPECTED}</td>
+                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 12.5 }}>{r.actual || "—"}</td>
+                <td style={{ padding: "12px" }}><StatusChip status={r.status} /></td>
               </tr>
             ))}
           </tbody>
@@ -1662,6 +2777,161 @@ function OwnerSection({ objectives }) {
 }
 
 /* ============================================================================
+   SETTINGS & DATA PAGE  (same pattern as the Objective 5 app)
+   - Export all data as JSON so changes made in the app can be sent back
+     and merged into the source file, or kept as a backup.
+   - Import a previously exported JSON to restore/continue from it.
+   - Reset to the original seeded data.
+============================================================================ */
+function downloadJSON(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function SettingsPage({ liveObjectives, setLiveObjectives, onToast, scopeOwner }) {
+  const [importError, setImportError] = useState("");
+  const fileInputRef = React.useRef(null);
+
+  const scopeObjectives = scopeOwner ? liveObjectives.filter(o => o.owner === scopeOwner) : liveObjectives;
+  const scopeIds = new Set(scopeObjectives.map(o => o.id));
+  const allInit = scopeObjectives.flatMap(o => o.initiatives);
+  const stats = [
+    { label: "Objectives", v: scopeObjectives.length },
+    { label: "Initiatives", v: allInit.length },
+    { label: "Completed Initiatives", v: allInit.filter(i => i.progress >= 100).length },
+    { label: "Last export", v: "—" },
+  ];
+
+  const handleExport = () => {
+    const today = "2026-08-19";
+    downloadJSON(
+      { exportedAt: today, strategy: RAW.strategy.name, scope: scopeOwner || "all", objectives: scopeObjectives },
+      `ba-strategy-data-${(scopeOwner || "all").toLowerCase()}-${today}.json`
+    );
+    onToast("Data exported");
+  };
+
+  const handleReset = () => {
+    const msg = scopeOwner
+      ? `Reset ${scopeOwner}'s objectives to the original seeded values? Any edits made in this session will be lost.`
+      : "Reset all data to the original seeded values? Any edits made in this session will be lost.";
+    if (window.confirm(msg)) {
+      if (scopeOwner) {
+        setLiveObjectives(prev => prev.map(o => (scopeIds.has(o.id) ? RAW.objectives.find(r => r.id === o.id) : o)));
+      } else {
+        setLiveObjectives(RAW.objectives);
+      }
+      onToast("Data reset to initial values");
+    }
+  };
+
+  const handleImportFile = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImportError("");
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        const objs = parsed.objectives || parsed;
+        if (!Array.isArray(objs) || !objs.every(o => o.id && o.initiatives)) {
+          throw new Error("File does not look like a valid strategy data export.");
+        }
+        const permitted = scopeOwner ? objs.filter(o => scopeIds.has(o.id)) : objs;
+        if (scopeOwner && permitted.length === 0) {
+          throw new Error(`This file doesn't contain any of ${scopeOwner}'s objectives.`);
+        }
+        const byId = Object.fromEntries(permitted.map(o => [o.id, o]));
+        setLiveObjectives(prev => prev.map(o => byId[o.id] || o));
+        onToast("Data imported");
+      } catch (err) {
+        setImportError(err.message || "Could not read this file.");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+      <SectionLabel icon={SettingsIcon}>Settings & Data{scopeOwner ? ` — ${scopeOwner}` : ""}</SectionLabel>
+
+      <Card style={{ padding: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+          {stats.map(s => (
+            <div key={s.label}>
+              <div style={{ fontSize: 11, color: T.inkMuted, marginBottom: 4 }}>{s.label}</div>
+              <Num size={18}>{s.v}</Num>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card style={{ padding: 20 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: T.navy, marginBottom: 4 }}>Export {scopeOwner ? "my" : "all"} data</div>
+        <div style={{ fontSize: 12.5, color: T.inkMuted, marginBottom: 14 }}>
+          {scopeOwner
+            ? `Downloads a JSON file with your own objectives, KPIs, sub-metrics and initiatives — including any edits made in this session. Send this file back so it can be merged into the source code.`
+            : "Downloads a JSON file with every objective, KPI, sub-metric and initiative — including any edits made in this session. Send this file back so it can be merged into the source code, or keep it as a backup."}
+        </div>
+        <button onClick={handleExport}
+          style={{
+            display: "flex", alignItems: "center", gap: 8, border: "none", background: T.navy, color: "#fff",
+            borderRadius: 9, padding: "10px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+          }}>
+          <Download size={15} /> Export {scopeOwner ? "my" : "all"} data (JSON)
+        </button>
+      </Card>
+
+      <Card style={{ padding: 20 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: T.navy, marginBottom: 4 }}>Import data</div>
+        <div style={{ fontSize: 12.5, color: T.inkMuted, marginBottom: 14 }}>
+          {scopeOwner
+            ? "Load a previously exported JSON file to continue from it. Only entries matching your own objectives will be applied."
+            : "Load a previously exported JSON file to continue from it in this browser session."}
+        </div>
+        <input ref={fileInputRef} type="file" accept="application/json" onChange={handleImportFile} style={{ display: "none" }} />
+        <button onClick={() => fileInputRef.current?.click()}
+          style={{
+            display: "flex", alignItems: "center", gap: 8, border: `1px solid ${T.border}`, background: T.bg, color: T.navy,
+            borderRadius: 9, padding: "10px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+          }}>
+          <Upload size={15} /> Import from file
+        </button>
+        {importError && (
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.red, fontSize: 12.5, marginTop: 10 }}>
+            <AlertCircle size={14} /> {importError}
+          </div>
+        )}
+      </Card>
+
+      <Card style={{ padding: 20, borderColor: T.redSoft }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: T.navy, marginBottom: 4 }}>Reset {scopeOwner ? "my" : "all"} data</div>
+        <div style={{ fontSize: 12.5, color: T.inkMuted, marginBottom: 14 }}>
+          {scopeOwner
+            ? "Discards any edits you made this session and restores your objectives to their originally seeded values."
+            : "Discards any edits made in this session and restores the originally seeded strategy data."}
+        </div>
+        <button onClick={handleReset}
+          style={{
+            display: "flex", alignItems: "center", gap: 8, border: `1px solid ${T.red}`, background: T.redSoft, color: T.red,
+            borderRadius: 9, padding: "10px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+          }}>
+          <RotateCcw size={15} /> Reset {scopeOwner ? "my" : "all"} data
+        </button>
+      </Card>
+    </div>
+  );
+}
+
+/* ============================================================================
    FORECAST PANEL
 ============================================================================ */
 function ForecastPanel({ objectives, streams, forecastOverrides, setForecastOverrides, onClose, onApply }) {
@@ -1711,20 +2981,29 @@ function ForecastPanel({ objectives, streams, forecastOverrides, setForecastOver
 }
 
 /* ============================================================================
-   URL-BASED OWNER LINKS  (?owner=Leen / ?owner=Yasser / ?owner=Baghdady / ?owner=Randa)
-   Lets each objective owner get a personal link that auto-filters to their
-   own objectives — no separate deploy needed, same repo & same Vercel project.
+   ROLES & URL LINKS
+   - default link (no params)   → Fatima (Lead): sees everything, read-only,
+     no Settings & Data, no editing, no Forecast Strategy.
+   - ?edit=1                    → Mashael (Admin): full control, everything visible.
+   - ?owner=Leen / Yasser / Baghdady / Randa → that owner's personal link:
+     locked to their own objectives, can edit their initiatives, sees a
+     Settings & Data tab scoped to just their own data.
+   No separate deploy needed — same repo, same Vercel project, different links.
 ============================================================================ */
 const KNOWN_OWNERS = ["Yasser", "Leen", "Baghdady", "Randa"];
-function getOwnerFromUrl() {
-  if (typeof window === "undefined") return "";
+function getRoleFromUrl() {
+  if (typeof window === "undefined") return { role: "lead", owner: "" };
   try {
     const params = new URLSearchParams(window.location.search);
+    if (params.get("edit") === "1") return { role: "admin", owner: "" };
     const raw = params.get("owner");
-    if (!raw) return "";
-    return KNOWN_OWNERS.find(o => o.toLowerCase() === raw.trim().toLowerCase()) || "";
+    if (raw) {
+      const matched = KNOWN_OWNERS.find(o => o.toLowerCase() === raw.trim().toLowerCase());
+      if (matched) return { role: "owner", owner: matched };
+    }
+    return { role: "lead", owner: "" };
   } catch {
-    return "";
+    return { role: "lead", owner: "" };
   }
 }
 
@@ -1732,17 +3011,20 @@ function getOwnerFromUrl() {
    ROOT APP
 ============================================================================ */
 export default function App() {
-  const initialOwner = useMemo(() => getOwnerFromUrl(), []);
+  const { role, owner: initialOwner } = useMemo(() => getRoleFromUrl(), []);
+  const canEdit = role === "admin" || role === "owner";
   const [page, setPage] = useState(initialOwner ? "objectives" : "overview");
   const [filters, setFilters] = useState({ stream: "", objective: "", owner: initialOwner, status: "" });
   const [selectedObjective, setSelectedObjective] = useState(null);
   const [forecastMode, setForecastMode] = useState(false);
   const [forecastOverrides, setForecastOverrides] = useState({});
   const [liveObjectives, setLiveObjectives] = useState(RAW.objectives);
+  const [liveRisks, setLiveRisks] = useState(RAW.risks);
   const [editingInitiative, setEditingInitiative] = useState(null);
   const [toast, setToast] = useState(null);
 
-  const filteredObjectives = useMemo(() => applyFilters(liveObjectives, RAW.streams, filters), [liveObjectives, filters]);
+  const enrichedObjectives = useMemo(() => enrichObjectives(liveObjectives), [liveObjectives]);
+  const filteredObjectives = useMemo(() => applyFilters(enrichedObjectives, RAW.streams, filters), [enrichedObjectives, filters]);
   const activeOverrides = forecastMode ? forecastOverrides : {};
 
   const saveInitiativeUpdate = useCallback((initId, patch) => {
@@ -1754,10 +3036,10 @@ export default function App() {
         const newHistoryEntry = {
           date: "2026-08-17", prev: prevProgress, next: patch.progress,
           summary: patch.comment || `Progress updated to ${patch.progress}%.`,
-          blockers: patch.blockers || "None", next2: patch.nextStep || i.nextMilestone, by: "Mashael",
+          blockers: "None", next2: patch.nextStep || i.nextMilestone, by: "Mashael",
         };
         return {
-          ...i, progress: patch.progress, risks: patch.blockers || i.risks, nextMilestone: patch.nextStep || i.nextMilestone,
+          ...i, owner: patch.owner || i.owner, progress: patch.progress, nextMilestone: patch.nextStep || i.nextMilestone,
           updatedBy: "Mashael", comments: patch.comment || i.comments,
           history: [newHistoryEntry, ...i.history],
         };
@@ -1780,16 +3062,184 @@ export default function App() {
     setTimeout(() => setToast(null), 2000);
   };
 
+  const genId = (prefix) => `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+
+  const addActivity = useCallback((objectiveId, initiativeId, payload) => {
+    setLiveObjectives(prev => prev.map(o => {
+      if (o.id !== objectiveId) return o;
+      return {
+        ...o,
+        initiatives: o.initiatives.map(i => i.id !== initiativeId ? i : {
+          ...i, activities: [...(i.activities || []), {
+            id: genId("act"), name: payload.name, owner: payload.owner || "", phase: payload.phase, quarter: payload.quarter, date: payload.date,
+            plannedStart: payload.plannedStart, plannedEnd: payload.plannedEnd,
+            actualStart: payload.actualStart || null, actualEnd: payload.actualEnd || null,
+            progress: payload.progress ?? 0, kpiRecords: payload.kpiRecords || {}, subActivities: [],
+            lastUpdated: TODAY_STR,
+          }],
+        }),
+      };
+    }));
+    setToast("Activity added");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const updateActivity = useCallback((objectiveId, initiativeId, activityId, patch) => {
+    setLiveObjectives(prev => prev.map(o => {
+      if (o.id !== objectiveId) return o;
+      return {
+        ...o,
+        initiatives: o.initiatives.map(i => i.id !== initiativeId ? i : {
+          ...i, activities: (i.activities || []).map(a => a.id === activityId ? { ...a, ...patch, lastUpdated: TODAY_STR } : a),
+        }),
+      };
+    }));
+    if (patch.name || patch.kpiRecords) {
+      setToast("Activity updated");
+      setTimeout(() => setToast(null), 2000);
+    }
+  }, []);
+
+  const deleteActivity = useCallback((objectiveId, initiativeId, activityId) => {
+    setLiveObjectives(prev => prev.map(o => {
+      if (o.id !== objectiveId) return o;
+      return {
+        ...o,
+        initiatives: o.initiatives.map(i => i.id !== initiativeId ? i : {
+          ...i, activities: (i.activities || []).filter(a => a.id !== activityId),
+        }),
+      };
+    }));
+    setToast("Activity deleted");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const addSubActivity = useCallback((objectiveId, initiativeId, activityId, payload) => {
+    setLiveObjectives(prev => prev.map(o => {
+      if (o.id !== objectiveId) return o;
+      return {
+        ...o,
+        initiatives: o.initiatives.map(i => i.id !== initiativeId ? i : {
+          ...i, activities: (i.activities || []).map(a => a.id !== activityId ? a : {
+            ...a, lastUpdated: TODAY_STR, subActivities: [...(a.subActivities || []), {
+              id: genId("sub"), name: payload.name,
+              plannedStart: payload.plannedStart, plannedEnd: payload.plannedEnd,
+              actualStart: payload.actualStart || null, actualEnd: payload.actualEnd || null,
+              progress: payload.progress ?? 0, kpiRecords: payload.kpiRecords || {},
+              lastUpdated: TODAY_STR,
+            }],
+          }),
+        }),
+      };
+    }));
+    setToast("Sub-activity added");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const updateSubActivity = useCallback((objectiveId, initiativeId, activityId, subId, patch) => {
+    setLiveObjectives(prev => prev.map(o => {
+      if (o.id !== objectiveId) return o;
+      return {
+        ...o,
+        initiatives: o.initiatives.map(i => i.id !== initiativeId ? i : {
+          ...i, activities: (i.activities || []).map(a => a.id !== activityId ? a : {
+            ...a, lastUpdated: TODAY_STR, subActivities: (a.subActivities || []).map(s => s.id === subId ? { ...s, ...patch, lastUpdated: TODAY_STR } : s),
+          }),
+        }),
+      };
+    }));
+    setToast("Sub-activity updated");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const toggleSubActivity = useCallback((objectiveId, initiativeId, activityId, subId) => {
+    setLiveObjectives(prev => prev.map(o => {
+      if (o.id !== objectiveId) return o;
+      return {
+        ...o,
+        initiatives: o.initiatives.map(i => i.id !== initiativeId ? i : {
+          ...i, activities: (i.activities || []).map(a => a.id !== activityId ? a : {
+            ...a, lastUpdated: TODAY_STR, subActivities: (a.subActivities || []).map(s => {
+              if (s.id !== subId) return s;
+              const cur = subProgress(s);
+              const { done, ...rest } = s;
+              return { ...rest, progress: cur >= 100 ? 0 : 100, lastUpdated: TODAY_STR };
+            }),
+          }),
+        }),
+      };
+    }));
+  }, []);
+
+  const deleteSubActivity = useCallback((objectiveId, initiativeId, activityId, subId) => {
+    setLiveObjectives(prev => prev.map(o => {
+      if (o.id !== objectiveId) return o;
+      return {
+        ...o,
+        initiatives: o.initiatives.map(i => i.id !== initiativeId ? i : {
+          ...i, activities: (i.activities || []).map(a => a.id !== activityId ? a : {
+            ...a, subActivities: (a.subActivities || []).filter(s => s.id !== subId),
+          }),
+        }),
+      };
+    }));
+    setToast("Sub-activity deleted");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const addMilestone = useCallback((objectiveId, payload) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, milestones: [...o.milestones, { id: genId("ms"), ...payload, lastUpdated: TODAY_STR }],
+    }));
+    setToast("Milestone added");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const updateMilestone = useCallback((objectiveId, milestoneId, patch) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, milestones: o.milestones.map(m => m.id === milestoneId ? { ...m, ...patch, lastUpdated: TODAY_STR } : m),
+    }));
+    setToast("Milestone updated");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const deleteMilestone = useCallback((objectiveId, milestoneId) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, milestones: o.milestones.filter(m => m.id !== milestoneId),
+    }));
+    setToast("Milestone deleted");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const addRisk = useCallback((payload) => {
+    setLiveRisks(prev => [...prev, { id: genId("r"), ...payload }]);
+    setToast("Risk added");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const updateRisk = useCallback((riskId, patch) => {
+    setLiveRisks(prev => prev.map(r => r.id === riskId ? { ...r, ...patch } : r));
+    setToast("Risk updated");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const deleteRisk = useCallback((riskId) => {
+    setLiveRisks(prev => prev.filter(r => r.id !== riskId));
+    setToast("Risk deleted");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
   const pageProps = {
     objectives: filteredObjectives, streams: RAW.streams, forecastOverrides: activeOverrides,
-    setPage, setSelectedObjective, selectedObjective, cycles: RAW.reportingCycles,
+    setPage, setSelectedObjective, selectedObjective, cycles: RAW.reportingCycles, editable: canEdit,
+    onAddMilestone: addMilestone, onUpdateMilestone: updateMilestone, onDeleteMilestone: deleteMilestone,
   };
 
   return (
     <div style={{ fontFamily: FONT, color: T.ink, height: "100%", minHeight: 640, display: "flex", background: T.bg, borderRadius: 12, overflow: "hidden", border: `1px solid ${T.border}` }}>
-      <Sidebar page={page} setPage={setPage} lockedOwner={initialOwner} />
+      <Sidebar page={page} setPage={setPage} role={role} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-        <TopBar forecastMode={forecastMode} setForecastMode={setForecastMode} />
+        <TopBar forecastMode={forecastMode} setForecastMode={setForecastMode} canEdit={canEdit} />
         {initialOwner && (
           <div style={{
             display: "flex", alignItems: "center", gap: 8,
@@ -1803,7 +3253,7 @@ export default function App() {
         )}
         <FilterBar filters={filters} setFilters={setFilters} objectives={liveObjectives} streams={RAW.streams} lockedOwner={initialOwner} />
         <div style={{ flex: 1, overflow: "auto", padding: 24, background: T.surface2 }}>
-          {forecastMode && (
+          {forecastMode && canEdit && (
             <div style={{ marginBottom: 18 }}>
               <ForecastPanel
                 objectives={filteredObjectives} streams={RAW.streams}
@@ -1815,10 +3265,22 @@ export default function App() {
           {page === "overview" && <OverviewPage {...pageProps} />}
           {page === "streams" && <StreamsPage {...pageProps} />}
           {page === "objectives" && <ObjectivesPage {...pageProps} />}
-          {page === "initiatives" && <InitiativesPage objectives={filteredObjectives} onEdit={setEditingInitiative} />}
-          {page === "timeline" && <TimelinePage objectives={filteredObjectives} streams={RAW.streams} />}
-          {page === "risks" && <RisksPage objectives={filteredObjectives} forecastOverrides={activeOverrides} />}
+          {page === "initiatives" && <InitiativesPage objectives={filteredObjectives} onEdit={canEdit ? setEditingInitiative : undefined} />}
+          {page === "timeline" && (
+            <TimelinePage objectives={filteredObjectives} streams={RAW.streams} editable={canEdit}
+              onAddActivity={addActivity} onUpdateActivity={updateActivity} onDeleteActivity={deleteActivity}
+              onAddSub={addSubActivity} onUpdateSub={updateSubActivity} onToggleSub={toggleSubActivity} onDeleteSub={deleteSubActivity}
+              onAddMilestone={addMilestone} onUpdateMilestone={updateMilestone} onDeleteMilestone={deleteMilestone} />
+          )}
+          {page === "risks" && (
+            <RisksPage objectives={filteredObjectives} forecastOverrides={activeOverrides} risks={liveRisks} editable={canEdit}
+              onAddRisk={addRisk} onUpdateRisk={updateRisk} onDeleteRisk={deleteRisk} />
+          )}
           {page === "compliance" && <CompliancePage objectives={filteredObjectives} />}
+          {page === "settings" && role !== "lead" && (
+            <SettingsPage liveObjectives={liveObjectives} setLiveObjectives={setLiveObjectives} scopeOwner={role === "owner" ? initialOwner : null}
+              onToast={(msg) => { setToast(msg); setTimeout(() => setToast(null), 2000); }} />
+          )}
         </div>
       </div>
 
