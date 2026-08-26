@@ -72,7 +72,8 @@ const RAW = {
     period: "Jul 2026 – Dec 2026",
   },
   settings: {
-    healthWeights: { kpi: 0.35, initiative: 0.30, objective: 0.20, timeline: 0.15 },
+    // KPI-driven strategy health weighting (see strategyHealth()).
+    healthWeights: { kpiAch: 0.40, subMetricAch: 0.25, kpisOnTarget: 0.20, measured: 0.15 },
     objectiveWeighting: "equal", // configurable
     streamWeighting: "equal",
   },
@@ -88,6 +89,28 @@ const RAW = {
     { id: "rc-nov", label: "Nov 2026 (proj.)", overall: 84, projected: true },
     { id: "rc-dec", label: "Dec 2026 (proj.)", overall: 92, projected: true },
   ],
+  // Illustrative archived summary for the prior strategy year. Real years will
+  // populate this automatically as each year's approved KPI checkpoints close out —
+  // note the KPI set itself differs from 2026, since targets and metrics are
+  // redefined each year.
+  archive2025: {
+    year: "2025",
+    label: "BA Department Strategy 2025 — Requirements Foundations",
+    overallProgress: 88,
+    health: 81,
+    closedOut: "2025-12-20",
+    streams: [
+      { name: "Requirements Discipline", progress: 91, color: T.blue },
+      { name: "Team Enablement", progress: 84, color: T.plum },
+    ],
+    kpis: [
+      { objective: "Requirements Sign-off Timeliness", current: 89, target: 90, unit: "%" },
+      { objective: "Documentation Completeness", current: 94, target: 90, unit: "%" },
+      { objective: "Stakeholder Satisfaction (survey)", current: 4.3, target: 4.2, unit: "/5" },
+      { objective: "Analyst Onboarding Time", current: 18, target: 21, unit: " days" },
+    ],
+    note: "2025 was the department's first tracked strategy cycle, run on a lighter KPI set focused on requirements discipline. 2026 introduced the full 9-objective structure and quarterly checkpoint governance shown elsewhere in this app.",
+  },
 };
 
 // ---- Objective 1 -----------------------------------------------------------
@@ -172,6 +195,10 @@ const O1 = {
     { id:"ms1", date:"2026-08-20", name:"Discovery Repository live", status:"Completed" },
     { id:"ms2", date:"2026-09-30", name:"Sign-off SLA approved", status:"Upcoming" },
     { id:"ms3", date:"2026-11-15", name:"Training workshop delivered", status:"Upcoming" },
+    { id:"kpichk-o1-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o1-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o1-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o1-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -205,6 +232,10 @@ const O2 = {
   milestones: [
     { id:"ms4", date:"2026-08-31", name:"All engagements baselined", status:"Upcoming" },
     { id:"ms5", date:"2026-10-15", name:"Automated reporting live", status:"Upcoming" },
+    { id:"kpichk-o2-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o2-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o2-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o2-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -238,6 +269,10 @@ const O3 = {
   milestones: [
     { id:"ms6", date:"2026-09-10", name:"Check instruments piloted", status:"Upcoming" },
     { id:"ms7", date:"2026-10-31", name:"Value realization pilot complete", status:"Upcoming" },
+    { id:"kpichk-o3-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o3-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o3-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o3-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -271,6 +306,10 @@ const O4 = {
   milestones: [
     { id:"ms8", date:"2026-08-31", name:"Opportunity Log live", status:"Upcoming" },
     { id:"ms9", date:"2026-10-15", name:"BD collaboration agreement signed", status:"Upcoming" },
+    { id:"kpichk-o4-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o4-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o4-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o4-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -302,6 +341,10 @@ const O5 = {
   milestones: [
     { id:"ms10", date:"2026-09-15", name:"Delivery discipline fully rolled out", status:"Upcoming" },
     { id:"ms11", date:"2026-11-30", name:"Continuous monitoring live", status:"Upcoming" },
+    { id:"kpichk-o5-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o5-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o5-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o5-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -334,6 +377,10 @@ const O6 = {
   milestones: [
     { id:"ms12", date:"2026-08-25", name:"Core standard set published", status:"Upcoming" },
     { id:"ms13", date:"2026-09-30", name:"Governance cadence approved", status:"Upcoming" },
+    { id:"kpichk-o6-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o6-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o6-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o6-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -365,6 +412,10 @@ const O7 = {
   milestones: [
     { id:"ms14", date:"2026-08-15", name:"Use-case repository structure agreed", status:"Overdue" },
     { id:"ms15", date:"2026-09-30", name:"Baseline report to leadership", status:"Overdue" },
+    { id:"kpichk-o7-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o7-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o7-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o7-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -394,6 +445,10 @@ const O8 = {
   milestones: [
     { id:"ms16", date:"2026-09-15", name:"Engagement-health view fully live", status:"Upcoming" },
     { id:"ms17", date:"2026-11-30", name:"Leadership rollout complete", status:"Upcoming" },
+    { id:"kpichk-o8-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o8-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o8-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o8-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -425,6 +480,10 @@ const O9 = {
   milestones: [
     { id:"ms18", date:"2026-10-15", name:"Onboarding playbook complete", status:"Upcoming" },
     { id:"ms19", date:"2026-12-15", name:"First quarterly talent review", status:"Upcoming" },
+    { id:"kpichk-o9-q1", date:"2026-09-30", name:"Q1 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q1", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o9-q2", date:"2026-12-31", name:"Q2 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q2", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o9-q3", date:"2027-03-31", name:"Q3 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q3", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
+    { id:"kpichk-o9-q4", date:"2027-06-30", name:"Q4 KPI Update", status:"Upcoming", kind:"kpi_checkpoint", quarter:"Q4", reviewStatus:"Not Submitted", kpiRecords:{}, reviewedBy:null, reviewNote:"" },
   ],
 };
 
@@ -483,26 +542,47 @@ function kpiStatus(kpi) {
   if (a >= 55) return "Below Target";
   return "Below Target";
 }
+/* ============================================================================
+   STRATEGIC MEASUREMENT — KPI-DRIVEN
+   At the strategy / stream / objective level, "progress" and "status" mean
+   KPI achievement against target, NOT how many activities got ticked off.
+   Activity completion still drives the *initiative* layer (see
+   initiativeStatus / enrichObjectives), but it never rolls up into the
+   strategic numbers the BA Lead reviews.
+============================================================================ */
+
+/* Objective progress = how far its KPI has come toward target (0–100). */
 function objectiveProgress(obj, forecastOverrides) {
   const ov = forecastOverrides?.[obj.id];
   if (ov != null) return ov;
-  if (!obj.initiatives.length) return 0;
-  const sum = obj.initiatives.reduce((a, i) => a + i.progress, 0);
-  return Math.round(sum / obj.initiatives.length);
+  return Math.round(Math.min(100, achievementPct(obj.kpi)));
 }
+
+/* Objective health blends KPI achievement with its sub-metrics, so a KPI
+   that looks fine but is propped up by one strong sub-metric still shows
+   the strain. Weighted 70% headline KPI / 30% average of sub-metrics. */
 function objectiveHealth(obj, weights, forecastOverrides) {
   const kpiAch = Math.min(100, achievementPct(obj.kpi));
-  const initProg = objectiveProgress(obj, forecastOverrides);
-  const tStatus = timelineStatus(obj.start, obj.end, initProg);
-  const timelineScore = tStatus === "On Track" ? 100 : tStatus === "At Risk" ? 65 : tStatus === "Delayed" ? 30 : tStatus === "Completed" ? 100 : 80;
-  const score = kpiAch * weights.kpi / (weights.kpi + weights.initiative + weights.timeline)
-    + initProg * weights.initiative / (weights.kpi + weights.initiative + weights.timeline)
-    + timelineScore * weights.timeline / (weights.kpi + weights.initiative + weights.timeline);
-  return Math.round(score);
+  const subs = obj.subMetrics || [];
+  if (!subs.length) return Math.round(kpiAch);
+  const subAvg = subs.reduce((a, sm) => {
+    const ach = sm.lowerBetter
+      ? (sm.target / Math.max(sm.current, 0.0001)) * 100
+      : (sm.current / Math.max(sm.target, 0.0001)) * 100;
+    return a + Math.min(100, ach);
+  }, 0) / subs.length;
+  return Math.round(kpiAch * 0.7 + subAvg * 0.3);
 }
+
+/* Objective status is derived from KPI achievement, not from dates or
+   activity ticks: at/over target = On Track, close = At Risk, far = Delayed. */
 function objectiveStatus(obj, forecastOverrides) {
-  const p = objectiveProgress(obj, forecastOverrides);
-  return timelineStatus(obj.start, obj.end, p);
+  const ov = forecastOverrides?.[obj.id];
+  const ach = ov != null ? ov : Math.min(150, achievementPct(obj.kpi));
+  if (ach >= 100) return "Completed";
+  if (ach >= 85) return "On Track";
+  if (ach >= 60) return "At Risk";
+  return "Delayed";
 }
 function streamProgress(stream, objectives, forecastOverrides) {
   const objs = objectives.filter(o => o.streamId === stream.id);
@@ -545,9 +625,6 @@ function subActivityStatus(s) {
   const end = s.plannedEnd || start;
   return timelineStatus(start, end, subProgress(s));
 }
-function avgOf(nums) {
-  return nums.length ? Math.round((nums.reduce((a, b) => a + b, 0) / nums.length) * 10) / 10 : null;
-}
 /* Most recent lastUpdated timestamp across an objective's Activities,
    Sub-Activities, and Milestones — the real signal of "the owner did
    something in the Timeline", used to drive Update Compliance. */
@@ -564,6 +641,17 @@ function lastActivityUpdate(o) {
   return dates.sort().slice(-1)[0];
 }
 
+/* KPI values are now ONLY updated via a quarterly checkpoint milestone that
+   the Objective Owner submits and the BA Lead approves — not from any
+   activity/sub-activity. This finds the most recently approved checkpoint's
+   values for a given objective and uses those as the "official" current KPI
+   value; if none is approved yet, the seeded baseline is used. */
+function latestApprovedCheckpoint(o) {
+  const approved = (o.milestones || []).filter(m => m.kind === "kpi_checkpoint" && m.reviewStatus === "Approved");
+  if (!approved.length) return null;
+  return [...approved].sort((a, b) => (a.date < b.date ? -1 : 1)).slice(-1)[0];
+}
+
 function enrichObjectives(objs) {
   return objs.map(o => {
     const initiatives = o.initiatives.map(i => {
@@ -572,33 +660,49 @@ function enrichObjectives(objs) {
       const progress = Math.round(activities.reduce((a, act) => a + effectiveActivityProgress(act), 0) / activities.length);
       return { ...i, progress };
     });
-    const allActivities = initiatives.flatMap(i => i.activities || []);
-    const allSubs = allActivities.flatMap(a => a.subActivities || []);
-    const recordsFor = (key) => [...allActivities, ...allSubs, ...o.milestones]
-      .map(x => x.kpiRecords?.[key])
-      .filter(v => v !== undefined && v !== null && v !== "" && !Number.isNaN(Number(v)))
-      .map(Number);
-    const kpiAvg = avgOf(recordsFor("kpi"));
+    const checkpoint = latestApprovedCheckpoint(o);
+    const records = checkpoint?.kpiRecords || {};
+    const kpiVal = records.kpi;
+    const kpi = (kpiVal !== undefined && kpiVal !== null && kpiVal !== "" && !Number.isNaN(Number(kpiVal)))
+      ? { ...o.kpi, previous: o.kpi.current, current: Number(kpiVal) } : o.kpi;
     const subMetrics = o.subMetrics.map(sm => {
-      const avg = avgOf(recordsFor(sm.id));
-      return avg == null ? sm : { ...sm, current: avg };
+      const v = records[sm.id];
+      return (v !== undefined && v !== null && v !== "" && !Number.isNaN(Number(v)))
+        ? { ...sm, previous: sm.current, current: Number(v) } : sm;
     });
-    const kpi = kpiAvg == null ? o.kpi : { ...o.kpi, current: kpiAvg };
     return { ...o, initiatives, kpi, subMetrics };
   });
 }
 
+/* Strategy health is now entirely KPI-driven. Its four components are all
+   different reads on measurement performance rather than activity delivery:
+     - kpiAch:      average headline KPI achievement across objectives
+     - subMetricAch: average sub-metric achievement (depth behind the KPI)
+     - kpisOnTarget: share of objectives whose KPI is at/over target
+     - measured:    share of objectives with an approved KPI checkpoint
+                    (i.e. how much of the picture is actually evidenced) */
 function strategyHealth(streams, objectives, weights, forecastOverrides) {
+  if (!objectives.length) return { score: 0, kpiAch: 0, subMetricAch: 0, kpisOnTarget: 0, measured: 0 };
   const kpiAch = Math.round(objectives.reduce((a, o) => a + Math.min(100, achievementPct(o.kpi)), 0) / objectives.length);
-  const initComplete = Math.round(
-    objectives.reduce((a, o) => a + o.initiatives.filter(i => initiativeStatus(i) === "Completed").length, 0) /
-    Math.max(1, objectives.reduce((a, o) => a + o.initiatives.length, 0)) * 100
-  );
-  const objProg = strategyProgress(streams, objectives, forecastOverrides);
-  const onTrackCount = objectives.filter(o => ["On Track", "Completed"].includes(objectiveStatus(o, forecastOverrides))).length;
-  const timelineHealth = Math.round((onTrackCount / objectives.length) * 100);
-  const score = kpiAch * weights.kpi + initComplete * weights.initiative + objProg * weights.objective + timelineHealth * weights.timeline;
-  return { score: Math.round(score), kpiAch, initComplete, objProg, timelineHealth };
+
+  const allSubs = objectives.flatMap(o => o.subMetrics || []);
+  const subMetricAch = allSubs.length
+    ? Math.round(allSubs.reduce((a, sm) => {
+        const ach = sm.lowerBetter
+          ? (sm.target / Math.max(sm.current, 0.0001)) * 100
+          : (sm.current / Math.max(sm.target, 0.0001)) * 100;
+        return a + Math.min(100, ach);
+      }, 0) / allSubs.length)
+    : kpiAch;
+
+  const onTargetCount = objectives.filter(o => achievementPct(o.kpi) >= 100).length;
+  const kpisOnTarget = Math.round((onTargetCount / objectives.length) * 100);
+
+  const measuredCount = objectives.filter(o => latestApprovedCheckpoint(o) != null).length;
+  const measured = Math.round((measuredCount / objectives.length) * 100);
+
+  const score = kpiAch * 0.40 + subMetricAch * 0.25 + kpisOnTarget * 0.20 + measured * 0.15;
+  return { score: Math.round(score), kpiAch, subMetricAch, kpisOnTarget, measured };
 }
 
 const STATUS_COLOR = {
@@ -688,10 +792,10 @@ const SectionLabel = ({ children, icon: Icon }) => (
 ============================================================================ */
 const HealthGauge = ({ health, weights }) => {
   const segs = [
-    { key: "kpiAch", label: "KPI", w: weights.kpi, color: T.blue },
-    { key: "initComplete", label: "Initiatives", w: weights.initiative, color: T.plum },
-    { key: "objProg", label: "Objectives", w: weights.objective, color: T.green },
-    { key: "timelineHealth", label: "Timeline", w: weights.timeline, color: T.amber },
+    { key: "kpiAch", label: "KPI Achievement", w: weights.kpiAch, color: T.blue },
+    { key: "subMetricAch", label: "Sub-Metrics", w: weights.subMetricAch, color: T.plum },
+    { key: "kpisOnTarget", label: "KPIs On Target", w: weights.kpisOnTarget, color: T.green },
+    { key: "measured", label: "Measured", w: weights.measured, color: T.amber },
   ];
   const R = 78, CX = 100, CY = 100, STROKE = 16;
   const circumference = 2 * Math.PI * R;
@@ -797,6 +901,7 @@ const NAV_ITEMS = [
   { id: "overview", label: "Strategy Overview", icon: LayoutDashboard },
   { id: "streams", label: "Streams", icon: GitBranch },
   { id: "objectives", label: "Objectives", icon: Target },
+  { id: "kpis", label: "KPIs & Sub-Metrics", icon: GaugeIcon },
   { id: "initiatives", label: "Initiatives", icon: ListChecks },
   { id: "timeline", label: "Timeline", icon: CalendarRange },
   { id: "risks", label: "Risks & Blockers", icon: AlertTriangle },
@@ -804,16 +909,8 @@ const NAV_ITEMS = [
   { id: "settings", label: "Settings & Data", icon: SettingsIcon },
 ];
 
-// Which nav tabs are hidden per role
-const HIDDEN_FOR_ROLE = {
-  admin: [],
-  owner: ["overview"],
-  lead: ["settings"],
-};
-
-function Sidebar({ page, setPage, role }) {
-  const hidden = HIDDEN_FOR_ROLE[role] || [];
-  const items = NAV_ITEMS.filter(i => !hidden.includes(i.id));
+function Sidebar({ page, setPage, allowedTabs }) {
+  const items = NAV_ITEMS.filter(i => allowedTabs.includes(i.id));
   return (
     <div style={{
       width: 240, minWidth: 240, background: T.navyDeep, height: "100%",
@@ -852,7 +949,7 @@ function Sidebar({ page, setPage, role }) {
 /* ============================================================================
    TOP BAR
 ============================================================================ */
-function TopBar({ forecastMode, setForecastMode, canEdit }) {
+function TopBar({ forecastMode, setForecastMode, canEdit, year, setYear }) {
   return (
     <div style={{
       display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -863,6 +960,11 @@ function TopBar({ forecastMode, setForecastMode, canEdit }) {
         <div style={{ fontSize: 12.5, color: T.inkMuted, marginTop: 1 }}>From Depth to Value — Strategy 2026</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <select value={year} onChange={e => setYear(e.target.value)} title="Compare a different year"
+          style={{ border: `1px solid ${T.border}`, borderRadius: 8, padding: "7px 10px", fontSize: 12.5, fontWeight: 600, color: T.navy, background: T.surface, cursor: "pointer" }}>
+          <option value="2026">2026 (Current)</option>
+          <option value="2025">2025 (Archived)</option>
+        </select>
         {canEdit && (
           <button onClick={() => setForecastMode(v => !v)}
             style={{
@@ -898,71 +1000,66 @@ function TopBar({ forecastMode, setForecastMode, canEdit }) {
 /* ============================================================================
    KPI EXECUTIVE CARDS
 ============================================================================ */
-function ExecCards({ objectives, streams, forecastOverrides, cycles, setPage }) {
+function ExecCards({ objectives, streams, forecastOverrides, cycles, setPage, role }) {
   const progress = strategyProgress(streams, objectives, forecastOverrides);
-  const prevCycle = cycles[cycles.findIndex(c => !c.projected) ] ; // Aug actual
-  const prevProgress = cycles[0].overall; // Jul
+  const prevProgress = cycles[0].overall;
   const objStatuses = objectives.map(o => objectiveStatus(o, forecastOverrides));
   const onTrack = objStatuses.filter(s => s === "On Track").length;
   const atRisk = objStatuses.filter(s => s === "At Risk").length;
   const delayed = objStatuses.filter(s => s === "Delayed").length;
   const completed = objStatuses.filter(s => s === "Completed").length;
 
-  const allInit = objectives.flatMap(o => o.initiatives);
-  const initStatuses = allInit.map(initiativeStatus);
-  const counts = {
-    Completed: initStatuses.filter(s => s === "Completed").length,
-    "In Progress": initStatuses.filter(s => !["Completed","At Risk","Delayed","Not Started"].includes(s)).length + initStatuses.filter(s=>s==="On Track").length,
-    "At Risk": initStatuses.filter(s => s === "At Risk").length,
-    Delayed: initStatuses.filter(s => s === "Delayed").length,
-    "Not Started": initStatuses.filter(s => s === "Not Started").length,
-  };
-  const kpiMeeting = objectives.filter(o => kpiStatus(o.kpi) === "Meeting Target").length;
-  const overdueItems = allInit.filter(i => isOverdue(i.due, i.progress)).length;
+  const kpiMeeting = objectives.filter(o => achievementPct(o.kpi) >= 100).length;
+  const kpiBelow = objectives.filter(o => achievementPct(o.kpi) < 80).length;
+
+  const allSubs = objectives.flatMap(o => o.subMetrics || []);
+  const subsBelow = allSubs.filter(sm => {
+    const ach = sm.lowerBetter ? (sm.target / Math.max(sm.current, 0.0001)) * 100 : (sm.current / Math.max(sm.target, 0.0001)) * 100;
+    return ach < 80;
+  }).length;
+
+  const measuredCount = objectives.filter(o => latestApprovedCheckpoint(o) != null).length;
+  const pendingReview = objectives.reduce((a, o) =>
+    a + (o.milestones || []).filter(m => m.kind === "kpi_checkpoint" && m.reviewStatus === "Pending Review").length, 0);
 
   const cards = [
     {
-      title: "Overall Strategy Progress",
+      title: "Overall KPI Progress",
       value: `${progress}%`, sub: <Trend current={progress} previous={prevProgress} suffix="pt" />,
       onClick: () => setPage("overview"),
     },
     {
-      title: "Objectives",
+      title: "Objectives by KPI",
       value: `${objectives.length} Total`,
       sub: (
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 2 }}>
+          <span style={{ fontSize: 11.5, color: T.blue, fontWeight: 700 }}>{completed} At Target</span>
           <span style={{ fontSize: 11.5, color: T.green, fontWeight: 700 }}>{onTrack} On Track</span>
           <span style={{ fontSize: 11.5, color: T.amber, fontWeight: 700 }}>{atRisk} At Risk</span>
-          <span style={{ fontSize: 11.5, color: T.red, fontWeight: 700 }}>{delayed} Delayed</span>
-          <span style={{ fontSize: 11.5, color: T.blue, fontWeight: 700 }}>{completed} Completed</span>
+          <span style={{ fontSize: 11.5, color: T.red, fontWeight: 700 }}>{delayed} Behind</span>
         </div>
       ),
       onClick: () => setPage("objectives"),
     },
     {
-      title: "Initiatives",
-      value: `${allInit.length} Total`,
-      sub: (
-        <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginTop: 2 }}>
-          <span style={{ fontSize: 11, color: T.blue, fontWeight: 700 }}>{counts.Completed} Done</span>
-          <span style={{ fontSize: 11, color: T.amber, fontWeight: 700 }}>{counts["At Risk"]} At Risk</span>
-          <span style={{ fontSize: 11, color: T.red, fontWeight: 700 }}>{counts.Delayed} Delayed</span>
-          <span style={{ fontSize: 11, color: T.gray, fontWeight: 700 }}>{counts["Not Started"]} Not Started</span>
-        </div>
-      ),
-      onClick: () => setPage("initiatives"),
-    },
-    {
-      title: "KPI Performance",
+      title: "KPIs Meeting Target",
       value: `${kpiMeeting} / ${objectives.length}`,
-      sub: <span style={{ fontSize: 12, color: T.inkMuted }}>KPIs meeting target</span>,
-      onClick: () => setPage("objectives"),
+      sub: <span style={{ fontSize: 12, color: kpiBelow ? T.amber : T.inkMuted, fontWeight: 600 }}>{kpiBelow} below 80% achievement</span>,
+      onClick: () => setPage("kpis"),
     },
     {
-      title: "Overdue Items",
-      value: `${overdueItems}`,
-      sub: <span style={{ fontSize: 12, color: overdueItems ? T.red : T.inkMuted, fontWeight: 600 }}>{overdueItems ? "needs attention" : "all clear"}</span>,
-      onClick: () => setPage("risks"),
+      title: "Sub-Metrics Below Target",
+      value: `${subsBelow} / ${allSubs.length}`,
+      sub: <span style={{ fontSize: 12, color: subsBelow ? T.amber : T.inkMuted, fontWeight: 600 }}>{subsBelow ? "underperforming" : "all healthy"}</span>,
+      onClick: () => setPage("kpis"),
+    },
+    {
+      title: "Checkpoints",
+      value: `${measuredCount} / ${objectives.length}`,
+      sub: <span style={{ fontSize: 12, color: pendingReview ? T.amber : T.inkMuted, fontWeight: 600 }}>
+        {pendingReview ? `${pendingReview} pending your review` : "measured & approved"}
+      </span>,
+      onClick: () => setPage("timeline"),
     },
   ];
 
@@ -988,25 +1085,140 @@ function insightsForData(objectives, streams, forecastOverrides) {
   const weakest = [...withProg].sort((a,b) => a.p - b.p)[0];
   const s1p = streamProgress(streams[0], objectives, forecastOverrides);
   const s2p = streamProgress(streams[1], objectives, forecastOverrides);
-  const overdueCount = objectives.flatMap(o => o.initiatives).filter(i => isOverdue(i.due, i.progress)).length;
-  const improvingDespiteDelay = objectives.find(o => {
+  const belowTarget = objectives.filter(o => achievementPct(o.kpi) < 80).length;
+  const unmeasured = objectives.filter(o => latestApprovedCheckpoint(o) == null).length;
+  const pendingReview = objectives.reduce((a, o) =>
+    a + (o.milestones || []).filter(m => m.kind === "kpi_checkpoint" && m.reviewStatus === "Pending Review").length, 0);
+
+  // A KPI that looks acceptable while its sub-metrics lag is worth surfacing.
+  const hollowKpi = objectives.find(o => {
     const kAch = achievementPct(o.kpi);
-    const delayed = o.initiatives.filter(i => initiativeStatus(i) === "Delayed").length > 0;
-    return kAch >= 60 && kAch < 90 && delayed;
+    const subs = o.subMetrics || [];
+    if (!subs.length || kAch < 85) return false;
+    const weakSubs = subs.filter(sm => {
+      const ach = sm.lowerBetter ? (sm.target / Math.max(sm.current, 0.0001)) * 100 : (sm.current / Math.max(sm.target, 0.0001)) * 100;
+      return ach < 70;
+    });
+    return weakSubs.length > 0;
   });
+
   const list = [
-    `Objective ${strongest.o.number} ("${strongest.o.title}") is the strongest performer at ${strongest.p}% progress.`,
-    `Objective ${weakest.o.number} ("${weakest.o.title}") carries the highest delivery risk at ${weakest.p}% progress and needs leadership attention.`,
-    `${overdueCount} initiative${overdueCount === 1 ? " is" : "s are"} currently overdue across the department.`,
-    `${streams[0].name} is ${Math.abs(s1p - s2p)} percentage points ${s1p >= s2p ? "ahead of" : "behind"} ${streams[1].name}.`,
+    `Objective ${strongest.o.number} ("${strongest.o.title}") has the strongest KPI achievement at ${strongest.p}% of target.`,
+    `Objective ${weakest.o.number} ("${weakest.o.title}") is furthest from its KPI target at ${weakest.p}% and needs leadership attention.`,
+    `${belowTarget} of ${objectives.length} objectives are below 80% KPI achievement.`,
+    `${streams[0].name} is ${Math.abs(s1p - s2p)} percentage points ${s1p >= s2p ? "ahead of" : "behind"} ${streams[1].name} on KPI achievement.`,
   ];
-  if (improvingDespiteDelay) {
-    list.push(`Objective ${improvingDespiteDelay.number} KPI performance is improving despite initiative delays.`);
+  if (pendingReview > 0) {
+    list.push(`${pendingReview} KPI checkpoint${pendingReview === 1 ? "" : "s"} awaiting your review before the numbers become official.`);
+  }
+  if (unmeasured > 0) {
+    list.push(`${unmeasured} objective${unmeasured === 1 ? " has" : "s have"} no approved KPI checkpoint yet, so ${unmeasured === 1 ? "its" : "their"} figures are still baseline estimates.`);
+  }
+  if (hollowKpi) {
+    list.push(`Objective ${hollowKpi.number}'s headline KPI looks healthy, but at least one sub-metric is under 70% — worth checking what's driving the average.`);
   }
   return list;
 }
 
-function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage, setSelectedObjective }) {
+/* Illustrative prior-year summary shown when the Year filter is switched to
+   an archived year. Real years will populate this automatically over time
+   as each year's approved KPI checkpoints close out. */
+function ArchivedYearSummary({ archive }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, background: T.amberSoft, borderRadius: 10, padding: "12px 16px" }}>
+        <Clock size={16} color={T.amber} />
+        <div style={{ fontSize: 13, color: T.ink }}>
+          Viewing an <b>archived</b> year — {archive.label}. Closed out {archive.closedOut}.
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14 }}>
+        <Card style={{ padding: "16px 18px" }}>
+          <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 8 }}>Overall Strategy Progress</div>
+          <Num size={26} color={T.navy}>{archive.overallProgress}%</Num>
+        </Card>
+        <Card style={{ padding: "16px 18px" }}>
+          <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 8 }}>Strategy Health</div>
+          <Num size={26} color={T.navy}>{archive.health}/100</Num>
+        </Card>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14 }}>
+        {archive.streams.map(s => (
+          <Card key={s.name} style={{ padding: 18, borderLeft: `4px solid ${s.color}` }}>
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: s.color, marginBottom: 8 }}>{s.name}</div>
+            <ProgressBar value={s.progress} color={s.color} height={8} />
+            <div style={{ marginTop: 8, fontSize: 12, color: T.inkMuted }}>{s.progress}% complete</div>
+          </Card>
+        ))}
+      </div>
+      <Card style={{ padding: 0 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ background: T.surface }}>
+              {["KPI", "Result", "Target"].map(h => (
+                <th key={h} style={{ padding: "10px 12px", fontSize: 10.5, fontWeight: 700, color: T.inkMuted, textAlign: "left", textTransform: "uppercase", borderBottom: `1px solid ${T.border}` }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {archive.kpis.map((k, i) => (
+              <tr key={i} style={{ borderBottom: `1px solid ${T.border}` }}>
+                <td style={{ padding: "12px", fontSize: 13, fontWeight: 600 }}>{k.objective}</td>
+                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 13 }}>{k.current}{k.unit}</td>
+                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 13, color: T.inkMuted }}>{k.target}{k.unit}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+      <div style={{ fontSize: 12, color: T.inkMuted, fontStyle: "italic" }}>{archive.note}</div>
+    </div>
+  );
+}
+
+/* KPI Progress at Strategy and Objective level — the primary view for the
+   BA Lead, who cares about outcomes rather than activity-level tracking. */
+function KpiProgressTable({ objectives, setSelectedObjective, setPage }) {
+  const rows = [...objectives].sort((a, b) => achievementPct(b.kpi) - achievementPct(a.kpi));
+  return (
+    <Card style={{ padding: 0 }}>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ background: T.surface }}>
+            {["Objective", "KPI", "Current", "Target", "Achievement", "Status"].map(h => (
+              <th key={h} style={{ padding: "10px 12px", fontSize: 10.5, fontWeight: 700, color: T.inkMuted, textAlign: "left", textTransform: "uppercase", borderBottom: `1px solid ${T.border}` }}>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(o => {
+            const ach = achievementPct(o.kpi);
+            return (
+              <tr key={o.id} style={{ borderBottom: `1px solid ${T.border}`, cursor: "pointer" }}
+                onClick={() => { setSelectedObjective(o.id); setPage("objectives"); }}>
+                <td style={{ padding: "12px", fontSize: 12.5 }}><span style={{ fontWeight: 700 }}>O{o.number}</span> <span style={{ color: T.inkMuted }}>{o.title}</span></td>
+                <td style={{ padding: "12px", fontSize: 12.5, color: T.inkMuted }}>{o.kpi.name}</td>
+                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 13 }}>{o.kpi.current}{o.kpi.unit}</td>
+                <td style={{ padding: "12px", fontFamily: MONO, fontSize: 13, color: T.inkMuted }}>{o.kpi.target}{o.kpi.unit}</td>
+                <td style={{ padding: "12px", minWidth: 120 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ flex: 1 }}><ProgressBar value={Math.min(100, ach)} color={ach >= 100 ? T.green : ach >= 80 ? T.blue : T.amber} height={6} /></div>
+                    <Num size={11.5}>{Math.round(ach)}%</Num>
+                  </div>
+                </td>
+                <td style={{ padding: "12px" }}><StatusChip status={kpiStatus(o.kpi)} /></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </Card>
+  );
+}
+
+function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage, setSelectedObjective, year, role }) {
+  if (year === "2025") return <ArchivedYearSummary archive={RAW.archive2025} />;
+
   const health = strategyHealth(streams, objectives, RAW.settings.healthWeights, forecastOverrides);
   const insights = insightsForData(objectives, streams, forecastOverrides);
   const chartData = cycles.map(c => ({ name: c.label.split(" ")[0], value: c.overall }));
@@ -1024,9 +1236,9 @@ function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage,
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, width: "100%", marginTop: 14 }}>
             {[
               { label: "KPI Achievement", v: health.kpiAch, color: T.blue },
-              { label: "Initiatives", v: health.initComplete, color: T.plum },
-              { label: "Objectives", v: health.objProg, color: T.green },
-              { label: "Timeline", v: health.timelineHealth, color: T.amber },
+              { label: "Sub-Metrics", v: health.subMetricAch, color: T.plum },
+              { label: "KPIs On Target", v: health.kpisOnTarget, color: T.green },
+              { label: "Measured", v: health.measured, color: T.amber },
             ].map(x => (
               <div key={x.label} style={{ fontSize: 11.5 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 5, color: T.inkMuted, marginBottom: 2 }}>
@@ -1066,15 +1278,22 @@ function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage,
         {streams.map(s => <StreamCard key={s.id} stream={s} objectives={objectives.filter(o => o.streamId === s.id)} forecastOverrides={forecastOverrides} onDrill={() => setPage("streams")} />)}
       </div>
 
-      <Card style={{ padding: 22 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-          <SectionLabel icon={AlertTriangle}>Needs Your Attention</SectionLabel>
-          <button onClick={() => setPage("risks")} style={{ border: "none", background: "none", color: T.plum, fontSize: 12.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}>
-            View all <ChevronRight size={14} />
-          </button>
-        </div>
-        <AttentionTable items={attentionItems} objectives={objectives} onSelect={(objId) => { setSelectedObjective(objId); setPage("objectives"); }} />
-      </Card>
+      <div>
+        <SectionLabel icon={GaugeIcon}>KPI Progress by Objective</SectionLabel>
+        <KpiProgressTable objectives={objectives} setSelectedObjective={setSelectedObjective} setPage={setPage} />
+      </div>
+
+      {role !== "lead" && (
+        <Card style={{ padding: 22 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+            <SectionLabel icon={AlertTriangle}>Needs Your Attention</SectionLabel>
+            <button onClick={() => setPage("risks")} style={{ border: "none", background: "none", color: T.plum, fontSize: 12.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}>
+              View all <ChevronRight size={14} />
+            </button>
+          </div>
+          <AttentionTable items={attentionItems} objectives={objectives} onSelect={(objId) => { setSelectedObjective(objId); setPage("objectives"); }} />
+        </Card>
+      )}
     </div>
   );
 }
@@ -1085,11 +1304,10 @@ function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage,
 function StreamCard({ stream, objectives, forecastOverrides, onDrill }) {
   const p = streamProgress(stream, objectives, forecastOverrides);
   const statuses = objectives.map(o => objectiveStatus(o, forecastOverrides));
-  const onTrack = statuses.filter(s => s === "On Track" || s === "Completed").length;
-  const atRisk = statuses.filter(s => s === "At Risk").length;
-  const allInit = objectives.flatMap(o => o.initiatives);
-  const completedInit = allInit.filter(i => initiativeStatus(i) === "Completed").length;
-  const kpiAch = Math.round(objectives.reduce((a,o) => a + Math.min(100, achievementPct(o.kpi)), 0) / objectives.length);
+  const atTarget = statuses.filter(s => s === "Completed").length;
+  const onTrack = statuses.filter(s => s === "On Track").length;
+  const behind = statuses.filter(s => s === "At Risk" || s === "Delayed").length;
+  const measured = objectives.filter(o => latestApprovedCheckpoint(o) != null).length;
   return (
     <Card hoverable onClick={onDrill} style={{ padding: 20, borderLeft: `4px solid ${stream.color}` }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -1103,9 +1321,9 @@ function StreamCard({ stream, objectives, forecastOverrides, onDrill }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
         {[
           { label: "Objectives", v: objectives.length },
+          { label: "At Target", v: atTarget },
           { label: "On Track", v: onTrack },
-          { label: "At Risk", v: atRisk },
-          { label: "Init. Done", v: `${completedInit}/${allInit.length}` },
+          { label: "Behind", v: behind },
         ].map(x => (
           <div key={x.label}>
             <div style={{ fontSize: 10.5, color: T.inkMuted, marginBottom: 2 }}>{x.label}</div>
@@ -1113,7 +1331,10 @@ function StreamCard({ stream, objectives, forecastOverrides, onDrill }) {
           </div>
         ))}
       </div>
-      <div style={{ marginTop: 12, fontSize: 12, color: T.inkMuted }}>KPI Achievement: <Num size={13} color={T.ink}>{kpiAch}%</Num></div>
+      <div style={{ marginTop: 12, fontSize: 12, color: T.inkMuted }}>
+        Avg KPI Achievement: <Num size={13} color={T.ink}>{p}%</Num>
+        <span style={{ marginLeft: 10 }}>Measured: <Num size={13} color={T.ink}>{measured}/{objectives.length}</Num></span>
+      </div>
     </Card>
   );
 }
@@ -1124,15 +1345,45 @@ function StreamCard({ stream, objectives, forecastOverrides, onDrill }) {
 function buildAttentionItems(objectives, forecastOverrides) {
   const items = [];
   objectives.forEach(o => {
-    const st = objectiveStatus(o, forecastOverrides);
-    if (st === "Delayed") items.push({ severity: "Critical", objective: o, initiative: null, owner: o.owner, issue: `Objective ${o.number} is delayed against its timeline.`, action: "Reassess plan and resourcing with owner.", due: o.end });
-    else if (st === "At Risk") items.push({ severity: "High", objective: o, initiative: null, owner: o.owner, issue: `Objective ${o.number} is at risk of slipping.`, action: "Review blockers in next check-in.", due: o.end });
-    if (kpiStatus(o.kpi) === "Below Target") items.push({ severity: "Medium", objective: o, initiative: null, owner: o.owner, issue: `${o.kpi.name} is below target (${o.kpi.current}${o.kpi.unit} vs ${o.kpi.target}${o.kpi.unit}).`, action: "Investigate root cause with data owner.", due: o.end });
-    o.initiatives.forEach(i => {
-      if (isOverdue(i.due, i.progress)) items.push({ severity: "Critical", objective: o, initiative: i, owner: i.owner, issue: `"${i.name}" is overdue.`, action: "Owner to provide revised date and blockers.", due: i.due });
-      else {
-        const dueSoon = daysBetween(TODAY, d(i.due)) <= 14 && daysBetween(TODAY, d(i.due)) >= 0 && i.progress < 100;
-        if (dueSoon) items.push({ severity: "Low", objective: o, initiative: i, owner: i.owner, issue: `"${i.name}" is due within 14 days.`, action: "Confirm on-track for the deadline.", due: i.due });
+    const ach = achievementPct(o.kpi);
+    const unit = o.kpi.unit;
+    // KPI-driven escalation — how far the measured value is from target.
+    if (ach < 60) {
+      items.push({ severity: "Critical", objective: o, initiative: null, owner: o.owner,
+        issue: `${o.kpi.name} is far below target (${o.kpi.current}${unit} vs ${o.kpi.target}${unit}, ${Math.round(ach)}% achievement).`,
+        action: "Reassess approach and resourcing with the objective owner.", due: o.end });
+    } else if (ach < 85) {
+      items.push({ severity: "High", objective: o, initiative: null, owner: o.owner,
+        issue: `${o.kpi.name} is at ${Math.round(ach)}% of target and at risk of missing.`,
+        action: "Review what's blocking the measure in the next check-in.", due: o.end });
+    }
+
+    // Sub-metrics dragging behind a headline KPI that looks acceptable.
+    (o.subMetrics || []).forEach(sm => {
+      const smAch = sm.lowerBetter
+        ? (sm.target / Math.max(sm.current, 0.0001)) * 100
+        : (sm.current / Math.max(sm.target, 0.0001)) * 100;
+      if (smAch < 70) {
+        items.push({ severity: "Medium", objective: o, initiative: null, owner: sm.dataOwner || o.owner,
+          issue: `Sub-metric "${sm.name}" is at ${Math.round(smAch)}% of target (${sm.current}${sm.unit} vs ${sm.target}${sm.unit}).`,
+          action: "Investigate root cause with the data owner.", due: o.end });
+      }
+    });
+
+    // Governance: checkpoints awaiting review, or a quarter with nothing submitted.
+    (o.milestones || []).filter(m => m.kind === "kpi_checkpoint").forEach(m => {
+      if (m.reviewStatus === "Pending Review") {
+        items.push({ severity: "High", objective: o, initiative: null, owner: o.owner,
+          issue: `${m.name} is submitted and awaiting BA Lead review.`,
+          action: "Review and approve so the figures become official.", due: m.date });
+      } else if (m.reviewStatus === "Rejected") {
+        items.push({ severity: "High", objective: o, initiative: null, owner: o.owner,
+          issue: `${m.name} was rejected and needs resubmission.`,
+          action: "Owner to correct the values and resubmit.", due: m.date });
+      } else if (m.reviewStatus === "Not Submitted" && d(m.date) < TODAY) {
+        items.push({ severity: "Critical", objective: o, initiative: null, owner: o.owner,
+          issue: `${m.name} was due ${m.date} and has not been submitted.`,
+          action: "Owner to measure and submit this quarter's KPI values.", due: m.date });
       }
     });
   });
@@ -1210,8 +1461,7 @@ function StreamsPage({ objectives, streams, forecastOverrides, setPage, setSelec
 function ObjectiveCard({ obj, streamColor, forecastOverrides, onClick }) {
   const p = objectiveProgress(obj, forecastOverrides);
   const status = objectiveStatus(obj, forecastOverrides);
-  const initDone = obj.initiatives.filter(i => initiativeStatus(i) === "Completed").length;
-  const kAch = Math.round(achievementPct(obj.kpi));
+  const measured = latestApprovedCheckpoint(obj) != null;
   return (
     <Card hoverable onClick={onClick} style={{ padding: 16, borderTop: `3px solid ${streamColor}` }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
@@ -1227,12 +1477,11 @@ function ObjectiveCard({ obj, streamColor, forecastOverrides, onClick }) {
       </div>
       <ProgressBar value={p} color={streamColor} />
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11.5, color: T.inkMuted }}>
-        <span>Progress</span><Num size={12.5}>{p}%</Num>
+        <span>KPI Achievement</span><Num size={12.5}>{p}%</Num>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, fontSize: 11.5, color: T.inkMuted }}>
-        <span>KPI {kAch}%</span>
-        <span>Init. {initDone}/{obj.initiatives.length}</span>
-        <span style={{ fontFamily: MONO }}>{obj.lastUpdate}</span>
+        <span>{obj.kpi.current}{obj.kpi.unit} / {obj.kpi.target}{obj.kpi.unit}</span>
+        <span style={{ color: measured ? T.green : T.amber, fontWeight: 600 }}>{measured ? "Approved" : "Baseline"}</span>
       </div>
     </Card>
   );
@@ -1241,8 +1490,303 @@ function ObjectiveCard({ obj, streamColor, forecastOverrides, onClick }) {
 /* ============================================================================
    OBJECTIVES PAGE (grid + drawer)
 ============================================================================ */
-function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObjective, setSelectedObjective }) {
+/* ============================================================================
+   KPIs & SUB-METRICS PAGE — a single place to monitor every measure in the
+   strategy and manage the metric set itself (targets change year to year).
+   Editing rights follow the same rule as elsewhere: an Objective Owner can
+   manage their own objectives' metrics; the BA Lead views only.
+============================================================================ */
+function KpisPage({ objectives, streams, role, currentOwner, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, onUpdateMilestone, setSelectedObjective, setPage }) {
+  const [expanded, setExpanded] = useState(null);
+  const [kpiModal, setKpiModal] = useState(null); // { objectiveId, mode, metric, isMainKpi }
+  const [checkpointModal, setCheckpointModal] = useState(null); // { objective, milestone }
+  const [sortBy, setSortBy] = useState("lowest");
+  const [query, setQuery] = useState("");
+
+  const canEditObjective = (o) => role === "admin";
+  const canApprove = role === "admin" || role === "lead";
+
+  let rows = objectives.map(o => ({ o, ach: achievementPct(o.kpi) }));
+  if (query) {
+    const q = query.toLowerCase();
+    rows = rows.filter(({ o }) =>
+      o.kpi.name.toLowerCase().includes(q) ||
+      o.title.toLowerCase().includes(q) ||
+      (o.subMetrics || []).some(sm => sm.name.toLowerCase().includes(q))
+    );
+  }
+  if (sortBy === "lowest") rows = [...rows].sort((a, b) => a.ach - b.ach);
+  if (sortBy === "highest") rows = [...rows].sort((a, b) => b.ach - a.ach);
+  if (sortBy === "objective") rows = [...rows].sort((a, b) => a.o.number - b.o.number);
+
+  const allSubs = objectives.flatMap(o => o.subMetrics || []);
+  const subAch = (sm) => sm.lowerBetter
+    ? (sm.target / Math.max(sm.current, 0.0001)) * 100
+    : (sm.current / Math.max(sm.target, 0.0001)) * 100;
+  const meetingTarget = objectives.filter(o => achievementPct(o.kpi) >= 100).length;
+  const subsBelow = allSubs.filter(sm => subAch(sm) < 80).length;
+  const measured = objectives.filter(o => latestApprovedCheckpoint(o) != null).length;
+
+  /* All quarterly KPI checkpoints that need someone's action, newest due first.
+     Pending Review and Rejected come first, then overdue unsubmitted ones. */
+  const checkpoints = objectives.flatMap(o =>
+    (o.milestones || [])
+      .filter(m => m.kind === "kpi_checkpoint")
+      .map(m => ({ objective: o, m }))
+  );
+  const actionRank = (m) => {
+    if (m.reviewStatus === "Pending Review") return 0;
+    if (m.reviewStatus === "Rejected") return 1;
+    if (m.reviewStatus === "Not Submitted" && d(m.date) < TODAY) return 2;
+    if (m.reviewStatus === "Not Submitted") return 3;
+    return 4; // Approved
+  };
+  const actionable = checkpoints
+    .filter(({ m }) => actionRank(m) <= 2)
+    .sort((a, b) => actionRank(a.m) - actionRank(b.m) || (a.m.date < b.m.date ? -1 : 1));
+  const upcoming = checkpoints
+    .filter(({ m }) => m.reviewStatus === "Not Submitted" && d(m.date) >= TODAY)
+    .sort((a, b) => (a.m.date < b.m.date ? -1 : 1))
+    .slice(0, 4);
+  const pendingCount = checkpoints.filter(({ m }) => m.reviewStatus === "Pending Review").length;
+
+  const checkpointChip = (m) =>
+    m.reviewStatus === "Approved" ? "Completed"
+      : m.reviewStatus === "Pending Review" ? "At Risk"
+        : m.reviewStatus === "Rejected" ? "Delayed" : "Not Started";
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+        {[
+          { label: "Total KPIs", v: `${objectives.length}` },
+          { label: "Meeting Target", v: `${meetingTarget} / ${objectives.length}` },
+          { label: "Sub-Metrics Below Target", v: `${subsBelow} / ${allSubs.length}` },
+          { label: "Approved Checkpoints", v: `${measured} / ${objectives.length}` },
+        ].map(c => (
+          <Card key={c.label} style={{ padding: "16px 18px" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", letterSpacing: 0.3, marginBottom: 8 }}>{c.label}</div>
+            <Num size={22} color={T.navy}>{c.v}</Num>
+          </Card>
+        ))}
+      </div>
+
+      {/* Quarterly checkpoint review queue — this is where the BA Lead
+          approves the numbers, since the Timeline tab is hidden for that role. */}
+      <div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <SectionLabel icon={CheckSquare}>
+            Quarterly KPI Review Queue{pendingCount > 0 ? ` — ${pendingCount} awaiting approval` : ""}
+          </SectionLabel>
+        </div>
+        <Card style={{ padding: 0 }}>
+          {actionable.length === 0 ? (
+            <div style={{ padding: 16, fontSize: 13, color: T.inkMuted }}>
+              Nothing needs action right now — no submissions pending review and no overdue checkpoints.
+            </div>
+          ) : actionable.map(({ objective: o, m }, i) => {
+            const mine = role === "admin" || (role === "leader" && currentOwner === o.owner);
+            const overdue = m.reviewStatus === "Not Submitted" && d(m.date) < TODAY;
+            return (
+              <div key={m.id} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 110px 130px 120px 90px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: T.navy, display: "flex", alignItems: "center", gap: 6 }}>
+                    <GaugeIcon size={12} color={T.plum} />
+                    {m.name}
+                    {m.evidence && m.evidence.length > 0 && <Paperclip size={11} color={T.inkMuted} />}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    O{o.number} · {o.kpi.name} · {o.owner}
+                  </div>
+                </div>
+                <div style={{ fontFamily: MONO, fontSize: 12, color: overdue ? T.red : T.inkMuted }}>{m.date}</div>
+                <StatusChip status={checkpointChip(m)} />
+                <div style={{ fontSize: 11.5, color: T.inkMuted }}>
+                  {m.reviewStatus === "Pending Review" ? "Needs your approval"
+                    : m.reviewStatus === "Rejected" ? "Owner to resubmit"
+                      : overdue ? "Overdue submission" : "—"}
+                </div>
+                {(mine || canApprove) ? (
+                  <button onClick={() => setCheckpointModal({ objective: o, milestone: m })}
+                    style={{
+                      border: "none", borderRadius: 8, padding: "7px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+                      background: m.reviewStatus === "Pending Review" && canApprove ? T.navy : T.surface,
+                      color: m.reviewStatus === "Pending Review" && canApprove ? "#fff" : T.navy,
+                    }}>
+                    {m.reviewStatus === "Pending Review" && canApprove ? "Review" : mine ? "Open" : "View"}
+                  </button>
+                ) : <span />}
+              </div>
+            );
+          })}
+        </Card>
+        {upcoming.length > 0 && (
+          <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: 8 }}>
+            Next scheduled: {upcoming.map(({ objective: o, m }) => `O${o.number} ${m.quarter} (${m.date})`).join(" · ")}
+          </div>
+        )}
+      </div>
+
+      <SectionLabel icon={GaugeIcon}>All KPIs & Sub-Metrics</SectionLabel>
+
+      <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ position: "relative", flex: "1 1 220px", minWidth: 200, maxWidth: 340 }}>
+          <Search size={15} style={{ position: "absolute", left: 10, top: 10, color: T.inkFaint }} />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search KPIs, sub-metrics, objectives…"
+            style={{ width: "100%", boxSizing: "border-box", padding: "9px 10px 9px 32px", border: `1px solid ${T.border}`, borderRadius: 9, fontSize: 13, fontFamily: FONT }} />
+        </div>
+        <select value={sortBy} onChange={e => setSortBy(e.target.value)}
+          style={{ flexShrink: 0, border: `1px solid ${T.border}`, borderRadius: 9, padding: "9px 10px", fontSize: 13, fontFamily: FONT, background: T.bg }}>
+          <option value="lowest">Sort: Lowest achievement</option>
+          <option value="highest">Sort: Highest achievement</option>
+          <option value="objective">Sort: Objective</option>
+        </select>
+        <div style={{ fontSize: 12, color: T.inkMuted, marginLeft: "auto", flexShrink: 0 }}>
+          KPI values change only via approved quarterly checkpoints
+        </div>
+      </div>
+
+      {rows.map(({ o, ach }) => {
+        const stream = streams.find(s => s.id === o.streamId);
+        const isOpen = expanded === o.id;
+        const editable = canEditObjective(o);
+        const checkpoint = latestApprovedCheckpoint(o);
+        return (
+          <Card key={o.id} style={{ padding: 0, borderLeft: `4px solid ${stream?.color || T.blue}` }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 130px 130px 90px 28px 28px", gap: 12, alignItems: "center", padding: "14px 16px" }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 700, color: T.navy, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.kpi.name}</div>
+                <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  O{o.number} · {o.title} · {o.owner}
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: 10.5, color: T.inkMuted, marginBottom: 2 }}>Current / Target</div>
+                <Num size={13}>{o.kpi.current}{o.kpi.unit} / {o.kpi.target}{o.kpi.unit}</Num>
+              </div>
+              <div>
+                <div style={{ fontSize: 10.5, color: T.inkMuted, marginBottom: 3 }}>Achievement</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <div style={{ flex: 1 }}><ProgressBar value={Math.min(100, ach)} color={ach >= 100 ? T.green : ach >= 80 ? T.blue : T.amber} height={6} /></div>
+                  <Num size={11.5}>{Math.round(ach)}%</Num>
+                </div>
+              </div>
+              <StatusChip status={kpiStatus(o.kpi)} />
+              {editable ? (
+                <button onClick={() => setKpiModal({ objectiveId: o.id, mode: "edit", metric: o.kpi, isMainKpi: true })} title="Edit KPI"
+                  style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                  <Pencil size={13} />
+                </button>
+              ) : <span />}
+              <button onClick={() => setExpanded(isOpen ? null : o.id)} title="Sub-metrics"
+                style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted, padding: 2, display: "flex" }}>
+                {isOpen ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
+              </button>
+            </div>
+
+            {isOpen && (
+              <div style={{ borderTop: `1px solid ${T.border}`, background: T.surface, padding: "12px 16px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                  <span style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>
+                    Sub-Metrics ({(o.subMetrics || []).length})
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 11, color: checkpoint ? T.green : T.amber, fontWeight: 600 }}>
+                      {checkpoint ? `Last approved: ${checkpoint.name} (${checkpoint.date})` : "No approved checkpoint yet — baseline figures"}
+                    </span>
+                    {editable && (
+                      <button onClick={() => setKpiModal({ objectiveId: o.id, mode: "add", metric: null, isMainKpi: false })}
+                        style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: T.bg, color: T.navy, borderRadius: 7, padding: "4px 9px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+                        <Plus size={11} /> Add Sub-Metric
+                      </button>
+                    )}
+                  </div>
+                </div>
+                {(o.subMetrics || []).length === 0 ? (
+                  <div style={{ fontSize: 12.5, color: T.inkMuted, padding: "6px 0" }}>No sub-metrics defined for this KPI.</div>
+                ) : (
+                  <Card style={{ padding: 0 }}>
+                    {o.subMetrics.map((sm, i) => {
+                      const a = subAch(sm);
+                      return (
+                        <div key={sm.id} style={{ display: "grid", gridTemplateColumns: `minmax(0, 1fr) 120px 120px 90px ${editable ? "28px" : ""}`, gap: 10, alignItems: "center", padding: "10px 12px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontSize: 12.5, fontWeight: 600, color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.number}.{i + 1} {sm.name}</div>
+                            <div style={{ fontSize: 10.5, color: T.inkMuted }}>owner: {sm.dataOwner || o.owner} · updated {sm.lastUpdated || "—"}</div>
+                          </div>
+                          <Num size={12.5}>{sm.current}{sm.unit} / {sm.target}{sm.unit}</Num>
+                          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                            <div style={{ flex: 1 }}><ProgressBar value={Math.min(100, a)} color={a >= 100 ? T.green : a >= 80 ? T.blue : T.amber} height={5} /></div>
+                            <span style={{ fontSize: 11, color: T.inkMuted }}>{Math.round(a)}%</span>
+                          </div>
+                          <StatusChip status={a >= 100 ? "Meeting Target" : a >= 80 ? "On Track" : "Below Target"} />
+                          {editable && (
+                            <button onClick={() => setKpiModal({ objectiveId: o.id, mode: "edit", metric: sm, isMainKpi: false })} title="Edit sub-metric"
+                              style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                              <Pencil size={12} />
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </Card>
+                )}
+              </div>
+            )}
+          </Card>
+        );
+      })}
+
+      {kpiModal && (
+        <KpiFormModal
+          mode={kpiModal.mode} metric={kpiModal.metric} isMainKpi={kpiModal.isMainKpi}
+          onClose={() => setKpiModal(null)}
+          onSave={(payload) => {
+            if (kpiModal.isMainKpi) onUpdateKpi(kpiModal.objectiveId, payload);
+            else if (kpiModal.mode === "add") onAddSubMetric(kpiModal.objectiveId, payload);
+            else onUpdateSubMetric(kpiModal.objectiveId, kpiModal.metric.id, payload);
+            setKpiModal(null);
+          }}
+          onDelete={(!kpiModal.isMainKpi && kpiModal.mode === "edit") ? () => {
+            onDeleteSubMetric(kpiModal.objectiveId, kpiModal.metric.id);
+            setKpiModal(null);
+          } : undefined}
+        />
+      )}
+
+      {checkpointModal && (
+        <KpiCheckpointModal
+          milestone={checkpointModal.milestone} objective={checkpointModal.objective}
+          canSubmit={role === "admin" || (role === "leader" && currentOwner === checkpointModal.objective.owner)}
+          canApprove={canApprove}
+          onClose={() => setCheckpointModal(null)}
+          onSubmit={(values, evidence) => {
+            onUpdateMilestone(checkpointModal.objective.id, checkpointModal.milestone.id, {
+              kpiRecords: values, evidence, reviewStatus: "Pending Review", reviewedBy: null, reviewNote: "",
+            });
+            setCheckpointModal(null);
+          }}
+          onApprove={(note) => {
+            onUpdateMilestone(checkpointModal.objective.id, checkpointModal.milestone.id, {
+              reviewStatus: "Approved", reviewedBy: "BA Lead", reviewNote: note, status: "Completed",
+            });
+            setCheckpointModal(null);
+          }}
+          onReject={(note) => {
+            onUpdateMilestone(checkpointModal.objective.id, checkpointModal.milestone.id, {
+              reviewStatus: "Rejected", reviewedBy: "BA Lead", reviewNote: note,
+            });
+            setCheckpointModal(null);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObjective, setSelectedObjective, role, currentOwner, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric }) {
   const selected = objectives.find(o => o.id === selectedObjective);
+  const canEditKpi = selected && role === "admin";
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <SectionLabel icon={Target}>Nine Objectives — Strategy Map</SectionLabel>
@@ -1253,7 +1797,13 @@ function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObject
         })}
       </div>
       {selected && (
-        <ObjectiveDrawer obj={selected} stream={streams.find(s => s.id === selected.streamId)} forecastOverrides={forecastOverrides} onClose={() => setSelectedObjective(null)} />
+        <ObjectiveDrawer obj={selected} stream={streams.find(s => s.id === selected.streamId)} forecastOverrides={forecastOverrides} onClose={() => setSelectedObjective(null)}
+          canEditKpi={canEditKpi}
+          onUpdateKpi={(patch) => onUpdateKpi(selected.id, patch)}
+          onAddSubMetric={(payload) => onAddSubMetric(selected.id, payload)}
+          onUpdateSubMetric={(smId, patch) => onUpdateSubMetric(selected.id, smId, patch)}
+          onDeleteSubMetric={(smId) => onDeleteSubMetric(selected.id, smId)}
+        />
       )}
     </div>
   );
@@ -1306,9 +1856,74 @@ function HistoryModal({ initiative, onClose }) {
 /* ============================================================================
    OBJECTIVE DRAWER
 ============================================================================ */
-function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose }) {
+/* ============================================================================
+   KPI FORM MODAL — edit the objective's main KPI, or add/edit a Sub-Metric.
+   Targets and metric sets change year to year, so these stay editable.
+============================================================================ */
+function KpiFormModal({ mode, metric, isMainKpi, onSave, onDelete, onClose }) {
+  const [name, setName] = useState(metric?.name || "");
+  const [target, setTarget] = useState(metric?.target ?? 0);
+  const [unit, setUnit] = useState(metric?.unit ?? "%");
+  const [lowerBetter, setLowerBetter] = useState(!!metric?.lowerBetter);
+
+  const handleSave = () => {
+    if (!name.trim()) return;
+    onSave({ name: name.trim(), target: Number(target), unit, lowerBetter });
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 440, maxWidth: "100%", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>
+            {isMainKpi ? "Edit KPI" : mode === "add" ? "Add Sub-Metric" : "Edit Sub-Metric"}
+          </div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Name</label>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Discovery Output Coverage"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Target</label>
+            <input type="number" value={target} onChange={e => setTarget(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: MONO }} />
+          </div>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Unit</label>
+            <input value={unit} onChange={e => setUnit(e.target.value)} placeholder="%"
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+          </div>
+        </div>
+
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, color: T.ink, marginBottom: 18, cursor: "pointer" }}>
+          <input type="checkbox" checked={lowerBetter} onChange={e => setLowerBetter(e.target.checked)} style={{ accentColor: T.plum }} />
+          Lower values are better for this metric
+        </label>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          {mode === "edit" && !isMainKpi && onDelete && (
+            <button onClick={onDelete}
+              style={{ display: "flex", alignItems: "center", gap: 6, border: `1px solid ${T.red}`, background: T.redSoft, color: T.red, borderRadius: 9, padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+              <Trash2 size={14} /> Delete
+            </button>
+          )}
+          <button onClick={handleSave}
+            style={{ flex: 1, padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
+            {isMainKpi ? "Save Changes" : mode === "add" ? "Add Sub-Metric" : "Save Changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric }) {
   const [historyFor, setHistoryFor] = useState(null);
   const [expandedSM, setExpandedSM] = useState(null);
+  const [kpiModal, setKpiModal] = useState(null); // { mode, metric, isMainKpi }
   const p = objectiveProgress(obj, forecastOverrides);
   const health = objectiveHealth(obj, RAW.settings.healthWeights, forecastOverrides);
   const status = objectiveStatus(obj, forecastOverrides);
@@ -1357,7 +1972,15 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose }) {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 20 }}>
           <div>
-            <SectionLabel icon={GaugeIcon}>KPI</SectionLabel>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <SectionLabel icon={GaugeIcon}>KPI</SectionLabel>
+              {canEditKpi && (
+                <button onClick={() => setKpiModal({ mode: "edit", metric: obj.kpi, isMainKpi: true })} title="Edit KPI"
+                  style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex", marginBottom: 14 }}>
+                  <Pencil size={13} />
+                </button>
+              )}
+            </div>
             <Card style={{ padding: 16 }}>
               <div style={{ fontSize: 13.5, fontWeight: 700, color: T.navy, marginBottom: 10 }}>{obj.kpi.name}</div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 8 }}>
@@ -1375,18 +1998,33 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose }) {
           </div>
 
           <div>
-            <SectionLabel icon={ListChecks}>Sub-Metrics</SectionLabel>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <SectionLabel icon={ListChecks}>Sub-Metrics</SectionLabel>
+              {canEditKpi && (
+                <button onClick={() => setKpiModal({ mode: "add", metric: null, isMainKpi: false })}
+                  style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: "none", color: T.navy, borderRadius: 7, padding: "4px 9px", fontSize: 11, fontWeight: 700, cursor: "pointer", marginBottom: 10 }}>
+                  <Plus size={11} /> Add
+                </button>
+              )}
+            </div>
             <Card style={{ padding: 0 }}>
+              {obj.subMetrics.length === 0 && <div style={{ padding: 14, fontSize: 12.5, color: T.inkMuted }}>No sub-metrics yet.</div>}
               {obj.subMetrics.map((sm, i) => {
                 const ach = Math.round((sm.current / sm.target) * 100);
                 const expanded = expandedSM === sm.id;
                 return (
                   <div key={sm.id} style={{ borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
-                    <div onClick={() => setExpandedSM(expanded ? null : sm.id)} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 70px 70px 90px 20px", gap: 8, alignItems: "center", padding: "11px 14px", cursor: "pointer" }}>
+                    <div onClick={() => setExpandedSM(expanded ? null : sm.id)} style={{ display: "grid", gridTemplateColumns: canEditKpi ? "minmax(0, 1fr) 70px 70px 90px 20px 20px" : "minmax(0, 1fr) 70px 70px 90px 20px", gap: 8, alignItems: "center", padding: "11px 14px", cursor: "pointer" }}>
                       <div style={{ fontSize: 12.5, fontWeight: 600, color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{obj.number}.{i+1} {sm.name}</div>
                       <Num size={12.5}>{sm.current}{sm.unit}</Num>
                       <span style={{ fontSize: 11.5, color: T.inkMuted }}>/ {sm.target}{sm.unit}</span>
                       <StatusChip status={ach >= 90 ? "On Track" : ach >= 65 ? "At Risk" : "Delayed"} />
+                      {canEditKpi && (
+                        <button onClick={(e) => { e.stopPropagation(); setKpiModal({ mode: "edit", metric: sm, isMainKpi: false }); }} title="Edit sub-metric"
+                          style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                          <Pencil size={12} />
+                        </button>
+                      )}
                       {expanded ? <ChevronDown size={14} color={T.inkMuted} /> : <ChevronRight size={14} color={T.inkMuted} />}
                     </div>
                     {expanded && (
@@ -1427,6 +2065,22 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose }) {
       </div>
 
       {historyFor && <HistoryModal initiative={historyFor} onClose={() => setHistoryFor(null)} />}
+      {kpiModal && (
+        <KpiFormModal
+          mode={kpiModal.mode} metric={kpiModal.metric} isMainKpi={kpiModal.isMainKpi}
+          onClose={() => setKpiModal(null)}
+          onSave={(payload) => {
+            if (kpiModal.isMainKpi) onUpdateKpi(payload);
+            else if (kpiModal.mode === "add") onAddSubMetric(payload);
+            else onUpdateSubMetric(kpiModal.metric.id, payload);
+            setKpiModal(null);
+          }}
+          onDelete={(!kpiModal.isMainKpi && kpiModal.mode === "edit") ? () => {
+            onDeleteSubMetric(kpiModal.metric.id);
+            setKpiModal(null);
+          } : undefined}
+        />
+      )}
     </Card>
   );
 }
@@ -1543,15 +2197,91 @@ function EditInitiativeModal({ initiative, onClose, onSave }) {
 /* ============================================================================
    INITIATIVES PAGE
 ============================================================================ */
-function InitiativesPage({ objectives, onEdit }) {
+/* ============================================================================
+   ADD INITIATIVE MODAL — create a new initiative and assign it to an objective.
+============================================================================ */
+function AddInitiativeModal({ objectives, defaultObjectiveId, onSave, onClose }) {
+  const [name, setName] = useState("");
+  const [objectiveId, setObjectiveId] = useState(defaultObjectiveId || objectives[0]?.id || "");
+  const [owner, setOwner] = useState("");
+  const [start, setStart] = useState("2026-08-01");
+  const [due, setDue] = useState("2026-10-31");
+  const [priority, setPriority] = useState("Medium");
+
+  const handleSave = () => {
+    if (!name.trim() || !objectiveId) return;
+    onSave(objectiveId, { name: name.trim(), owner: owner.trim(), start, due, priority });
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 480, maxWidth: "100%", maxHeight: "85vh", overflow: "auto", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>Add Initiative</div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Initiative Name</label>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Discovery Sign-off SLA"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Assign to Objective</label>
+        <select value={objectiveId} onChange={e => setObjectiveId(e.target.value)}
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }}>
+          {objectives.map(o => <option key={o.id} value={o.id}>O{o.number} · {o.title}</option>)}
+        </select>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Owner</label>
+            <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+          </div>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Priority</label>
+            <select value={priority} onChange={e => setPriority(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }}>
+              {["High", "Medium", "Low"].map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 18 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Start Date</label>
+            <input type="date" value={start} onChange={e => setStart(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+          </div>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Due Date</label>
+            <input type="date" value={due} onChange={e => setDue(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+          </div>
+        </div>
+
+        <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 16 }}>
+          Progress and status will be derived from the Activities you add under this initiative in the Timeline tab.
+        </div>
+
+        <button onClick={handleSave}
+          style={{ width: "100%", padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
+          Add Initiative
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function InitiativesPage({ objectives, onEdit, editable, currentOwner, onAddInitiative }) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState("due");
+  const [showAdd, setShowAdd] = useState(false);
   const objectivesById = Object.fromEntries(objectives.map(o => [o.id, o]));
   let all = objectives.flatMap(o => o.initiatives.map(i => ({ ...i, objectiveId: o.id })));
-  if (query) all = all.filter(i => i.name.toLowerCase().includes(query.toLowerCase()) || i.owner.toLowerCase().includes(query.toLowerCase()));
+  if (query) all = all.filter(i => i.name.toLowerCase().includes(query.toLowerCase()) || (i.owner || "").toLowerCase().includes(query.toLowerCase()));
   if (sortBy === "due") all = [...all].sort((a, b) => d(a.due) - d(b.due));
   if (sortBy === "progress") all = [...all].sort((a, b) => a.progress - b.progress);
-  if (sortBy === "owner") all = [...all].sort((a, b) => a.owner.localeCompare(b.owner));
+  if (sortBy === "owner") all = [...all].sort((a, b) => (a.owner || "").localeCompare(b.owner || ""));
 
   const [historyFor, setHistoryFor] = useState(null);
 
@@ -1569,10 +2299,24 @@ function InitiativesPage({ objectives, onEdit }) {
           <option value="progress">Sort: Lowest progress</option>
           <option value="owner">Sort: Owner</option>
         </select>
+        {editable && (
+          <button onClick={() => setShowAdd(true)}
+            style={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 6, border: "none", background: T.navy, color: "#fff", borderRadius: 9, padding: "9px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
+            <Plus size={13} /> Add Initiative
+          </button>
+        )}
         <div style={{ fontSize: 12.5, color: T.inkMuted, marginLeft: "auto", flexShrink: 0 }}>{all.length} initiatives</div>
       </div>
       <InitiativeTable initiatives={all} onHistory={setHistoryFor} onEdit={onEdit} showObjective objectivesById={objectivesById} />
       {historyFor && <HistoryModal initiative={historyFor} onClose={() => setHistoryFor(null)} />}
+      {showAdd && (
+        <AddInitiativeModal
+          objectives={objectives}
+          defaultObjectiveId={objectives[0]?.id}
+          onClose={() => setShowAdd(false)}
+          onSave={(objectiveId, payload) => { onAddInitiative(objectiveId, payload); setShowAdd(false); }}
+        />
+      )}
     </div>
   );
 }
@@ -1593,7 +2337,7 @@ const QUARTERS = [
   { id: "Q4", label: "Q4", range: "Apr – Jun 2027" },
 ];
 const PHASES = ["As-Is Scan", "Standard", "Pilot", "Baseline & Measure", "Scale"];
-const ACTIVITY_VIEWS = ["Quarterly", "List"];
+const ACTIVITY_VIEWS = ["Quarterly", "Phase", "List"];
 
 /* Scheduling helpers — an Activity's `date` is the source of truth for
    sorting in the List view; legacy activities that only have a `quarter`
@@ -1675,57 +2419,21 @@ function SubActivityRow({ sub, editable, onToggle, onDelete, onRequestEdit }) {
   );
 }
 
-/* Shared KPI-contribution field list used by both the Activity and
-   Sub-Activity forms — the objective's KPI plus all its Sub-Metrics. */
-function KpiContributionFields({ kpi, subMetrics, kpiRecords, setMetricValue }) {
-  const metrics = [
-    { id: "kpi", label: kpi.name, target: kpi.target, unit: kpi.unit },
-    ...subMetrics.map(sm => ({ id: sm.id, label: sm.name, target: sm.target, unit: sm.unit })),
-  ];
-  return (
-    <>
-      <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 6 }}>KPI Contribution</div>
-      <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 10 }}>
-        Record what this item measured for the objective's KPI and/or Sub-Metrics. Leave blank if it doesn't measure a given metric — the objective's live value is the average across everything that did.
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
-        {metrics.map(m => (
-          <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, background: T.surface, borderRadius: 8, padding: "8px 10px" }}>
-            <div style={{ flex: 1, fontSize: 12.5, color: T.ink, fontWeight: 600 }}>{m.label}</div>
-            <div style={{ fontSize: 11, color: T.inkMuted }}>target {m.target}{m.unit}</div>
-            <input type="number" value={kpiRecords[m.id] ?? ""} onChange={e => setMetricValue(m.id, e.target.value)}
-              placeholder="—" style={{ width: 72, padding: "5px 7px", border: `1px solid ${T.border}`, borderRadius: 6, fontSize: 12.5, fontFamily: MONO, textAlign: "right" }} />
-            <span style={{ fontSize: 11, color: T.inkMuted, minWidth: 18 }}>{m.unit}</span>
-          </div>
-        ))}
-      </div>
-    </>
-  );
-}
-
 /* ============================================================================
    SUB-ACTIVITY FORM MODAL — add or edit a sub-activity: name, its own
    progress, and the same KPI-contribution fields as the Activity form.
 ============================================================================ */
-function SubActivityFormModal({ mode, sub, kpi, subMetrics, onSave, onDelete, onClose }) {
+function SubActivityFormModal({ mode, sub, onSave, onDelete, onClose }) {
   const [name, setName] = useState(sub?.name || "");
   const [plannedStart, setPlannedStart] = useState(sub?.plannedStart || "2026-07-15");
   const [plannedEnd, setPlannedEnd] = useState(sub?.plannedEnd || sub?.plannedStart || "2026-07-22");
   const [actualStart, setActualStart] = useState(sub?.actualStart || "");
   const [actualEnd, setActualEnd] = useState(sub?.actualEnd || "");
   const [progress, setProgress] = useState(sub ? subProgress(sub) : 0);
-  const [kpiRecords, setKpiRecords] = useState({ ...(sub?.kpiRecords || {}) });
-
-  const setMetricValue = (id, v) => setKpiRecords(prev => {
-    const next = { ...prev };
-    if (v === "") delete next[id];
-    else next[id] = Number(v);
-    return next;
-  });
 
   const handleSave = () => {
     if (!name.trim()) return;
-    onSave({ name: name.trim(), plannedStart, plannedEnd, actualStart: actualStart || null, actualEnd: actualEnd || null, progress: Number(progress), kpiRecords });
+    onSave({ name: name.trim(), plannedStart, plannedEnd, actualStart: actualStart || null, actualEnd: actualEnd || null, progress: Number(progress) });
   };
 
   return (
@@ -1748,8 +2456,6 @@ function SubActivityFormModal({ mode, sub, kpi, subMetrics, onSave, onDelete, on
         <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Progress</label>
         <input type="range" min={0} max={100} value={progress} onChange={e => setProgress(e.target.value)} style={{ width: "100%", margin: "8px 0 4px", accentColor: T.plum }} />
         <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 16 }}>{progress}%</div>
-
-        <KpiContributionFields kpi={kpi} subMetrics={subMetrics} kpiRecords={kpiRecords} setMetricValue={setMetricValue} />
 
         <div style={{ display: "flex", gap: 10 }}>
           {mode === "edit" && onDelete && (
@@ -1905,6 +2611,155 @@ function RiskFormModal({ mode, risk, objectives, onSave, onDelete, onClose }) {
   );
 }
 
+/* ============================================================================
+   KPI CHECKPOINT MODAL — the quarterly, governed way KPI values change.
+   The Objective Owner fills in measured values and submits for review; the
+   BA Lead approves or rejects. Only an Approved submission updates the
+   objective's official KPI/Sub-Metric values (see enrichObjectives()).
+============================================================================ */
+function KpiCheckpointModal({ milestone, objective, canSubmit, canApprove, onSubmit, onApprove, onReject, onClose }) {
+  const [values, setValues] = useState({ ...(milestone.kpiRecords || {}) });
+  const [note, setNote] = useState(milestone.reviewNote || "");
+  const [evidence, setEvidence] = useState(milestone.evidence || []);
+  const [fileError, setFileError] = useState("");
+  const metrics = [
+    { id: "kpi", label: objective.kpi.name, target: objective.kpi.target, unit: objective.kpi.unit },
+    ...objective.subMetrics.map(sm => ({ id: sm.id, label: sm.name, target: sm.target, unit: sm.unit })),
+  ];
+  const setMetricValue = (id, v) => setValues(prev => {
+    const next = { ...prev };
+    if (v === "") delete next[id];
+    else next[id] = Number(v);
+    return next;
+  });
+  const editableNow = canSubmit && milestone.reviewStatus !== "Pending Review";
+  const pendingReview = milestone.reviewStatus === "Pending Review";
+
+  const handleFiles = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setFileError("");
+    const oversized = files.find(f => f.size > 5 * 1024 * 1024);
+    if (oversized) {
+      setFileError(`"${oversized.name}" is larger than 5MB.`);
+      e.target.value = "";
+      return;
+    }
+    Promise.all(files.map(file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve({ id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, name: file.name, data: reader.result });
+      reader.onerror = () => reject(new Error(file.name));
+      reader.readAsDataURL(file);
+    })))
+      .then(loaded => setEvidence(prev => [...prev, ...loaded]))
+      .catch(err => setFileError(`Could not read "${err.message}".`));
+    e.target.value = "";
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 500, maxWidth: "100%", maxHeight: "85vh", overflow: "auto", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>{milestone.name}</div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+        <div style={{ fontSize: 12.5, color: T.inkMuted, marginBottom: 4 }}>O{objective.number} · {objective.title} · due {milestone.date}</div>
+        <div style={{ marginBottom: 16 }}><StatusChip status={
+          milestone.reviewStatus === "Approved" ? "Completed" : milestone.reviewStatus === "Pending Review" ? "At Risk" : milestone.reviewStatus === "Rejected" ? "Delayed" : "Not Started"
+        } /> <span style={{ fontSize: 11.5, color: T.inkMuted, marginLeft: 6 }}>{milestone.reviewStatus}</span></div>
+
+        <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 10 }}>
+          {canSubmit
+            ? "Enter the values measured for this quarter. Once submitted, the BA Lead reviews and approves before they become official."
+            : "Values submitted by the Objective Owner for this quarter's checkpoint."}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
+          {metrics.map(m => (
+            <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, background: T.surface, borderRadius: 8, padding: "8px 10px" }}>
+              <div style={{ flex: 1, fontSize: 12.5, color: T.ink, fontWeight: 600 }}>{m.label}</div>
+              <div style={{ fontSize: 11, color: T.inkMuted }}>target {m.target}{m.unit}</div>
+              {editableNow ? (
+                <input type="number" value={values[m.id] ?? ""} onChange={e => setMetricValue(m.id, e.target.value)}
+                  placeholder="—" style={{ width: 72, padding: "5px 7px", border: `1px solid ${T.border}`, borderRadius: 6, fontSize: 12.5, fontFamily: MONO, textAlign: "right" }} />
+              ) : (
+                <Num size={13}>{values[m.id] ?? "—"}</Num>
+              )}
+              <span style={{ fontSize: 11, color: T.inkMuted, minWidth: 18 }}>{m.unit}</span>
+            </div>
+          ))}
+        </div>
+
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Evidence & Files</label>
+        <div style={{ fontSize: 11, color: T.inkMuted, margin: "4px 0 8px" }}>
+          Attach the reports, exports, or survey results these numbers came from, so the review is based on evidence.
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
+          {evidence.map(f => (
+            <div key={f.id} style={{ display: "flex", alignItems: "center", gap: 8, background: T.surface, borderRadius: 8, padding: "7px 10px" }}>
+              <Paperclip size={13} color={T.inkMuted} />
+              <a href={f.data} download={f.name} style={{ flex: 1, fontSize: 12.5, color: T.blue, textDecoration: "none", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</a>
+              {editableNow && (
+                <button onClick={() => setEvidence(prev => prev.filter(x => x.id !== f.id))} title="Remove"
+                  style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, display: "flex" }}>
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+          ))}
+          {evidence.length === 0 && !editableNow && (
+            <div style={{ fontSize: 12, color: T.inkFaint }}>No evidence attached.</div>
+          )}
+          {editableNow && (
+            <label style={{
+              display: "flex", alignItems: "center", gap: 8, border: `1px dashed ${T.borderStrong}`, borderRadius: 8,
+              padding: "9px 12px", cursor: "pointer", color: T.navy, fontSize: 12.5, fontWeight: 600,
+            }}>
+              <Paperclip size={13} /> Attach evidence (multiple files allowed)
+              <input type="file" multiple onChange={handleFiles} style={{ display: "none" }} />
+            </label>
+          )}
+          {fileError && <div style={{ fontSize: 11.5, color: T.red }}>{fileError}</div>}
+        </div>
+
+        {canApprove && pendingReview && (
+          <>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Review Note (optional)</label>
+            <textarea value={note} onChange={e => setNote(e.target.value)} rows={2}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT, resize: "vertical" }} />
+          </>
+        )}
+
+        {milestone.reviewedBy && (
+          <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 16 }}>
+            Reviewed by {milestone.reviewedBy}{milestone.reviewNote ? ` — "${milestone.reviewNote}"` : ""}
+          </div>
+        )}
+
+        <div style={{ display: "flex", gap: 10 }}>
+          {canApprove && pendingReview && (
+            <>
+              <button onClick={() => onReject(note)}
+                style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, border: `1px solid ${T.red}`, background: T.redSoft, color: T.red, borderRadius: 9, padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                Reject
+              </button>
+              <button onClick={() => onApprove(note)}
+                style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, border: "none", background: T.green, color: "#fff", borderRadius: 9, padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                <Check size={14} /> Approve
+              </button>
+            </>
+          )}
+          {editableNow && (
+            <button onClick={() => onSubmit(values, evidence)}
+              style={{ flex: 1, padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
+              {milestone.reviewStatus === "Approved" ? "Edit & Resubmit" : "Submit for Review"}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MilestoneFormModal({ mode, milestone, objectives, defaultObjectiveId, onSave, onDelete, onClose }) {
   const [name, setName] = useState(milestone?.name || "");
   const [objectiveId, setObjectiveId] = useState(defaultObjectiveId || objectives[0]?.id || "");
@@ -1914,19 +2769,11 @@ function MilestoneFormModal({ mode, milestone, objectives, defaultObjectiveId, o
   const [fileName, setFileName] = useState(milestone?.fileName || "");
   const [fileData, setFileData] = useState(milestone?.fileData || "");
   const [fileError, setFileError] = useState("");
-  const [kpiRecords, setKpiRecords] = useState({ ...(milestone?.kpiRecords || {}) });
 
   const selectedObjective = objectives.find(o => o.id === objectiveId);
   const activityOptions = (selectedObjective?.initiatives || []).flatMap(init =>
     (init.activities || []).map(a => ({ id: a.id, label: `${init.name} — ${a.name}` }))
   );
-
-  const setMetricValue = (id, v) => setKpiRecords(prev => {
-    const next = { ...prev };
-    if (v === "") delete next[id];
-    else next[id] = Number(v);
-    return next;
-  });
 
   const handleFile = (e) => {
     const file = e.target.files?.[0];
@@ -1945,7 +2792,7 @@ function MilestoneFormModal({ mode, milestone, objectives, defaultObjectiveId, o
 
   const handleSave = () => {
     if (!name.trim() || !objectiveId) return;
-    onSave({ name: name.trim(), objective: objectiveId, activity: activityId || null, date, status, fileName, fileData, kpiRecords });
+    onSave({ name: name.trim(), objective: objectiveId, activity: activityId || null, date, status, fileName, fileData });
   };
 
   return (
@@ -1988,10 +2835,6 @@ function MilestoneFormModal({ mode, milestone, objectives, defaultObjectiveId, o
           </div>
         </div>
 
-        {selectedObjective && (
-          <KpiContributionFields kpi={selectedObjective.kpi} subMetrics={selectedObjective.subMetrics} kpiRecords={kpiRecords} setMetricValue={setMetricValue} />
-        )}
-
         <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Attachment</label>
         <div style={{ margin: "6px 0 16px" }}>
           {fileName ? (
@@ -2032,7 +2875,7 @@ function MilestoneFormModal({ mode, milestone, objectives, defaultObjectiveId, o
   );
 }
 
-function ActivityFormModal({ mode, activity, kpi, subMetrics, onSave, onDelete, onClose }) {
+function ActivityFormModal({ mode, activity, onSave, onDelete, onClose }) {
   const [name, setName] = useState(activity?.name || "");
   const [owner, setOwner] = useState(activity?.owner || "");
   const [phase, setPhase] = useState(activity?.phase || PHASES[0]);
@@ -2043,19 +2886,6 @@ function ActivityFormModal({ mode, activity, kpi, subMetrics, onSave, onDelete, 
   const subs = activity?.subActivities || [];
   const autoProgress = subs.length ? Math.round((subs.filter(s => s.done).length / subs.length) * 100) : null;
   const [progress, setProgress] = useState(activity?.progress ?? 0);
-  const [kpiRecords, setKpiRecords] = useState({ ...(activity?.kpiRecords || {}) });
-
-  const metrics = [
-    { id: "kpi", label: kpi.name, target: kpi.target, unit: kpi.unit },
-    ...subMetrics.map(sm => ({ id: sm.id, label: sm.name, target: sm.target, unit: sm.unit })),
-  ];
-
-  const setMetricValue = (id, v) => setKpiRecords(prev => {
-    const next = { ...prev };
-    if (v === "") delete next[id];
-    else next[id] = Number(v);
-    return next;
-  });
 
   const handleSave = () => {
     if (!name.trim()) return;
@@ -2063,7 +2893,7 @@ function ActivityFormModal({ mode, activity, kpi, subMetrics, onSave, onDelete, 
       name: name.trim(), owner: owner.trim(), phase,
       plannedStart, plannedEnd, actualStart: actualStart || null, actualEnd: actualEnd || null,
       date: plannedStart, quarter: quarterFromDate(plannedStart),
-      progress: autoProgress != null ? autoProgress : Number(progress), kpiRecords,
+      progress: autoProgress != null ? autoProgress : Number(progress),
     });
   };
 
@@ -2113,22 +2943,6 @@ function ActivityFormModal({ mode, activity, kpi, subMetrics, onSave, onDelete, 
             <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 16 }}>{progress}%</div>
           </>
         )}
-
-        <div style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", marginBottom: 6 }}>KPI Contribution</div>
-        <div style={{ fontSize: 11.5, color: T.inkMuted, marginBottom: 10 }}>
-          Record what this activity measured for the objective's KPI and/or Sub-Metrics. Leave blank if this activity doesn't measure a given metric — the objective's live value is the average across all activities that did.
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
-          {metrics.map(m => (
-            <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, background: T.surface, borderRadius: 8, padding: "8px 10px" }}>
-              <div style={{ flex: 1, fontSize: 12.5, color: T.ink, fontWeight: 600 }}>{m.label}</div>
-              <div style={{ fontSize: 11, color: T.inkMuted }}>target {m.target}{m.unit}</div>
-              <input type="number" value={kpiRecords[m.id] ?? ""} onChange={e => setMetricValue(m.id, e.target.value)}
-                placeholder="—" style={{ width: 72, padding: "5px 7px", border: `1px solid ${T.border}`, borderRadius: 6, fontSize: 12.5, fontFamily: MONO, textAlign: "right" }} />
-              <span style={{ fontSize: 11, color: T.inkMuted, minWidth: 18 }}>{m.unit}</span>
-            </div>
-          ))}
-        </div>
 
         <div style={{ display: "flex", gap: 10 }}>
           {mode === "edit" && onDelete && (
@@ -2252,6 +3066,41 @@ function QuarterLegend() {
 
 /* Flat, date-sorted list of every activity across the current objectives —
    the "List" view. */
+/* Groups every activity by its pipeline Phase — a Kanban-style view across
+   all objectives so you can see how much work sits in each stage. */
+function PhaseView({ objectives, streams, editable, onRequestEdit }) {
+  const rows = objectives.flatMap(o => o.initiatives.flatMap(init =>
+    (init.activities || []).map(a => ({ activity: a, objective: o, initiative: init }))
+  ));
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${PHASES.length}, 1fr)`, gap: 12, alignItems: "start" }}>
+      {PHASES.map(phase => {
+        const items = rows.filter(r => r.activity.phase === phase);
+        return (
+          <div key={phase}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+              <span style={{ fontSize: 11.5, fontWeight: 800, color: T.navy }}>{phase}</span>
+              <span style={{ fontSize: 10.5, color: T.inkMuted, background: T.surface, borderRadius: 10, padding: "1px 7px" }}>{items.length}</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {items.length === 0 && <div style={{ fontSize: 11.5, color: T.inkFaint, padding: "8px 0" }}>—</div>}
+              {items.map(({ activity, objective, initiative }) => (
+                <Card key={activity.id} hoverable={editable} onClick={editable ? () => onRequestEdit(objective.id, initiative.id, activity) : undefined} style={{ padding: 10 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: T.ink, marginBottom: 4 }}>{activity.name}</div>
+                  <div style={{ fontSize: 10.5, color: T.inkMuted, marginBottom: 6, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    O{objective.number} · {initiative.name}
+                  </div>
+                  <ProgressBar value={effectiveActivityProgress(activity)} height={5} />
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function ActivityListView({ objectives, streams, editable, onRequestEdit }) {
   const rows = objectives.flatMap(o => o.initiatives.flatMap(init =>
     (init.activities || []).map(a => ({ activity: a, objective: o, initiative: init }))
@@ -2307,7 +3156,7 @@ function ActivityListView({ objectives, streams, editable, onRequestEdit }) {
 }
 
 
-function TimelinePage({ objectives, streams, editable, onAddActivity, onUpdateActivity, onDeleteActivity, onAddSub, onUpdateSub, onToggleSub, onDeleteSub, onAddMilestone, onUpdateMilestone, onDeleteMilestone }) {
+function TimelinePage({ objectives, streams, editable, canSubmitCheckpoint, canApproveCheckpoint, role, currentOwner, onAddActivity, onUpdateActivity, onDeleteActivity, onAddSub, onUpdateSub, onToggleSub, onDeleteSub, onAddMilestone, onUpdateMilestone, onDeleteMilestone }) {
   const [view, setView] = useState("Month");
   const [activityView, setActivityView] = useState("Quarterly");
   const [modalCtx, setModalCtx] = useState(null); // { mode, kind, objectiveId, initiativeId, activity/activityId/sub, kpi, subMetrics }
@@ -2445,61 +3294,76 @@ function TimelinePage({ objectives, streams, editable, onAddActivity, onUpdateAc
         </div>
       </Card>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
-        <SectionLabel icon={ListChecks}>Activity Template — Initiatives × Phases</SectionLabel>
-        <div style={{ display: "flex", gap: 6 }}>
-          {ACTIVITY_VIEWS.map(v => (
-            <button key={v} onClick={() => setActivityView(v)}
-              style={{
-                border: `1px solid ${activityView === v ? T.navy : T.border}`, background: activityView === v ? T.navy : T.bg,
-                color: activityView === v ? "#fff" : T.inkMuted, borderRadius: 8, padding: "6px 13px", fontSize: 12, fontWeight: 600, cursor: "pointer",
-              }}>{v}</button>
-          ))}
-        </div>
-      </div>
-      {activityView === "Quarterly" && <QuarterLegend />}
-      <div style={{ fontSize: 12, color: T.inkMuted, margin: "-6px 0 4px" }}>
-        Every activity moves through: <b style={{ color: T.ink }}>As-Is Scan → Standard → Pilot → Baseline & Measure → Scale</b>.
-        Progress and KPI values recorded per activity roll up automatically into the initiative, objective, and dashboard{editable ? "" : " (view only)"}.
-      </div>
-
-      {activityView === "List" ? (
-        <ActivityListView objectives={objectives} streams={streams} editable={editable}
-          onRequestEdit={(objectiveId, initiativeId, activity) => {
-            const o = objectives.find(x => x.id === objectiveId);
-            setModalCtx({ mode: "edit", kind: "activity", objectiveId, initiativeId, activity, kpi: o.kpi, subMetrics: o.subMetrics });
-          }}
-        />
-      ) : objectives.map(o => {
-        const stream = streams.find(s => s.id === o.streamId);
-        return (
-          <div key={o.id} style={{ marginTop: 6 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: stream.color }} />
-              <span style={{ fontSize: 13.5, fontWeight: 800, color: T.navy }}>O{o.number} · {o.title}</span>
-              <span style={{ fontSize: 11.5, color: T.inkMuted }}>{o.owner}</span>
+      {role !== "lead" ? (
+        <>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+            <SectionLabel icon={ListChecks}>Activity Template — Initiatives × Phases</SectionLabel>
+            <div style={{ display: "flex", gap: 6 }}>
+              {ACTIVITY_VIEWS.map(v => (
+                <button key={v} onClick={() => setActivityView(v)}
+                  style={{
+                    border: `1px solid ${activityView === v ? T.navy : T.border}`, background: activityView === v ? T.navy : T.bg,
+                    color: activityView === v ? "#fff" : T.inkMuted, borderRadius: 8, padding: "6px 13px", fontSize: 12, fontWeight: 600, cursor: "pointer",
+                  }}>{v}</button>
+              ))}
             </div>
-            {o.initiatives.map(init => (
-              <InitiativeTimelineBlock key={init.id} initiative={init} editable={editable} viewMode={activityView}
-                onToggleSub={(activityId, subId) => onToggleSub(o.id, init.id, activityId, subId)}
-                onDeleteSub={(activityId, subId) => onDeleteSub(o.id, init.id, activityId, subId)}
-                onQuickUpdate={(activityId, patch) => onUpdateActivity(o.id, init.id, activityId, patch)}
-                onRequestAdd={() => setModalCtx({ mode: "add", kind: "activity", objectiveId: o.id, initiativeId: init.id, activity: null, kpi: o.kpi, subMetrics: o.subMetrics })}
-                onRequestEdit={(activity) => setModalCtx({ mode: "edit", kind: "activity", objectiveId: o.id, initiativeId: init.id, activity, kpi: o.kpi, subMetrics: o.subMetrics })}
-                onRequestAddSub={(activityId) => setModalCtx({ mode: "add", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub: null, kpi: o.kpi, subMetrics: o.subMetrics })}
-                onRequestEditSub={(activityId, sub) => setModalCtx({ mode: "edit", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub, kpi: o.kpi, subMetrics: o.subMetrics })}
-              />
-            ))}
           </div>
-        );
-      })}
+          {activityView === "Quarterly" && <QuarterLegend />}
+          <div style={{ fontSize: 12, color: T.inkMuted, margin: "-6px 0 4px" }}>
+            Every activity moves through: <b style={{ color: T.ink }}>As-Is Scan → Standard → Pilot → Baseline & Measure → Scale</b>.
+            Progress rolls up automatically into the initiative and objective{editable ? "" : " (view only)"}. KPI values only change via the quarterly KPI Checkpoint below, once approved by the BA Lead.
+          </div>
 
-      <SectionLabel icon={Clock}>Upcoming Milestones</SectionLabel>
-      <MilestonesCard objectives={objectives} editable={editable} onAddMilestone={onAddMilestone} onUpdateMilestone={onUpdateMilestone} onDeleteMilestone={onDeleteMilestone} />
+          {activityView === "List" ? (
+            <ActivityListView objectives={objectives} streams={streams} editable={editable}
+              onRequestEdit={(objectiveId, initiativeId, activity) => {
+                setModalCtx({ mode: "edit", kind: "activity", objectiveId, initiativeId, activity });
+              }}
+            />
+          ) : activityView === "Phase" ? (
+            <PhaseView objectives={objectives} streams={streams} editable={editable}
+              onRequestEdit={(objectiveId, initiativeId, activity) => {
+                setModalCtx({ mode: "edit", kind: "activity", objectiveId, initiativeId, activity });
+              }}
+            />
+          ) : objectives.map(o => {
+            const stream = streams.find(s => s.id === o.streamId);
+            return (
+              <div key={o.id} style={{ marginTop: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: stream.color }} />
+                  <span style={{ fontSize: 13.5, fontWeight: 800, color: T.navy }}>O{o.number} · {o.title}</span>
+                  <span style={{ fontSize: 11.5, color: T.inkMuted }}>{o.owner}</span>
+                </div>
+                {o.initiatives.map(init => (
+                  <InitiativeTimelineBlock key={init.id} initiative={init} editable={editable} viewMode={activityView}
+                    onToggleSub={(activityId, subId) => onToggleSub(o.id, init.id, activityId, subId)}
+                    onDeleteSub={(activityId, subId) => onDeleteSub(o.id, init.id, activityId, subId)}
+                    onQuickUpdate={(activityId, patch) => onUpdateActivity(o.id, init.id, activityId, patch)}
+                    onRequestAdd={() => setModalCtx({ mode: "add", kind: "activity", objectiveId: o.id, initiativeId: init.id, activity: null })}
+                    onRequestEdit={(activity) => setModalCtx({ mode: "edit", kind: "activity", objectiveId: o.id, initiativeId: init.id, activity })}
+                    onRequestAddSub={(activityId) => setModalCtx({ mode: "add", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub: null })}
+                    onRequestEditSub={(activityId, sub) => setModalCtx({ mode: "edit", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub })}
+                  />
+                ))}
+              </div>
+            );
+          })}
+        </>
+      ) : (
+        <div style={{ fontSize: 12.5, color: T.inkMuted, background: T.surface, borderRadius: 10, padding: "12px 14px" }}>
+          Activity-level tracking is hidden in this view. Use the KPI checkpoints below to review and approve quarterly KPI submissions.
+        </div>
+      )}
+
+      <SectionLabel icon={Clock}>Milestones & KPI Checkpoints</SectionLabel>
+      <MilestonesCard objectives={objectives} editable={editable}
+        canSubmitCheckpoint={canSubmitCheckpoint} canApproveCheckpoint={canApproveCheckpoint}
+        role={role} currentOwner={currentOwner} onAddMilestone={onAddMilestone} onUpdateMilestone={onUpdateMilestone} onDeleteMilestone={onDeleteMilestone} />
 
       {modalCtx && modalCtx.kind === "activity" && (
         <ActivityFormModal
-          mode={modalCtx.mode} activity={modalCtx.activity} kpi={modalCtx.kpi} subMetrics={modalCtx.subMetrics}
+          mode={modalCtx.mode} activity={modalCtx.activity}
           onClose={() => setModalCtx(null)}
           onSave={(payload) => {
             if (modalCtx.mode === "add") onAddActivity(modalCtx.objectiveId, modalCtx.initiativeId, payload);
@@ -2515,7 +3379,7 @@ function TimelinePage({ objectives, streams, editable, onAddActivity, onUpdateAc
 
       {modalCtx && modalCtx.kind === "sub" && (
         <SubActivityFormModal
-          mode={modalCtx.mode} sub={modalCtx.sub} kpi={modalCtx.kpi} subMetrics={modalCtx.subMetrics}
+          mode={modalCtx.mode} sub={modalCtx.sub}
           onClose={() => setModalCtx(null)}
           onSave={(payload) => {
             if (modalCtx.mode === "add") onAddSub(modalCtx.objectiveId, modalCtx.initiativeId, modalCtx.activityId, payload);
@@ -2532,26 +3396,72 @@ function TimelinePage({ objectives, streams, editable, onAddActivity, onUpdateAc
   );
 }
 
-function MilestonesCard({ objectives, editable, onAddMilestone, onUpdateMilestone, onDeleteMilestone }) {
-  const [range, setRange] = useState(30);
+function MilestonesCard({ objectives, editable, canSubmitCheckpoint, canApproveCheckpoint, role, currentOwner, onAddMilestone, onUpdateMilestone, onDeleteMilestone }) {
+  // filterMode is either a day-window number (7/30/90), a quarter id
+  // ("Q1".."Q4"), or "all" — quarters are the natural lens for the KPI
+  // checkpoints, which land at each quarter end.
+  const [filterMode, setFilterMode] = useState(30);
+  const [typeFilter, setTypeFilter] = useState("all");
   const [milestoneModal, setMilestoneModal] = useState(null); // { mode, objectiveId, milestone }
+  const [checkpointModal, setCheckpointModal] = useState(null); // { objective, milestone }
   const all = objectives.flatMap(o => o.milestones.map(m => ({ ...m, objective: o })));
-  const withinRange = all.filter(m => {
+
+  const quarterRanges = {
+    Q1: ["2026-07-01", "2026-09-30"],
+    Q2: ["2026-10-01", "2026-12-31"],
+    Q3: ["2027-01-01", "2027-03-31"],
+    Q4: ["2027-04-01", "2027-06-30"],
+  };
+
+  const isQuarter = typeof filterMode === "string" && quarterRanges[filterMode];
+  const shown = all.filter(m => {
+    if (filterMode === "all") return true;
+    if (isQuarter) {
+      const [from, to] = quarterRanges[filterMode];
+      return m.date >= from && m.date <= to;
+    }
     const days = daysBetween(TODAY, d(m.date));
-    return days >= -3650 && days <= range && m.status !== "Completed";
+    return days >= -3650 && days <= filterMode && m.status !== "Completed";
   }).sort((a, b) => d(a.date) - d(b.date));
+
+  const heading = filterMode === "all"
+    ? "All Milestones"
+    : isQuarter
+      ? `${filterMode} · ${QUARTERS.find(q => q.id === filterMode)?.range || ""}`
+      : `Next ${filterMode} Days`;
+
+  const canApprove = canApproveCheckpoint;
+
+  const btn = (active) => ({
+    border: `1px solid ${active ? T.navy : T.border}`, background: active ? T.navy : T.bg,
+    color: active ? "#fff" : T.inkMuted, borderRadius: 7, padding: "4px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: 600,
+  });
+
   return (
     <Card style={{ padding: 18 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: T.navy }}>Next {range} Days</div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, flexWrap: "wrap", gap: 10 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: T.navy }}>{heading} <span style={{ fontWeight: 500, color: T.inkMuted }}>({shown.length})</span></div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
           <div style={{ display: "flex", gap: 6 }}>
             {[7, 30, 90].map(r => (
-              <button key={r} onClick={() => setRange(r)}
-                style={{
-                  border: `1px solid ${range === r ? T.navy : T.border}`, background: range === r ? T.navy : T.bg,
-                  color: range === r ? "#fff" : T.inkMuted, borderRadius: 7, padding: "4px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: 600,
-                }}>{r}d</button>
+              <button key={r} onClick={() => setFilterMode(r)} style={btn(filterMode === r)}>{r}d</button>
+            ))}
+          </div>
+          <span style={{ width: 1, height: 18, background: T.border }} />
+          <div style={{ display: "flex", gap: 6 }}>
+            {QUARTERS.map(q => (
+              <button key={q.id} onClick={() => setFilterMode(q.id)} title={q.range} style={btn(filterMode === q.id)}>{q.id}</button>
+            ))}
+            <button onClick={() => setFilterMode("all")} style={btn(filterMode === "all")}>All</button>
+          </div>
+          <span style={{ width: 1, height: 18, background: T.border }} />
+          <div style={{ display: "flex", gap: 6 }}>
+            {[
+              { id: "all", label: "All types" },
+              { id: "checkpoint", label: "KPI Checkpoints" },
+              { id: "delivery", label: "Delivery" },
+            ].map(t => (
+              <button key={t.id} onClick={() => setTypeFilter(t.id)} style={btn(typeFilter === t.id)}>{t.label}</button>
             ))}
           </div>
           {editable && (
@@ -2562,22 +3472,76 @@ function MilestonesCard({ objectives, editable, onAddMilestone, onUpdateMileston
           )}
         </div>
       </div>
-      {withinRange.length === 0 ? <div style={{ color: T.inkMuted, fontSize: 13 }}>No milestones in this window.</div> :
-        withinRange.map((m, i) => (
-          <div key={i} style={{ display: "grid", gridTemplateColumns: editable ? "90px minmax(0, 1fr) 90px 100px 28px" : "90px minmax(0, 1fr) 90px 100px", gap: 10, alignItems: "center", padding: "9px 4px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
-            <Num size={12} color={T.navy}>{m.date}</Num>
-            <div style={{ fontSize: 13, color: T.ink, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {m.name}
-              <div style={{ fontSize: 11, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>O{m.objective.number} · {m.objective.title}</div>
+
+      {/* KPI measurement checkpoints and ordinary delivery milestones are
+          different animals — one is a governed quarterly measurement with an
+          approval flow, the other is a normal deliverable date. They're shown
+          as separate groups so they're never confused. */}
+      {[
+        { key: "checkpoint", title: "KPI Measurement Checkpoints", hint: "Quarterly — owner submits, BA Lead approves", accent: T.plum, items: shown.filter(m => m.kind === "kpi_checkpoint") },
+        { key: "delivery", title: "Delivery Milestones", hint: "Objective deliverables and target dates", accent: T.blue, items: shown.filter(m => m.kind !== "kpi_checkpoint") },
+      ]
+        .filter(g => typeFilter === "all" || typeFilter === g.key)
+        .map(group => (
+          <div key={group.key} style={{ marginTop: 14 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, paddingLeft: 4, borderLeft: `3px solid ${group.accent}` }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color: T.navy, marginLeft: 6 }}>{group.title}</span>
+              <span style={{ fontSize: 10.5, color: T.inkMuted, background: T.surface, borderRadius: 10, padding: "1px 7px" }}>{group.items.length}</span>
+              <span style={{ fontSize: 11, color: T.inkFaint }}>{group.hint}</span>
             </div>
-            <div style={{ fontSize: 12, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.objective.owner}</div>
-            <StatusChip status={m.status === "Overdue" ? "Delayed" : "Not Started"} />
-            {editable && (
-              <button onClick={() => setMilestoneModal({ mode: "edit", objectiveId: m.objective.id, milestone: m })} title="Edit milestone"
-                style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
-                <Pencil size={13} />
-              </button>
-            )}
+            {group.items.length === 0 ? (
+              <div style={{ color: T.inkMuted, fontSize: 12.5, padding: "4px 0 8px" }}>None in this window.</div>
+            ) : group.items.map((m, i) => {
+              const isCheckpoint = m.kind === "kpi_checkpoint";
+              // Only the Objective Leader who owns this objective (or admin)
+              // may submit its quarterly KPI values.
+              const canSubmitThis = canSubmitCheckpoint && (role === "admin" || currentOwner === m.objective.owner);
+              const rowStatus = isCheckpoint
+                ? (m.reviewStatus === "Approved" ? "Completed" : m.reviewStatus === "Pending Review" ? "At Risk" : m.reviewStatus === "Rejected" ? "Delayed" : "Not Started")
+                : (m.status === "Overdue" ? "Delayed" : m.status === "Completed" ? "Completed" : "Not Started");
+              return (
+                <div key={m.id || i} style={{
+                  display: "grid",
+                  gridTemplateColumns: (editable || isCheckpoint) ? "90px minmax(0, 1fr) 90px 120px 28px" : "90px minmax(0, 1fr) 90px 120px",
+                  gap: 10, alignItems: "center", padding: "9px 4px 9px 10px",
+                  borderTop: i === 0 ? "none" : `1px solid ${T.border}`,
+                  borderLeft: `3px solid ${isCheckpoint ? T.plumSoft : "transparent"}`,
+                  background: isCheckpoint ? "rgba(247,233,241,0.35)" : "transparent",
+                }}>
+                  <Num size={12} color={T.navy}>{m.date}</Num>
+                  <div style={{ fontSize: 13, color: T.ink, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 6 }}>
+                    {isCheckpoint
+                      ? <GaugeIcon size={12} color={T.plum} />
+                      : <CalendarRange size={12} color={T.inkFaint} />}
+                    {((m.evidence && m.evidence.length > 0) || m.fileName) && <Paperclip size={11} color={T.inkMuted} />}
+                    <div style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {m.name}
+                      <div style={{ fontSize: 11, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>O{m.objective.number} · {m.objective.title}</div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: 12, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.objective.owner}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <StatusChip status={rowStatus} />
+                    {isCheckpoint && m.reviewStatus === "Pending Review" && (
+                      <span style={{ fontSize: 9.5, fontWeight: 800, color: T.plum, background: T.plumSoft, borderRadius: 4, padding: "1px 5px", whiteSpace: "nowrap" }}>REVIEW</span>
+                    )}
+                  </div>
+                  {isCheckpoint ? (
+                    (canSubmitThis || canApprove) && (
+                      <button onClick={() => setCheckpointModal({ objective: m.objective, milestone: m })} title="Open KPI checkpoint"
+                        style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                        <Pencil size={13} />
+                      </button>
+                    )
+                  ) : editable && (
+                    <button onClick={() => setMilestoneModal({ mode: "edit", objectiveId: m.objective.id, milestone: m })} title="Edit milestone"
+                      style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                      <Pencil size={13} />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         ))}
       {milestoneModal && (
@@ -2600,6 +3564,32 @@ function MilestonesCard({ objectives, editable, onAddMilestone, onUpdateMileston
             onDeleteMilestone(milestoneModal.objectiveId, milestoneModal.milestone.id);
             setMilestoneModal(null);
           } : undefined}
+        />
+      )}
+      {checkpointModal && (
+        <KpiCheckpointModal
+          milestone={checkpointModal.milestone} objective={checkpointModal.objective}
+          canSubmit={canSubmitCheckpoint && (role === "admin" || currentOwner === checkpointModal.objective.owner)}
+          canApprove={canApprove}
+          onClose={() => setCheckpointModal(null)}
+          onSubmit={(values, evidence) => {
+            onUpdateMilestone(checkpointModal.objective.id, checkpointModal.milestone.id, {
+              kpiRecords: values, evidence, reviewStatus: "Pending Review", reviewedBy: null, reviewNote: "",
+            });
+            setCheckpointModal(null);
+          }}
+          onApprove={(note) => {
+            onUpdateMilestone(checkpointModal.objective.id, checkpointModal.milestone.id, {
+              reviewStatus: "Approved", reviewedBy: "BA Lead", reviewNote: note, status: "Completed",
+            });
+            setCheckpointModal(null);
+          }}
+          onReject={(note) => {
+            onUpdateMilestone(checkpointModal.objective.id, checkpointModal.milestone.id, {
+              reviewStatus: "Rejected", reviewedBy: "BA Lead", reviewNote: note,
+            });
+            setCheckpointModal(null);
+          }}
         />
       )}
     </Card>
@@ -2990,33 +3980,95 @@ function ForecastPanel({ objectives, streams, forecastOverrides, setForecastOver
      Settings & Data tab scoped to just their own data.
    No separate deploy needed — same repo, same Vercel project, different links.
 ============================================================================ */
-const KNOWN_OWNERS = ["Yasser", "Leen", "Baghdady", "Randa"];
+const OBJECTIVE_LEADERS = ["Yasser", "Leen", "Baghdady", "Randa"];
+const OBJECTIVE_OWNERS = ["Sara", "Omar", "Fahad", "Noura"];
+
 function getRoleFromUrl() {
-  if (typeof window === "undefined") return { role: "lead", owner: "" };
+  const fallback = { role: "lead", person: "" };
+  if (typeof window === "undefined") return fallback;
   try {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("edit") === "1") return { role: "admin", owner: "" };
-    const raw = params.get("owner");
-    if (raw) {
-      const matched = KNOWN_OWNERS.find(o => o.toLowerCase() === raw.trim().toLowerCase());
-      if (matched) return { role: "owner", owner: matched };
+    if (params.get("edit") === "1") return { role: "admin", person: "" };
+
+    const leaderParam = params.get("leader") || params.get("owner"); // ?owner= kept for existing links
+    if (leaderParam) {
+      const matched = OBJECTIVE_LEADERS.find(o => o.toLowerCase() === leaderParam.trim().toLowerCase());
+      if (matched) return { role: "leader", person: matched };
     }
-    return { role: "lead", owner: "" };
+    const memberParam = params.get("member");
+    if (memberParam) {
+      const matched = OBJECTIVE_OWNERS.find(o => o.toLowerCase() === memberParam.trim().toLowerCase());
+      if (matched) return { role: "member", person: matched };
+    }
+    return fallback;
   } catch {
-    return { role: "lead", owner: "" };
+    return fallback;
   }
 }
+
+/* ============================================================================
+   PERMISSION MODEL
+   Four roles, each with its own tab set, data scope, and edit rights:
+
+   admin   (?edit=1)          — everything, unrestricted.
+   lead    (no parameter)     — BA Lead (Fatima). Sees Overview, Objectives,
+                                KPIs, Risks, Update Compliance. View-only,
+                                except she is the ONLY one who approves the
+                                quarterly KPI checkpoints.
+   leader  (?leader=Yasser)   — Objective Leader. Sees only their objectives:
+                                Objectives, Initiatives, Timeline, Risks.
+                                Timeline is view-only for them EXCEPT the
+                                quarterly KPI checkpoint, which they submit.
+   member  (?member=Sara)     — Objective Owner working under a leader. Sees
+                                Objectives, Timeline, Risks for the objectives
+                                they hold. Full Timeline editing EXCEPT the KPI
+                                checkpoint, which is not theirs to touch.
+============================================================================ */
+const PERMISSIONS = {
+  admin: {
+    tabs: ["overview", "streams", "objectives", "kpis", "initiatives", "timeline", "risks", "compliance", "settings"],
+    editTimeline: true, submitCheckpoint: true, approveCheckpoint: true,
+    editKpiDefinition: true, editRisks: true, forecast: true,
+  },
+  lead: {
+    tabs: ["overview", "objectives", "kpis", "risks", "compliance"],
+    editTimeline: false, submitCheckpoint: false, approveCheckpoint: true,
+    editKpiDefinition: false, editRisks: false, forecast: false,
+  },
+  leader: {
+    tabs: ["objectives", "initiatives", "timeline", "risks"],
+    editTimeline: false, submitCheckpoint: true, approveCheckpoint: false,
+    editKpiDefinition: false, editRisks: true, forecast: false,
+  },
+  member: {
+    tabs: ["objectives", "timeline", "risks"],
+    editTimeline: true, submitCheckpoint: false, approveCheckpoint: false,
+    editKpiDefinition: false, editRisks: true, forecast: false,
+  },
+};
+
+/* Which objectives a person is allowed to see. Leaders own objectives
+   outright; members are scoped to objectives where they own an initiative. */
+function scopeObjectivesForRole(objectives, role, person) {
+  if (role === "leader") return objectives.filter(o => o.owner === person);
+  if (role === "member") return objectives.filter(o => (o.initiatives || []).some(i => i.owner === person));
+  return objectives;
+}
+
 
 /* ============================================================================
    ROOT APP
 ============================================================================ */
 export default function App() {
-  const { role, owner: initialOwner } = useMemo(() => getRoleFromUrl(), []);
-  const canEdit = role === "admin" || role === "owner";
-  const [page, setPage] = useState(initialOwner ? "objectives" : "overview");
-  const [filters, setFilters] = useState({ stream: "", objective: "", owner: initialOwner, status: "" });
+  const { role, person } = useMemo(() => getRoleFromUrl(), []);
+  const perms = PERMISSIONS[role] || PERMISSIONS.lead;
+  const initialOwner = role === "leader" ? person : "";
+  const canEdit = perms.editTimeline;
+  const [page, setPage] = useState(perms.tabs[0]);
+  const [filters, setFilters] = useState({ stream: "", objective: "", owner: "", status: "" });
   const [selectedObjective, setSelectedObjective] = useState(null);
   const [forecastMode, setForecastMode] = useState(false);
+  const [year, setYear] = useState("2026");
   const [forecastOverrides, setForecastOverrides] = useState({});
   const [liveObjectives, setLiveObjectives] = useState(RAW.objectives);
   const [liveRisks, setLiveRisks] = useState(RAW.risks);
@@ -3024,7 +4076,10 @@ export default function App() {
   const [toast, setToast] = useState(null);
 
   const enrichedObjectives = useMemo(() => enrichObjectives(liveObjectives), [liveObjectives]);
-  const filteredObjectives = useMemo(() => applyFilters(enrichedObjectives, RAW.streams, filters), [enrichedObjectives, filters]);
+  // Role scope is applied before user filters, so a leader/member can never
+  // widen their view past their own objectives via the filter bar.
+  const scopedObjectives = useMemo(() => scopeObjectivesForRole(enrichedObjectives, role, person), [enrichedObjectives, role, person]);
+  const filteredObjectives = useMemo(() => applyFilters(scopedObjectives, RAW.streams, filters), [scopedObjectives, filters]);
   const activeOverrides = forecastMode ? forecastOverrides : {};
 
   const saveInitiativeUpdate = useCallback((initId, patch) => {
@@ -3187,6 +4242,19 @@ export default function App() {
     setTimeout(() => setToast(null), 2000);
   }, []);
 
+  const addInitiative = useCallback((objectiveId, payload) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, initiatives: [...o.initiatives, {
+        id: genId("i"), name: payload.name, owner: payload.owner || o.owner,
+        start: payload.start, due: payload.due, progress: 0, priority: payload.priority,
+        phase: "Not Started", nextMilestone: "—", deps: [], risks: "None",
+        comments: "", evidence: "—", updatedBy: "Mashael", history: [], activities: [],
+      }],
+    }));
+    setToast("Initiative added");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
   const addMilestone = useCallback((objectiveId, payload) => {
     setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
       ...o, milestones: [...o.milestones, { id: genId("ms"), ...payload, lastUpdated: TODAY_STR }],
@@ -3208,6 +4276,39 @@ export default function App() {
       ...o, milestones: o.milestones.filter(m => m.id !== milestoneId),
     }));
     setToast("Milestone deleted");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const updateKpi = useCallback((objectiveId, patch) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : { ...o, kpi: { ...o.kpi, ...patch } }));
+    setToast("KPI updated");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const addSubMetric = useCallback((objectiveId, payload) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, subMetrics: [...o.subMetrics, {
+        id: genId("sm"), name: payload.name, current: 0, target: payload.target, previous: 0,
+        unit: payload.unit, lowerBetter: payload.lowerBetter, trend: "flat", lastUpdated: TODAY_STR, dataOwner: o.owner,
+      }],
+    }));
+    setToast("Sub-metric added");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const updateSubMetric = useCallback((objectiveId, smId, patch) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, subMetrics: o.subMetrics.map(sm => sm.id === smId ? { ...sm, ...patch } : sm),
+    }));
+    setToast("Sub-metric updated");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const deleteSubMetric = useCallback((objectiveId, smId) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, subMetrics: o.subMetrics.filter(sm => sm.id !== smId),
+    }));
+    setToast("Sub-metric deleted");
     setTimeout(() => setToast(null), 2000);
   }, []);
 
@@ -3233,27 +4334,32 @@ export default function App() {
     objectives: filteredObjectives, streams: RAW.streams, forecastOverrides: activeOverrides,
     setPage, setSelectedObjective, selectedObjective, cycles: RAW.reportingCycles, editable: canEdit,
     onAddMilestone: addMilestone, onUpdateMilestone: updateMilestone, onDeleteMilestone: deleteMilestone,
+    role, currentOwner: person, perms, year,
+    onUpdateKpi: updateKpi, onAddSubMetric: addSubMetric, onUpdateSubMetric: updateSubMetric, onDeleteSubMetric: deleteSubMetric,
   };
 
   return (
     <div style={{ fontFamily: FONT, color: T.ink, height: "100%", minHeight: 640, display: "flex", background: T.bg, borderRadius: 12, overflow: "hidden", border: `1px solid ${T.border}` }}>
-      <Sidebar page={page} setPage={setPage} role={role} />
+      <Sidebar page={page} setPage={setPage} allowedTabs={perms.tabs} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-        <TopBar forecastMode={forecastMode} setForecastMode={setForecastMode} canEdit={canEdit} />
-        {initialOwner && (
+        <TopBar forecastMode={forecastMode} setForecastMode={setForecastMode} canEdit={perms.forecast} year={year} setYear={setYear} />
+        {person && (
           <div style={{
             display: "flex", alignItems: "center", gap: 8,
             padding: "10px 24px", background: T.plumSoft, borderBottom: `1px solid ${T.border}`,
           }}>
             <Users size={15} color={T.plum} />
             <span style={{ fontSize: 13, color: T.navy, fontWeight: 600 }}>
-              Personal view for <span style={{ color: T.plum }}>{initialOwner}</span> — showing only their objectives
+              {role === "leader" ? "Objective Leader" : "Objective Owner"} view for <span style={{ color: T.plum }}>{person}</span>
+              {" — "}{role === "leader"
+                ? "your objectives; Timeline is view-only apart from the quarterly KPI checkpoint"
+                : "objectives you hold; you can update the Timeline apart from the KPI checkpoint"}
             </span>
           </div>
         )}
-        <FilterBar filters={filters} setFilters={setFilters} objectives={liveObjectives} streams={RAW.streams} lockedOwner={initialOwner} />
+        <FilterBar filters={filters} setFilters={setFilters} objectives={scopedObjectives} streams={RAW.streams} lockedOwner={role === "leader" ? person : ""} />
         <div style={{ flex: 1, overflow: "auto", padding: 24, background: T.surface2 }}>
-          {forecastMode && canEdit && (
+          {forecastMode && perms.forecast && (
             <div style={{ marginBottom: 18 }}>
               <ForecastPanel
                 objectives={filteredObjectives} streams={RAW.streams}
@@ -3262,24 +4368,38 @@ export default function App() {
               />
             </div>
           )}
-          {page === "overview" && <OverviewPage {...pageProps} />}
-          {page === "streams" && <StreamsPage {...pageProps} />}
-          {page === "objectives" && <ObjectivesPage {...pageProps} />}
-          {page === "initiatives" && <InitiativesPage objectives={filteredObjectives} onEdit={canEdit ? setEditingInitiative : undefined} />}
-          {page === "timeline" && (
-            <TimelinePage objectives={filteredObjectives} streams={RAW.streams} editable={canEdit}
-              onAddActivity={addActivity} onUpdateActivity={updateActivity} onDeleteActivity={deleteActivity}
-              onAddSub={addSubActivity} onUpdateSub={updateSubActivity} onToggleSub={toggleSubActivity} onDeleteSub={deleteSubActivity}
-              onAddMilestone={addMilestone} onUpdateMilestone={updateMilestone} onDeleteMilestone={deleteMilestone} />
-          )}
-          {page === "risks" && (
-            <RisksPage objectives={filteredObjectives} forecastOverrides={activeOverrides} risks={liveRisks} editable={canEdit}
-              onAddRisk={addRisk} onUpdateRisk={updateRisk} onDeleteRisk={deleteRisk} />
-          )}
-          {page === "compliance" && <CompliancePage objectives={filteredObjectives} />}
-          {page === "settings" && role !== "lead" && (
-            <SettingsPage liveObjectives={liveObjectives} setLiveObjectives={setLiveObjectives} scopeOwner={role === "owner" ? initialOwner : null}
-              onToast={(msg) => { setToast(msg); setTimeout(() => setToast(null), 2000); }} />
+          {!perms.tabs.includes(page) ? (
+            <Card style={{ padding: 20, fontSize: 13, color: T.inkMuted }}>
+              This section isn't available for your role.
+            </Card>
+          ) : (
+            <>
+              {page === "overview" && <OverviewPage {...pageProps} />}
+              {page === "streams" && <StreamsPage {...pageProps} />}
+              {page === "objectives" && <ObjectivesPage {...pageProps} />}
+              {page === "kpis" && <KpisPage {...pageProps} />}
+              {page === "initiatives" && (
+                <InitiativesPage objectives={filteredObjectives} onEdit={perms.editTimeline ? setEditingInitiative : undefined}
+                  editable={perms.editTimeline} currentOwner={person} onAddInitiative={addInitiative} />
+              )}
+              {page === "timeline" && (
+                <TimelinePage objectives={filteredObjectives} streams={RAW.streams}
+                  editable={perms.editTimeline} canSubmitCheckpoint={perms.submitCheckpoint} canApproveCheckpoint={perms.approveCheckpoint}
+                  role={role} currentOwner={person}
+                  onAddActivity={addActivity} onUpdateActivity={updateActivity} onDeleteActivity={deleteActivity}
+                  onAddSub={addSubActivity} onUpdateSub={updateSubActivity} onToggleSub={toggleSubActivity} onDeleteSub={deleteSubActivity}
+                  onAddMilestone={addMilestone} onUpdateMilestone={updateMilestone} onDeleteMilestone={deleteMilestone} />
+              )}
+              {page === "risks" && (
+                <RisksPage objectives={filteredObjectives} forecastOverrides={activeOverrides} risks={liveRisks} editable={perms.editRisks}
+                  onAddRisk={addRisk} onUpdateRisk={updateRisk} onDeleteRisk={deleteRisk} />
+              )}
+              {page === "compliance" && <CompliancePage objectives={filteredObjectives} />}
+              {page === "settings" && (
+                <SettingsPage liveObjectives={liveObjectives} setLiveObjectives={setLiveObjectives} scopeOwner={null}
+                  onToast={(msg) => { setToast(msg); setTimeout(() => setToast(null), 2000); }} />
+              )}
+            </>
           )}
         </div>
       </div>
