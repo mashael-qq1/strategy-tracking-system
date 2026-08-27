@@ -1649,9 +1649,15 @@ function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi,
           <option value="highest">Sort: Highest achievement</option>
           <option value="objective">Sort: Objective</option>
         </select>
-        <div style={{ fontSize: 12, color: T.inkMuted, marginLeft: "auto", flexShrink: 0 }}>
-          KPI values change only via approved quarterly checkpoints
-        </div>
+        {objectives.some(o => canEditObjective(o)) && (
+          <button onClick={() => setKpiModal({ objectiveId: null, mode: "add", metric: null, isMainKpi: false })}
+            style={{ marginLeft: "auto", flexShrink: 0, display: "flex", alignItems: "center", gap: 6, border: "none", background: T.navy, color: "#fff", borderRadius: 9, padding: "9px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
+            <Plus size={13} /> Add KPI
+          </button>
+        )}
+      </div>
+      <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: -6 }}>
+        KPI values change only via approved quarterly checkpoints — this manages the metric definitions themselves.
       </div>
 
       {rows.map(({ o, ach }) => {
@@ -1661,7 +1667,7 @@ function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi,
         const checkpoint = latestApprovedCheckpoint(o);
         return (
           <Card key={o.id} style={{ padding: 0, borderLeft: `4px solid ${stream?.color || T.blue}` }}>
-            <div style={{ display: "grid", gridTemplateColumns: editable ? "minmax(0, 1fr) 130px 130px 90px 28px 90px 28px" : "minmax(0, 1fr) 130px 130px 90px 28px", gap: 12, alignItems: "center", padding: "14px 16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 130px 130px 90px 28px 28px", gap: 12, alignItems: "center", padding: "14px 16px" }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 700, color: T.navy, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.kpi.name}</div>
                 <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -1685,14 +1691,7 @@ function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi,
                   style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
                   <Pencil size={13} />
                 </button>
-              ) : null}
-              {editable && (
-                <button onClick={() => { setKpiModal({ objectiveId: o.id, mode: "add", metric: null, isMainKpi: false }); setExpanded(o.id); }}
-                  title="Add a KPI / Sub-Metric under this objective"
-                  style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: T.bg, color: T.navy, borderRadius: 7, padding: "4px 8px", fontSize: 10.5, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
-                  <Plus size={11} /> Add KPI
-                </button>
-              )}
+              ) : <span />}
               <button onClick={() => setExpanded(isOpen ? null : o.id)} title="Sub-metrics"
                 style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted, padding: 2, display: "flex" }}>
                 {isOpen ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
@@ -1755,11 +1754,14 @@ function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi,
       {kpiModal && (
         <KpiFormModal
           mode={kpiModal.mode} metric={kpiModal.metric} isMainKpi={kpiModal.isMainKpi}
+          objectives={kpiModal.objectiveId ? undefined : objectives.filter(o => canEditObjective(o))}
           onClose={() => setKpiModal(null)}
           onSave={(payload) => {
-            if (kpiModal.isMainKpi) onUpdateKpi(kpiModal.objectiveId, payload);
-            else if (kpiModal.mode === "add") onAddSubMetric(kpiModal.objectiveId, payload);
-            else onUpdateSubMetric(kpiModal.objectiveId, kpiModal.metric.id, payload);
+            const { objectiveId: pickedId, ...rest } = payload;
+            const targetObjId = kpiModal.objectiveId || pickedId;
+            if (kpiModal.isMainKpi) onUpdateKpi(targetObjId, rest);
+            else if (kpiModal.mode === "add") onAddSubMetric(targetObjId, rest);
+            else onUpdateSubMetric(targetObjId, kpiModal.metric.id, rest);
             setKpiModal(null);
           }}
           onDelete={(!kpiModal.isMainKpi && kpiModal.mode === "edit") ? () => {
@@ -1878,15 +1880,19 @@ function HistoryModal({ initiative, onClose }) {
    KPI FORM MODAL — edit the objective's main KPI, or add/edit a Sub-Metric.
    Targets and metric sets change year to year, so these stay editable.
 ============================================================================ */
-function KpiFormModal({ mode, metric, isMainKpi, onSave, onDelete, onClose }) {
+function KpiFormModal({ mode, metric, isMainKpi, objectives, onSave, onDelete, onClose }) {
   const [name, setName] = useState(metric?.name || "");
   const [target, setTarget] = useState(metric?.target ?? 0);
   const [unit, setUnit] = useState(metric?.unit ?? "%");
   const [lowerBetter, setLowerBetter] = useState(!!metric?.lowerBetter);
+  const [objectiveId, setObjectiveId] = useState(objectives?.[0]?.id || "");
+  const needsObjectivePicker = !!objectives; // only passed when adding to the overall list, not from a specific row
 
   const handleSave = () => {
     if (!name.trim()) return;
-    onSave({ name: name.trim(), target: Number(target), unit, lowerBetter });
+    if (needsObjectivePicker && !objectiveId) return;
+    const payload = { name: name.trim(), target: Number(target), unit, lowerBetter };
+    onSave(needsObjectivePicker ? { ...payload, objectiveId } : payload);
   };
 
   return (
@@ -1894,10 +1900,20 @@ function KpiFormModal({ mode, metric, isMainKpi, onSave, onDelete, onClose }) {
       <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 440, maxWidth: "100%", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
           <div style={{ fontSize: 16, fontWeight: 800, color: T.navy }}>
-            {isMainKpi ? "Edit KPI" : mode === "add" ? "Add Sub-Metric" : "Edit Sub-Metric"}
+            {isMainKpi ? "Edit KPI" : mode === "add" ? "Add KPI" : "Edit KPI"}
           </div>
           <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
         </div>
+
+        {needsObjectivePicker && (
+          <>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Objective</label>
+            <select value={objectiveId} onChange={e => setObjectiveId(e.target.value)}
+              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }}>
+              {objectives.map(o => <option key={o.id} value={o.id}>O{o.number} · {o.title}</option>)}
+            </select>
+          </>
+        )}
 
         <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Name</label>
         <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Discovery Output Coverage"
@@ -1930,7 +1946,7 @@ function KpiFormModal({ mode, metric, isMainKpi, onSave, onDelete, onClose }) {
           )}
           <button onClick={handleSave}
             style={{ flex: 1, padding: "11px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13.5, fontWeight: 700 }}>
-            {isMainKpi ? "Save Changes" : mode === "add" ? "Add Sub-Metric" : "Save Changes"}
+            {isMainKpi ? "Save Changes" : mode === "add" ? "Add KPI" : "Save Changes"}
           </button>
         </div>
       </div>
