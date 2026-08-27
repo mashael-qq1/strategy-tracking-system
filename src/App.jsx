@@ -4027,22 +4027,24 @@ function getRoleFromUrl() {
 const PERMISSIONS = {
   admin: {
     tabs: ["overview", "streams", "objectives", "kpis", "initiatives", "timeline", "risks", "compliance", "settings"],
-    editTimeline: true, submitCheckpoint: true, approveCheckpoint: true,
+    editTimeline: true, editInitiatives: true, submitCheckpoint: true, approveCheckpoint: true,
     editKpiDefinition: true, editRisks: true, forecast: true,
   },
   lead: {
     tabs: ["overview", "objectives", "kpis", "risks", "compliance"],
-    editTimeline: false, submitCheckpoint: false, approveCheckpoint: true,
+    editTimeline: false, editInitiatives: false, submitCheckpoint: false, approveCheckpoint: true,
     editKpiDefinition: false, editRisks: false, forecast: false,
   },
   leader: {
     tabs: ["objectives", "initiatives", "timeline", "risks"],
-    editTimeline: false, submitCheckpoint: true, approveCheckpoint: false,
+    // Timeline itself (activities/sub-activities) is view-only for leaders,
+    // but they can add/edit the initiatives that sit under their objectives.
+    editTimeline: false, editInitiatives: true, submitCheckpoint: true, approveCheckpoint: false,
     editKpiDefinition: false, editRisks: true, forecast: false,
   },
   member: {
     tabs: ["objectives", "timeline", "risks"],
-    editTimeline: true, submitCheckpoint: false, approveCheckpoint: false,
+    editTimeline: true, editInitiatives: false, submitCheckpoint: false, approveCheckpoint: false,
     editKpiDefinition: false, editRisks: true, forecast: false,
   },
 };
@@ -4379,8 +4381,8 @@ export default function App() {
               {page === "objectives" && <ObjectivesPage {...pageProps} />}
               {page === "kpis" && <KpisPage {...pageProps} />}
               {page === "initiatives" && (
-                <InitiativesPage objectives={filteredObjectives} onEdit={perms.editTimeline ? setEditingInitiative : undefined}
-                  editable={perms.editTimeline} currentOwner={person} onAddInitiative={addInitiative} />
+                <InitiativesPage objectives={filteredObjectives} onEdit={perms.editInitiatives ? setEditingInitiative : undefined}
+                  editable={perms.editInitiatives} currentOwner={person} onAddInitiative={addInitiative} />
               )}
               {page === "timeline" && (
                 <TimelinePage objectives={filteredObjectives} streams={RAW.streams}
