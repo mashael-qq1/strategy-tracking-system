@@ -1237,11 +1237,26 @@ function KpiProgressTable({ objectives, setSelectedObjective, setPage }) {
 }
 
 function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage, setSelectedObjective, year, role }) {
+  const [chartGranularity, setChartGranularity] = useState("Month");
   if (year === "2025") return <ArchivedYearSummary archive={RAW.archive2025} />;
 
   const health = strategyHealth(streams, objectives, RAW.settings.healthWeights, forecastOverrides);
   const insights = insightsForData(objectives, streams, forecastOverrides);
-  const chartData = cycles.map(c => ({ name: c.label.split(" ")[0], value: c.overall }));
+
+  const monthChartData = cycles.map(c => ({ name: c.label.split(" ")[0], value: c.overall }));
+  // Roll the monthly cycles up into fiscal quarters (Q1: Jul–Sep, Q2: Oct–Dec)
+  // using the same month→quarter mapping as the rest of the app.
+  const monthToQuarter = { Jul: "Q1", Aug: "Q1", Sep: "Q1", Oct: "Q2", Nov: "Q2", Dec: "Q2" };
+  const quarterChartData = QUARTERS.map(q => {
+    const months = monthChartData.filter(m => monthToQuarter[m.name] === q.id);
+    if (!months.length) return null;
+    return { name: q.id, value: Math.round(months.reduce((a, m) => a + m.value, 0) / months.length) };
+  }).filter(Boolean);
+  const yearChartData = [
+    { name: RAW.archive2025.year, value: RAW.archive2025.overallProgress },
+    { name: "2026", value: strategyProgress(streams, objectives, forecastOverrides) },
+  ];
+  const chartData = chartGranularity === "Quarter" ? quarterChartData : chartGranularity === "Year" ? yearChartData : monthChartData;
 
   const attentionItems = buildAttentionItems(objectives, forecastOverrides).slice(0, 4);
 
@@ -1280,7 +1295,19 @@ function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage,
               </div>
             ))}
           </div>
-          <div style={{ height: 170 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+            <span style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Overall Strategy Progress</span>
+            <div style={{ display: "flex", gap: 6 }}>
+              {["Month", "Quarter", "Year"].map(g => (
+                <button key={g} onClick={() => setChartGranularity(g)}
+                  style={{
+                    border: `1px solid ${chartGranularity === g ? T.navy : T.border}`, background: chartGranularity === g ? T.navy : T.bg,
+                    color: chartGranularity === g ? "#fff" : T.inkMuted, borderRadius: 7, padding: "4px 10px", fontSize: 11.5, fontWeight: 600, cursor: "pointer",
+                  }}>{g}</button>
+              ))}
+            </div>
+          </div>
+          <div style={{ height: 155 }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid stroke={T.border} vertical={false} />
