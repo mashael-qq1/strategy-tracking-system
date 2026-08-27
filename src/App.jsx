@@ -1002,7 +1002,9 @@ function TopBar({ forecastMode, setForecastMode, canEdit, year, setYear }) {
 ============================================================================ */
 function ExecCards({ objectives, streams, forecastOverrides, cycles, setPage, role }) {
   const progress = strategyProgress(streams, objectives, forecastOverrides);
-  const prevProgress = cycles[0].overall;
+  // Compare to last year's closed-out strategy, not last month's cycle.
+  const prevYearProgress = RAW.archive2025.overallProgress;
+  const prevYearLabel = RAW.archive2025.year;
   const objStatuses = objectives.map(o => objectiveStatus(o, forecastOverrides));
   const onTrack = objStatuses.filter(s => s === "On Track").length;
   const atRisk = objStatuses.filter(s => s === "At Risk").length;
@@ -1025,7 +1027,13 @@ function ExecCards({ objectives, streams, forecastOverrides, cycles, setPage, ro
   const cards = [
     {
       title: "Overall KPI Progress",
-      value: `${progress}%`, sub: <Trend current={progress} previous={prevProgress} suffix="pt" />,
+      value: `${progress}%`,
+      sub: (
+        <div>
+          <Trend current={progress} previous={prevYearProgress} suffix="pt" />
+          <div style={{ fontSize: 10.5, color: T.inkMuted, marginTop: 2 }}>vs {prevYearLabel} ({prevYearProgress}%)</div>
+        </div>
+      ),
       onClick: () => setPage("overview"),
     },
     {
@@ -1496,14 +1504,14 @@ function ObjectiveCard({ obj, streamColor, forecastOverrides, onClick }) {
    Editing rights follow the same rule as elsewhere: an Objective Owner can
    manage their own objectives' metrics; the BA Lead views only.
 ============================================================================ */
-function KpisPage({ objectives, streams, role, currentOwner, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, onUpdateMilestone, setSelectedObjective, setPage }) {
+function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, onUpdateMilestone, setSelectedObjective, setPage }) {
   const [expanded, setExpanded] = useState(null);
   const [kpiModal, setKpiModal] = useState(null); // { objectiveId, mode, metric, isMainKpi }
   const [checkpointModal, setCheckpointModal] = useState(null); // { objective, milestone }
   const [sortBy, setSortBy] = useState("lowest");
   const [query, setQuery] = useState("");
 
-  const canEditObjective = (o) => role === "admin";
+  const canEditObjective = (o) => role === "admin" || (role === "lead" && perms?.editKpiDefinition);
   const canApprove = role === "admin" || role === "lead";
 
   let rows = objectives.map(o => ({ o, ach: achievementPct(o.kpi) }));
@@ -1784,9 +1792,9 @@ function KpisPage({ objectives, streams, role, currentOwner, onUpdateKpi, onAddS
   );
 }
 
-function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObjective, setSelectedObjective, role, currentOwner, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, onUpdateAssignedOwner }) {
+function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObjective, setSelectedObjective, role, currentOwner, perms, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, onUpdateAssignedOwner }) {
   const selected = objectives.find(o => o.id === selectedObjective);
-  const canEditKpi = selected && role === "admin";
+  const canEditKpi = selected && (role === "admin" || (role === "lead" && perms?.editKpiDefinition));
   const canAssignOwner = selected && (role === "admin" || (role === "leader" && currentOwner === selected.owner));
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -4093,7 +4101,10 @@ const PERMISSIONS = {
   lead: {
     tabs: ["overview", "objectives", "kpis", "risks", "compliance"],
     editTimeline: false, editInitiatives: false, submitCheckpoint: false, approveCheckpoint: true,
-    editKpiDefinition: false, editRisks: false, forecast: false,
+    // The BA Lead owns the metric set itself — she can add/edit/delete
+    // KPIs and Sub-Metrics (their definitions), separate from approving
+    // the quarterly measured values, which stays a checkpoint action.
+    editKpiDefinition: true, editRisks: false, forecast: false,
   },
   leader: {
     tabs: ["objectives", "initiatives", "timeline", "risks"],
