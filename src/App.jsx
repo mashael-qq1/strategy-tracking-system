@@ -584,6 +584,18 @@ function objectiveStatus(obj, forecastOverrides) {
   if (ach >= 60) return "At Risk";
   return "Delayed";
 }
+
+/* Activity-based alternative lens — used only where an Objective Leader
+   explicitly switches to it (they care about delivery pace day to day, not
+   just the quarterly KPI number). Progress = average progress of the
+   objective's initiatives (which itself rolls up from Activities). */
+function activityObjectiveProgress(obj) {
+  if (!obj.initiatives || !obj.initiatives.length) return 0;
+  return Math.round(obj.initiatives.reduce((a, i) => a + i.progress, 0) / obj.initiatives.length);
+}
+function activityObjectiveStatus(obj) {
+  return timelineStatus(obj.start, obj.end, activityObjectiveProgress(obj));
+}
 function streamProgress(stream, objectives, forecastOverrides) {
   const objs = objectives.filter(o => o.streamId === stream.id);
   if (!objs.length) return 0;
@@ -1466,9 +1478,10 @@ function StreamsPage({ objectives, streams, forecastOverrides, setPage, setSelec
 /* ============================================================================
    OBJECTIVE CARD (grid tile)
 ============================================================================ */
-function ObjectiveCard({ obj, streamColor, forecastOverrides, onClick }) {
-  const p = objectiveProgress(obj, forecastOverrides);
-  const status = objectiveStatus(obj, forecastOverrides);
+function ObjectiveCard({ obj, streamColor, forecastOverrides, onClick, progressMode }) {
+  const isActivityMode = progressMode === "activity";
+  const p = isActivityMode ? activityObjectiveProgress(obj) : objectiveProgress(obj, forecastOverrides);
+  const status = isActivityMode ? activityObjectiveStatus(obj) : objectiveStatus(obj, forecastOverrides);
   const measured = latestApprovedCheckpoint(obj) != null;
   return (
     <Card hoverable onClick={onClick} style={{ padding: 16, borderTop: `3px solid ${streamColor}` }}>
@@ -1485,7 +1498,7 @@ function ObjectiveCard({ obj, streamColor, forecastOverrides, onClick }) {
       </div>
       <ProgressBar value={p} color={streamColor} />
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11.5, color: T.inkMuted }}>
-        <span>KPI Achievement</span><Num size={12.5}>{p}%</Num>
+        <span>{isActivityMode ? "Activity Completion" : "KPI Achievement"}</span><Num size={12.5}>{p}%</Num>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, fontSize: 11.5, color: T.inkMuted }}>
         <span>{obj.kpi.current}{obj.kpi.unit} / {obj.kpi.target}{obj.kpi.unit}</span>
@@ -1799,13 +1812,40 @@ function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObject
   const selected = objectives.find(o => o.id === selectedObjective);
   const canEditKpi = selected && (role === "admin" || (role === "lead" && perms?.editKpiDefinition));
   const canAssignOwner = selected && (role === "admin" || (role === "leader" && currentOwner === selected.owner));
+  // Objective Leaders juggle two lenses day to day: the official quarterly
+  // KPI number, and the day-to-day pace of activities under their
+  // initiatives. This toggle only appears for them — everyone else keeps
+  // the single KPI-driven view used across the rest of the app.
+  const [progressMode, setProgressMode] = useState("kpi");
+  const showToggle = role === "leader";
+  const effectiveMode = showToggle ? progressMode : "kpi";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      <SectionLabel icon={Target}>Nine Objectives — Strategy Map</SectionLabel>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+        <SectionLabel icon={Target}>Nine Objectives — Strategy Map</SectionLabel>
+        {showToggle && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11.5, color: T.inkMuted, fontWeight: 600 }}>Progress by:</span>
+            <div style={{ display: "flex", gap: 6 }}>
+              {[
+                { id: "kpi", label: "KPI Achievement" },
+                { id: "activity", label: "Activity Completion" },
+              ].map(m => (
+                <button key={m.id} onClick={() => setProgressMode(m.id)}
+                  style={{
+                    border: `1px solid ${progressMode === m.id ? T.navy : T.border}`, background: progressMode === m.id ? T.navy : T.bg,
+                    color: progressMode === m.id ? "#fff" : T.inkMuted, borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer",
+                  }}>{m.label}</button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 14 }}>
         {objectives.map(o => {
           const stream = streams.find(s => s.id === o.streamId);
-          return <ObjectiveCard key={o.id} obj={o} streamColor={stream.color} forecastOverrides={forecastOverrides} onClick={() => setSelectedObjective(o.id)} />;
+          return <ObjectiveCard key={o.id} obj={o} streamColor={stream.color} forecastOverrides={forecastOverrides} onClick={() => setSelectedObjective(o.id)} progressMode={effectiveMode} />;
         })}
       </div>
       {selected && (
@@ -1817,6 +1857,7 @@ function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObject
           onDeleteSubMetric={(smId) => onDeleteSubMetric(selected.id, smId)}
           canAssignOwner={canAssignOwner}
           onUpdateAssignedOwner={(ownerName) => onUpdateAssignedOwner(selected.id, ownerName)}
+          progressMode={effectiveMode}
         />
       )}
     </div>
@@ -1948,15 +1989,16 @@ function KpiFormModal({ mode, metric, isMainKpi, objectives, onSave, onDelete, o
   );
 }
 
-function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, canAssignOwner, onUpdateAssignedOwner }) {
+function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, canAssignOwner, onUpdateAssignedOwner, progressMode }) {
   const [historyFor, setHistoryFor] = useState(null);
   const [expandedSM, setExpandedSM] = useState(null);
   const [kpiModal, setKpiModal] = useState(null); // { mode, metric, isMainKpi }
   const [ownerInput, setOwnerInput] = useState(obj.assignedOwner || "");
   const [copied, setCopied] = useState(false);
-  const p = objectiveProgress(obj, forecastOverrides);
+  const isActivityMode = progressMode === "activity";
+  const p = isActivityMode ? activityObjectiveProgress(obj) : objectiveProgress(obj, forecastOverrides);
   const health = objectiveHealth(obj, RAW.settings.healthWeights, forecastOverrides);
-  const status = objectiveStatus(obj, forecastOverrides);
+  const status = isActivityMode ? activityObjectiveStatus(obj) : objectiveStatus(obj, forecastOverrides);
   const daysLeft = daysBetween(TODAY, d(obj.end));
   const kAch = achievementPct(obj.kpi);
 
@@ -2043,7 +2085,7 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, 
 
         <div style={{ marginTop: 16, display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{ flex: 1 }}><ProgressBar value={p} color={stream.color} height={8} track="rgba(255,255,255,0.15)" /></div>
-          <Num size={16} color="#fff">{p}% progress</Num>
+          <Num size={16} color="#fff">{p}% {isActivityMode ? "activity" : "KPI"} progress</Num>
           <Num size={16} color="#fff">Health {health}</Num>
         </div>
       </div>
@@ -4525,4 +4567,3 @@ export default function App() {
     </div>
   );
 }
-
