@@ -115,7 +115,7 @@ const RAW = {
 
 // ---- Objective 1 -----------------------------------------------------------
 const O1 = {
-  id: "o1", number: 1, streamId: "s1", owner: "Yasser",
+  id: "o1", number: 1, streamId: "s1", owner: "Yasser", assignedOwner: null,
   title: "Master the business problem at the start",
   subtitle: "Define the value before we design the solution.",
   meaning: "Get the start right and the engagement stops fighting you three months later.",
@@ -204,7 +204,7 @@ const O1 = {
 
 // ---- Objective 2 -----------------------------------------------------------
 const O2 = {
-  id:"o2", number:2, streamId:"s1", owner:"Leen",
+  id:"o2", number:2, streamId:"s1", owner:"Leen", assignedOwner: null,
   title:"Keep scope alive and visible",
   subtitle:"Every change is a conscious decision, never a surprise.",
   meaning:'When a client says "this isn\'t what we agreed," the matrix defends you.',
@@ -241,7 +241,7 @@ const O2 = {
 
 // ---- Objective 3 -----------------------------------------------------------
 const O3 = {
-  id:"o3", number:3, streamId:"s1", owner:"Baghdady",
+  id:"o3", number:3, streamId:"s1", owner:"Baghdady", assignedOwner: null,
   title:"Own the value, not just the delivery",
   subtitle:"", meaning:"Your work is measured by outcomes, not output — you become a value partner.",
   start:"2026-08-01", end:"2026-12-31", lastUpdate:"2026-08-09",
@@ -278,7 +278,7 @@ const O3 = {
 
 // ---- Objective 4 -----------------------------------------------------------
 const O4 = {
-  id:"o4", number:4, streamId:"s1", owner:"Yasser",
+  id:"o4", number:4, streamId:"s1", owner:"Yasser", assignedOwner: null,
   title:"Turn analytical depth into new opportunities",
   subtitle:"", meaning:"The opportunities you already notice become real business AZM grows on.",
   start:"2026-08-01", end:"2026-12-31", lastUpdate:"2026-07-30",
@@ -315,7 +315,7 @@ const O4 = {
 
 // ---- Objective 5 -----------------------------------------------------------
 const O5 = {
-  id:"o5", number:5, streamId:"s1", owner:"Leen",
+  id:"o5", number:5, streamId:"s1", owner:"Leen", assignedOwner: null,
   title:"Deliver on time and on client expectation, every time",
   subtitle:"", meaning:"Predictable delivery means less firefighting and more trust.",
   start:"2026-07-01", end:"2026-12-31", lastUpdate:"2026-08-15",
@@ -350,7 +350,7 @@ const O5 = {
 
 // ---- Objective 6 -----------------------------------------------------------
 const O6 = {
-  id:"o6", number:6, streamId:"s2", owner:"Baghdady",
+  id:"o6", number:6, streamId:"s2", owner:"Baghdady", assignedOwner: null,
   title:"Bring AZM consistency to every output",
   subtitle:"One quality standard, one tracking spine, many ways to think.",
   meaning:"Stop starting from zero every project; your knowledge is kept, not lost.",
@@ -386,7 +386,7 @@ const O6 = {
 
 // ---- Objective 7 (weakest performer — flagged in insights) ----------------
 const O7 = {
-  id:"o7", number:7, streamId:"s2", owner:"Randa",
+  id:"o7", number:7, streamId:"s2", owner:"Randa", assignedOwner: null,
   title:"Make AI a department capability, not a personal habit",
   subtitle:"", meaning:"AI takes the repetitive work so you do the deep thinking — with the time measured back.",
   start:"2026-09-01", end:"2026-12-31", lastUpdate:"2026-07-20",
@@ -421,7 +421,7 @@ const O7 = {
 
 // ---- Objective 8 -----------------------------------------------------------
 const O8 = {
-  id:"o8", number:8, streamId:"s2", owner:"Leen",
+  id:"o8", number:8, streamId:"s2", owner:"Leen", assignedOwner: null,
   title:"Give leaders real-time visibility into the work",
   subtitle:"Without depending on 1:1s.", meaning:"Your contribution is seen without chasing your lead in a 1:1.",
   start:"2026-07-01", end:"2026-12-31", lastUpdate:"2026-08-13",
@@ -454,7 +454,7 @@ const O8 = {
 
 // ---- Objective 9 -----------------------------------------------------------
 const O9 = {
-  id:"o9", number:9, streamId:"s2", owner:"Yasser",
+  id:"o9", number:9, streamId:"s2", owner:"Yasser", assignedOwner: null,
   title:"Grow and onboard analysts with intent",
   subtitle:"Clear paths, fair assessment, fast activation.", meaning:"A career path you can see, and a fair read based on evidence, not memory.",
   start:"2026-09-01", end:"2026-12-31", lastUpdate:"2026-08-06",
@@ -1784,9 +1784,10 @@ function KpisPage({ objectives, streams, role, currentOwner, onUpdateKpi, onAddS
   );
 }
 
-function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObjective, setSelectedObjective, role, currentOwner, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric }) {
+function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObjective, setSelectedObjective, role, currentOwner, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, onUpdateAssignedOwner }) {
   const selected = objectives.find(o => o.id === selectedObjective);
   const canEditKpi = selected && role === "admin";
+  const canAssignOwner = selected && (role === "admin" || (role === "leader" && currentOwner === selected.owner));
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <SectionLabel icon={Target}>Nine Objectives — Strategy Map</SectionLabel>
@@ -1803,6 +1804,8 @@ function ObjectivesPage({ objectives, streams, forecastOverrides, selectedObject
           onAddSubMetric={(payload) => onAddSubMetric(selected.id, payload)}
           onUpdateSubMetric={(smId, patch) => onUpdateSubMetric(selected.id, smId, patch)}
           onDeleteSubMetric={(smId) => onDeleteSubMetric(selected.id, smId)}
+          canAssignOwner={canAssignOwner}
+          onUpdateAssignedOwner={(ownerName) => onUpdateAssignedOwner(selected.id, ownerName)}
         />
       )}
     </div>
@@ -1920,15 +1923,32 @@ function KpiFormModal({ mode, metric, isMainKpi, onSave, onDelete, onClose }) {
   );
 }
 
-function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric }) {
+function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, onUpdateKpi, onAddSubMetric, onUpdateSubMetric, onDeleteSubMetric, canAssignOwner, onUpdateAssignedOwner }) {
   const [historyFor, setHistoryFor] = useState(null);
   const [expandedSM, setExpandedSM] = useState(null);
   const [kpiModal, setKpiModal] = useState(null); // { mode, metric, isMainKpi }
+  const [ownerInput, setOwnerInput] = useState(obj.assignedOwner || "");
+  const [copied, setCopied] = useState(false);
   const p = objectiveProgress(obj, forecastOverrides);
   const health = objectiveHealth(obj, RAW.settings.healthWeights, forecastOverrides);
   const status = objectiveStatus(obj, forecastOverrides);
   const daysLeft = daysBetween(TODAY, d(obj.end));
   const kAch = achievementPct(obj.kpi);
+
+  const memberLink = ownerInput.trim()
+    ? `${window.location.origin}${window.location.pathname}?member=${encodeURIComponent(ownerInput.trim())}`
+    : "";
+
+  const saveOwner = () => onUpdateAssignedOwner(ownerInput.trim() || null);
+
+  const copyLink = () => {
+    const name = ownerInput.trim();
+    if (!name) return;
+    onUpdateAssignedOwner(name); // typing a name and copying its link assigns them in one step
+    navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}?member=${encodeURIComponent(name)}`)
+      .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); })
+      .catch(() => {});
+  };
 
   return (
     <Card style={{ padding: 0, overflow: "hidden" }}>
@@ -1945,7 +1965,7 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, 
         </div>
         <div style={{ display: "flex", gap: 24, marginTop: 16, flexWrap: "wrap" }}>
           {[
-            ["Owner", obj.owner], ["Start", obj.start], ["Target End", obj.end],
+            ["Leader", obj.owner], ["Start", obj.start], ["Target End", obj.end],
             ["Days Remaining", daysLeft >= 0 ? daysLeft : "0 (past due)"], ["Last Update", obj.lastUpdate],
           ].map(([l, v]) => (
             <div key={l}>
@@ -1953,11 +1973,49 @@ function ObjectiveDrawer({ obj, stream, forecastOverrides, onClose, canEditKpi, 
               <div style={{ fontFamily: MONO, fontSize: 13.5, fontWeight: 600, marginTop: 2 }}>{v}</div>
             </div>
           ))}
+          {!canAssignOwner && (
+            <div>
+              <div style={{ fontSize: 10.5, color: "#8FA8C4", textTransform: "uppercase", letterSpacing: 0.4 }}>Team Owner</div>
+              <div style={{ fontFamily: MONO, fontSize: 13.5, fontWeight: 600, marginTop: 2 }}>{obj.assignedOwner || "— Unassigned —"}</div>
+            </div>
+          )}
           <div>
             <div style={{ fontSize: 10.5, color: "#8FA8C4", textTransform: "uppercase", letterSpacing: 0.4 }}>Status</div>
             <div style={{ marginTop: 3 }}><StatusChip status={status} /></div>
           </div>
         </div>
+
+        {canAssignOwner && (
+          <div style={{ marginTop: 16, background: "rgba(255,255,255,0.08)", borderRadius: 9, padding: "12px 14px" }}>
+            <div style={{ fontSize: 10.5, color: "#8FA8C4", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 8 }}>Team Owner</div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <input value={ownerInput} onChange={e => setOwnerInput(e.target.value)} placeholder="Type a name…"
+                style={{
+                  flex: "1 1 160px", minWidth: 140, fontFamily: FONT, fontSize: 13, padding: "7px 10px",
+                  background: "rgba(255,255,255,0.1)", color: "#fff", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 7,
+                }} />
+              <button onClick={saveOwner}
+                style={{ border: "1px solid rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.1)", color: "#fff", borderRadius: 7, padding: "7px 12px", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
+                Save
+              </button>
+              <button onClick={copyLink} disabled={!ownerInput.trim()}
+                style={{
+                  display: "flex", alignItems: "center", gap: 6, border: "none", borderRadius: 7, padding: "7px 12px", fontSize: 12.5, fontWeight: 700,
+                  cursor: ownerInput.trim() ? "pointer" : "default", opacity: ownerInput.trim() ? 1 : 0.5,
+                  background: copied ? T.green : T.plum, color: "#fff",
+                }}>
+                <Link2 size={13} /> {copied ? "Link copied!" : "Copy Link"}
+              </button>
+            </div>
+            {ownerInput.trim() && (
+              <div style={{ fontSize: 11, color: "#B9CBE0", marginTop: 8, fontFamily: MONO, wordBreak: "break-all" }}>{memberLink}</div>
+            )}
+            <div style={{ fontSize: 11, color: "#8FA8C4", marginTop: 6 }}>
+              Send this link to {ownerInput.trim() || "them"} — opening it shows the Objective Owner view scoped to this objective.
+            </div>
+          </div>
+        )}
+
         <div style={{ marginTop: 16, display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{ flex: 1 }}><ProgressBar value={p} color={stream.color} height={8} track="rgba(255,255,255,0.15)" /></div>
           <Num size={16} color="#fff">{p}% progress</Num>
@@ -3981,7 +4039,6 @@ function ForecastPanel({ objectives, streams, forecastOverrides, setForecastOver
    No separate deploy needed — same repo, same Vercel project, different links.
 ============================================================================ */
 const OBJECTIVE_LEADERS = ["Yasser", "Leen", "Baghdady", "Randa"];
-const OBJECTIVE_OWNERS = ["Sara", "Omar", "Fahad", "Noura"];
 
 function getRoleFromUrl() {
   const fallback = { role: "lead", person: "" };
@@ -3995,10 +4052,13 @@ function getRoleFromUrl() {
       const matched = OBJECTIVE_LEADERS.find(o => o.toLowerCase() === leaderParam.trim().toLowerCase());
       if (matched) return { role: "leader", person: matched };
     }
+    // Objective Owners are assigned freely by their Leader (any name, typed
+    // in on the Objectives page), so any non-empty ?member= is accepted —
+    // scoping then depends on whether that name is actually assigned to an
+    // objective (see scopeObjectivesForRole).
     const memberParam = params.get("member");
-    if (memberParam) {
-      const matched = OBJECTIVE_OWNERS.find(o => o.toLowerCase() === memberParam.trim().toLowerCase());
-      if (matched) return { role: "member", person: matched };
+    if (memberParam && memberParam.trim()) {
+      return { role: "member", person: memberParam.trim() };
     }
     return fallback;
   } catch {
@@ -4050,10 +4110,17 @@ const PERMISSIONS = {
 };
 
 /* Which objectives a person is allowed to see. Leaders own objectives
-   outright; members are scoped to objectives where they own an initiative. */
+   outright; members are scoped to objectives explicitly assigned to them
+   by their leader, or where they already own an initiative. */
 function scopeObjectivesForRole(objectives, role, person) {
   if (role === "leader") return objectives.filter(o => o.owner === person);
-  if (role === "member") return objectives.filter(o => (o.initiatives || []).some(i => i.owner === person));
+  if (role === "member") {
+    const p = person.trim().toLowerCase();
+    return objectives.filter(o =>
+      (o.assignedOwner && o.assignedOwner.trim().toLowerCase() === p) ||
+      (o.initiatives || []).some(i => (i.owner || "").trim().toLowerCase() === p)
+    );
+  }
   return objectives;
 }
 
@@ -4287,6 +4354,12 @@ export default function App() {
     setTimeout(() => setToast(null), 2000);
   }, []);
 
+  const updateAssignedOwner = useCallback((objectiveId, ownerName) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : { ...o, assignedOwner: ownerName || null }));
+    setToast(ownerName ? `${ownerName} assigned` : "Owner unassigned");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
   const addSubMetric = useCallback((objectiveId, payload) => {
     setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
       ...o, subMetrics: [...o.subMetrics, {
@@ -4338,6 +4411,7 @@ export default function App() {
     onAddMilestone: addMilestone, onUpdateMilestone: updateMilestone, onDeleteMilestone: deleteMilestone,
     role, currentOwner: person, perms, year,
     onUpdateKpi: updateKpi, onAddSubMetric: addSubMetric, onUpdateSubMetric: updateSubMetric, onDeleteSubMetric: deleteSubMetric,
+    onUpdateAssignedOwner: updateAssignedOwner,
   };
 
   return (
