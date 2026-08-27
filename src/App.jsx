@@ -1338,7 +1338,7 @@ function OverviewPage({ objectives, streams, forecastOverrides, cycles, setPage,
               View all <ChevronRight size={14} />
             </button>
           </div>
-          <AttentionTable items={attentionItems} objectives={objectives} onSelect={(objId) => { setSelectedObjective(objId); setPage("objectives"); }} />
+          <AttentionTable items={attentionItems} objectives={objectives} onSelect={(item) => { setSelectedObjective(item.objective.id); setPage("objectives"); }} />
         </Card>
       )}
     </div>
@@ -1443,7 +1443,7 @@ function AttentionTable({ items, onSelect }) {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {items.map((it, i) => (
-        <div key={i} onClick={() => onSelect(it.objective.id)}
+        <div key={i} onClick={() => onSelect(it)}
           style={{
             display: "grid", gridTemplateColumns: "90px minmax(0, 1fr) 130px 100px", gap: 12, alignItems: "center",
             padding: "11px 6px", borderTop: i === 0 ? "none" : `1px solid ${T.border}`, cursor: "pointer",
@@ -3845,53 +3845,70 @@ function MilestonesCard({ objectives, editable, canSubmitCheckpoint, canApproveC
 
 /* ============================================================================
    RISKS PAGE
+   Objective Owners log the risks themselves, so "Needs Your Attention"
+   (a system-generated summary of things they already know) is redundant for
+   them — they see the log instead. Objective Leaders never create risks
+   directly, so they see the generated attention feed instead of the log.
 ============================================================================ */
-function RisksPage({ objectives, forecastOverrides, risks, editable, onAddRisk, onUpdateRisk, onDeleteRisk }) {
+function RisksPage({ objectives, forecastOverrides, risks, editable, role, onAddRisk, onUpdateRisk, onDeleteRisk }) {
   const [riskModal, setRiskModal] = useState(null); // { mode, risk }
   const [detailRisk, setDetailRisk] = useState(null); // the risk currently being viewed in full
+  const [detailAttention, setDetailAttention] = useState(null); // an attention-panel item being viewed in full
   const items = buildAttentionItems(objectives, forecastOverrides);
   const objById = Object.fromEntries(objectives.map(o => [o.id, o]));
   const scopedRisks = risks.filter(r => objById[r.objective]);
+
+  const showAttention = role !== "member";
+  const showLogged = role !== "leader";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      <SectionLabel icon={AlertTriangle}>Needs Your Attention — {items.length} items</SectionLabel>
-      <Card style={{ padding: 8 }}>
-        <AttentionTable items={items} onSelect={() => {}} />
-      </Card>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <SectionLabel icon={AlertTriangle}>Logged Risks & Blockers</SectionLabel>
-        {editable && (
-          <button onClick={() => setRiskModal({ mode: "add", risk: null })}
-            style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: "none", color: T.navy, borderRadius: 7, padding: "5px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", marginBottom: 14 }}>
-            <Plus size={12} /> Add Risk
-          </button>
-        )}
-      </div>
-      <Card style={{ padding: 0 }}>
-        {scopedRisks.length === 0 ? (
-          <div style={{ padding: 16, fontSize: 13, color: T.inkMuted }}>No logged risks for the current view.</div>
-        ) : scopedRisks.map((r, i) => {
-          const o = objById[r.objective];
-          return (
-            <div key={r.id} onClick={() => setDetailRisk(r)}
-              style={{ display: "grid", gridTemplateColumns: editable ? "90px minmax(0, 1fr) 100px 100px 32px" : "90px minmax(0, 1fr) 100px 100px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}`, cursor: "pointer" }}>
-              <StatusChip status={r.severity} />
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 13.5, color: T.ink, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.issue}</div>
-                <div style={{ fontSize: 12, color: T.inkMuted, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>O{o.number} · {o.title} · Action: {r.action}</div>
-              </div>
-              <div style={{ fontSize: 12.5, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.owner}</div>
-              <div style={{ fontSize: 12.5, color: T.inkMuted, fontFamily: MONO }}>{r.due}</div>
-              {editable && (
-                <button onClick={(e) => { e.stopPropagation(); setRiskModal({ mode: "edit", risk: r }); }} title="Edit risk"
-                  style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
-                  <Pencil size={13} />
-                </button>
-              )}
-            </div>
-          );
-        })}
-      </Card>
+      {showAttention && (
+        <>
+          <SectionLabel icon={AlertTriangle}>Needs Your Attention — {items.length} items</SectionLabel>
+          <Card style={{ padding: 8 }}>
+            <AttentionTable items={items} onSelect={(item) => setDetailAttention(item)} />
+          </Card>
+        </>
+      )}
+      {showLogged && (
+        <>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <SectionLabel icon={AlertTriangle}>Logged Risks & Blockers</SectionLabel>
+            {editable && (
+              <button onClick={() => setRiskModal({ mode: "add", risk: null })}
+                style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: "none", color: T.navy, borderRadius: 7, padding: "5px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", marginBottom: 14 }}>
+                <Plus size={12} /> Add Risk
+              </button>
+            )}
+          </div>
+          <Card style={{ padding: 0 }}>
+            {scopedRisks.length === 0 ? (
+              <div style={{ padding: 16, fontSize: 13, color: T.inkMuted }}>No logged risks for the current view.</div>
+            ) : scopedRisks.map((r, i) => {
+              const o = objById[r.objective];
+              return (
+                <div key={r.id} onClick={() => setDetailRisk(r)}
+                  style={{ display: "grid", gridTemplateColumns: editable ? "90px minmax(0, 1fr) 100px 100px 32px" : "90px minmax(0, 1fr) 100px 100px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}`, cursor: "pointer" }}>
+                  <StatusChip status={r.severity} />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 13.5, color: T.ink, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.issue}</div>
+                    <div style={{ fontSize: 12, color: T.inkMuted, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>O{o.number} · {o.title} · Action: {r.action}</div>
+                  </div>
+                  <div style={{ fontSize: 12.5, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.owner}</div>
+                  <div style={{ fontSize: 12.5, color: T.inkMuted, fontFamily: MONO }}>{r.due}</div>
+                  {editable && (
+                    <button onClick={(e) => { e.stopPropagation(); setRiskModal({ mode: "edit", risk: r }); }} title="Edit risk"
+                      style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+                      <Pencil size={13} />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </Card>
+        </>
+      )}
       {detailRisk && (
         <RiskDetailModal
           risk={detailRisk}
@@ -3900,6 +3917,15 @@ function RisksPage({ objectives, forecastOverrides, risks, editable, onAddRisk, 
           canEdit={editable}
           onClose={() => setDetailRisk(null)}
           onEdit={() => { setRiskModal({ mode: "edit", risk: detailRisk }); setDetailRisk(null); }}
+        />
+      )}
+      {detailAttention && (
+        <RiskDetailModal
+          risk={detailAttention}
+          objective={detailAttention.objective}
+          initiative={detailAttention.initiative}
+          canEdit={false}
+          onClose={() => setDetailAttention(null)}
         />
       )}
       {riskModal && (
@@ -4683,7 +4709,7 @@ export default function App() {
                   onUpdateInitiativeOwner={updateInitiativeOwner} />
               )}
               {page === "risks" && (
-                <RisksPage objectives={filteredObjectives} forecastOverrides={activeOverrides} risks={liveRisks} editable={perms.editRisks}
+                <RisksPage objectives={filteredObjectives} forecastOverrides={activeOverrides} risks={liveRisks} editable={perms.editRisks} role={role}
                   onAddRisk={addRisk} onUpdateRisk={updateRisk} onDeleteRisk={deleteRisk} />
               )}
               {page === "compliance" && <CompliancePage objectives={filteredObjectives} />}
