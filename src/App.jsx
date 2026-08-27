@@ -1649,12 +1649,6 @@ function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi,
           <option value="highest">Sort: Highest achievement</option>
           <option value="objective">Sort: Objective</option>
         </select>
-        {objectives.some(o => canEditObjective(o)) && (
-          <button onClick={() => setKpiModal({ objectiveId: null, mode: "add", metric: null, isMainKpi: false })}
-            style={{ marginLeft: "auto", flexShrink: 0, display: "flex", alignItems: "center", gap: 6, border: "none", background: T.navy, color: "#fff", borderRadius: 9, padding: "9px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
-            <Plus size={13} /> Add KPI
-          </button>
-        )}
       </div>
       <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: -6 }}>
         KPI values change only via approved quarterly checkpoints — this manages the metric definitions themselves.
