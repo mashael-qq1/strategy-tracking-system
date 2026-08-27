@@ -1661,7 +1661,7 @@ function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi,
         const checkpoint = latestApprovedCheckpoint(o);
         return (
           <Card key={o.id} style={{ padding: 0, borderLeft: `4px solid ${stream?.color || T.blue}` }}>
-            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 130px 130px 90px 28px 28px", gap: 12, alignItems: "center", padding: "14px 16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: editable ? "minmax(0, 1fr) 130px 130px 90px 28px 90px 28px" : "minmax(0, 1fr) 130px 130px 90px 28px", gap: 12, alignItems: "center", padding: "14px 16px" }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 700, color: T.navy, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.kpi.name}</div>
                 <div style={{ fontSize: 11.5, color: T.inkMuted, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -1685,7 +1685,14 @@ function KpisPage({ objectives, streams, role, currentOwner, perms, onUpdateKpi,
                   style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
                   <Pencil size={13} />
                 </button>
-              ) : <span />}
+              ) : null}
+              {editable && (
+                <button onClick={() => { setKpiModal({ objectiveId: o.id, mode: "add", metric: null, isMainKpi: false }); setExpanded(o.id); }}
+                  title="Add a KPI / Sub-Metric under this objective"
+                  style={{ display: "flex", alignItems: "center", gap: 5, border: `1px dashed ${T.borderStrong}`, background: T.bg, color: T.navy, borderRadius: 7, padding: "4px 8px", fontSize: 10.5, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
+                  <Plus size={11} /> Add KPI
+                </button>
+              )}
               <button onClick={() => setExpanded(isOpen ? null : o.id)} title="Sub-metrics"
                 style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted, padding: 2, display: "flex" }}>
                 {isOpen ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
