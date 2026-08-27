@@ -4116,7 +4116,7 @@ const PERMISSIONS = {
     editKpiDefinition: true, editRisks: true, forecast: true,
   },
   lead: {
-    tabs: ["overview", "objectives", "kpis", "risks", "compliance"],
+    tabs: ["overview", "objectives", "kpis", "compliance"],
     editTimeline: false, editInitiatives: false, submitCheckpoint: false, approveCheckpoint: true,
     // The BA Lead owns the metric set itself — she can add/edit/delete
     // KPIs and Sub-Metrics (their definitions), separate from approving
@@ -4525,3 +4525,4 @@ export default function App() {
     </div>
   );
 }
+
