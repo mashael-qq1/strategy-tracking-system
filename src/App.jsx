@@ -2296,7 +2296,7 @@ function InitiativeTable({ initiatives, onHistory, onEdit, showObjective, object
   );
 }
 
-function EditInitiativeModal({ initiative, onClose, onSave }) {
+function EditInitiativeModal({ initiative, onClose, onSave, canEditOwner }) {
   const [owner, setOwner] = useState(initiative.owner || "");
   const [progress, setProgress] = useState(initiative.progress);
   const [nextStep, setNextStep] = useState(initiative.nextMilestone);
@@ -2304,7 +2304,7 @@ function EditInitiativeModal({ initiative, onClose, onSave }) {
   const [saved, setSaved] = useState(false);
 
   const save = () => {
-    onSave(initiative.id, { owner: owner.trim(), progress: Number(progress), nextStep, comment });
+    onSave(initiative.id, { owner: canEditOwner ? owner.trim() : initiative.owner, progress: Number(progress), nextStep, comment });
     setSaved(true);
     setTimeout(() => { setSaved(false); onClose(); }, 900);
   };
@@ -2319,8 +2319,15 @@ function EditInitiativeModal({ initiative, onClose, onSave }) {
         <div style={{ fontSize: 13, color: T.inkMuted, marginBottom: 18 }}>{initiative.name}</div>
 
         <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Owner</label>
-        <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
-          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+        {canEditOwner ? (
+          <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
+            style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 16px", fontFamily: FONT }} />
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 10px", background: T.surface, borderRadius: 8, margin: "6px 0 16px" }}>
+            <span style={{ fontSize: 13, color: T.ink }}>{initiative.owner || "— Unassigned —"}</span>
+            <span style={{ fontSize: 10.5, color: T.inkFaint }}>set by the Objective Owner</span>
+          </div>
+        )}
 
         <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Progress ({progress}%)</label>
         <input type="range" min={0} max={100} value={progress} onChange={e => setProgress(e.target.value)} style={{ width: "100%", margin: "8px 0 16px", accentColor: T.plum }} />
@@ -2352,7 +2359,7 @@ function EditInitiativeModal({ initiative, onClose, onSave }) {
 /* ============================================================================
    ADD INITIATIVE MODAL — create a new initiative and assign it to an objective.
 ============================================================================ */
-function AddInitiativeModal({ objectives, defaultObjectiveId, onSave, onClose }) {
+function AddInitiativeModal({ objectives, defaultObjectiveId, canEditOwner, onSave, onClose }) {
   const [name, setName] = useState("");
   const [objectiveId, setObjectiveId] = useState(defaultObjectiveId || objectives[0]?.id || "");
   const [owner, setOwner] = useState("");
@@ -2362,7 +2369,7 @@ function AddInitiativeModal({ objectives, defaultObjectiveId, onSave, onClose })
 
   const handleSave = () => {
     if (!name.trim() || !objectiveId) return;
-    onSave(objectiveId, { name: name.trim(), owner: owner.trim(), start, due, priority });
+    onSave(objectiveId, { name: name.trim(), owner: canEditOwner ? owner.trim() : "", start, due, priority });
   };
 
   return (
@@ -2386,8 +2393,14 @@ function AddInitiativeModal({ objectives, defaultObjectiveId, onSave, onClose })
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
           <div>
             <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Owner</label>
-            <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
-              style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+            {canEditOwner ? (
+              <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
+                style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 0", fontFamily: FONT }} />
+            ) : (
+              <div style={{ padding: "8px 10px", background: T.surface, borderRadius: 8, margin: "6px 0 0", fontSize: 12, color: T.inkFaint }}>
+                Assigned later by the Objective Owner
+              </div>
+            )}
           </div>
           <div>
             <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Priority</label>
@@ -2424,7 +2437,7 @@ function AddInitiativeModal({ objectives, defaultObjectiveId, onSave, onClose })
   );
 }
 
-function InitiativesPage({ objectives, onEdit, editable, currentOwner, onAddInitiative }) {
+function InitiativesPage({ objectives, onEdit, editable, canEditOwner, currentOwner, onAddInitiative }) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState("due");
   const [showAdd, setShowAdd] = useState(false);
@@ -2465,6 +2478,7 @@ function InitiativesPage({ objectives, onEdit, editable, currentOwner, onAddInit
         <AddInitiativeModal
           objectives={objectives}
           defaultObjectiveId={objectives[0]?.id}
+          canEditOwner={canEditOwner}
           onClose={() => setShowAdd(false)}
           onSave={(objectiveId, payload) => { onAddInitiative(objectiveId, payload); setShowAdd(false); }}
         />
@@ -2675,6 +2689,44 @@ const MILESTONE_STATUSES = ["Upcoming", "Completed", "Overdue"];
    issue, the required action, and a due date.
 ============================================================================ */
 const RISK_SEVERITIES = ["Critical", "High", "Medium", "Low"];
+
+/* ============================================================================
+   RISK DETAIL VIEW — read-only, full-text view of a logged risk/blocker.
+   Anyone can open it by clicking the row; an Edit button only appears for
+   whoever actually has editRisks permission.
+============================================================================ */
+function RiskDetailModal({ risk, objective, initiative, canEdit, onEdit, onClose }) {
+  const row = (label, value) => (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ fontSize: 10.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 13.5, color: T.ink, lineHeight: 1.5 }}>{value}</div>
+    </div>
+  );
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 480, maxWidth: "100%", maxHeight: "85vh", overflow: "auto", padding: 24, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+          <StatusChip status={risk.severity} size="md" />
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={18} /></button>
+        </div>
+        <div style={{ fontSize: 17, fontWeight: 800, color: T.navy, margin: "12px 0 18px" }}>{risk.issue}</div>
+
+        {row("Objective", `O${objective.number} · ${objective.title}`)}
+        {initiative && row("Initiative", initiative.name)}
+        {row("Owner", risk.owner || "— Unassigned —")}
+        {row("Required Action", risk.action || "—")}
+        {row("Due Date", risk.due)}
+
+        {canEdit && (
+          <button onClick={onEdit}
+            style={{ width: "100%", marginTop: 6, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, border: `1px solid ${T.border}`, background: T.surface, color: T.navy, borderRadius: 9, padding: "10px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            <Pencil size={14} /> Edit
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function RiskFormModal({ mode, risk, objectives, onSave, onDelete, onClose }) {
   const [severity, setSeverity] = useState(risk?.severity || "Medium");
@@ -3160,7 +3212,7 @@ function ActivityBlock({ activity, editable, viewMode, onUpdatePhase, onToggleSu
   );
 }
 
-function InitiativeTimelineBlock({ initiative, editable, viewMode, onToggleSub, onDeleteSub, onRequestAdd, onRequestEdit, onRequestAddSub, onRequestEditSub, onQuickUpdate }) {
+function InitiativeTimelineBlock({ initiative, editable, canEditOwner, viewMode, onToggleSub, onDeleteSub, onRequestAdd, onRequestEdit, onRequestAddSub, onRequestEditSub, onQuickUpdate, onRequestEditOwner }) {
   const [open, setOpen] = useState(true);
   const activitiesAll = initiative.activities || [];
   const activities = viewMode === "List" ? [] : activitiesAll;
@@ -3170,7 +3222,13 @@ function InitiativeTimelineBlock({ initiative, editable, viewMode, onToggleSub, 
       <div onClick={() => setOpen(o => !o)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", cursor: "pointer", background: T.surface }}>
         {open ? <ChevronDown size={15} color={T.inkMuted} /> : <ChevronRight size={15} color={T.inkMuted} />}
         <span style={{ fontSize: 13.5, fontWeight: 700, color: T.navy, flex: 1 }}>{initiative.name}</span>
-        <span style={{ fontSize: 11.5, color: T.inkMuted }}>{initiative.owner}</span>
+        <span style={{ fontSize: 11.5, color: T.inkMuted }}>{initiative.owner || "— Unassigned —"}</span>
+        {canEditOwner && (
+          <button onClick={(e) => { e.stopPropagation(); onRequestEditOwner(); }} title="Edit initiative owner"
+            style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
+            <Pencil size={12} />
+          </button>
+        )}
         <StatusChip status={status} />
         <div style={{ width: 90 }}><ProgressBar value={initiative.progress} height={6} /></div>
         <span style={{ fontSize: 11, color: T.inkMuted, minWidth: 30, textAlign: "right" }}>{activitiesAll.length} act.</span>
@@ -3308,11 +3366,37 @@ function ActivityListView({ objectives, streams, editable, onRequestEdit }) {
 }
 
 
-function TimelinePage({ objectives, streams, editable, canSubmitCheckpoint, canApproveCheckpoint, role, currentOwner, onAddActivity, onUpdateActivity, onDeleteActivity, onAddSub, onUpdateSub, onToggleSub, onDeleteSub, onAddMilestone, onUpdateMilestone, onDeleteMilestone }) {
+/* Minimal modal for reassigning who owns an initiative — this is deliberately
+   separate from the full Update Initiative form since it's the Objective
+   Owner's own permission, not tied to the Leader's broader editing rights. */
+function EditOwnerModal({ initiative, onSave, onClose }) {
+  const [owner, setOwner] = useState(initiative.owner || "");
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(8,26,46,0.45)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, borderRadius: 14, width: 380, maxWidth: "100%", padding: 22, boxShadow: "0 20px 60px rgba(8,26,46,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+          <div style={{ fontSize: 15, fontWeight: 800, color: T.navy }}>Edit Initiative Owner</div>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: T.inkMuted }}><X size={16} /></button>
+        </div>
+        <div style={{ fontSize: 12.5, color: T.inkMuted, marginBottom: 16 }}>{initiative.name}</div>
+        <label style={{ fontSize: 11.5, fontWeight: 700, color: T.inkMuted, textTransform: "uppercase" }}>Owner</label>
+        <input value={owner} onChange={e => setOwner(e.target.value)} placeholder="e.g. Sara"
+          style={{ width: "100%", padding: "8px 10px", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 13, margin: "6px 0 18px", fontFamily: FONT }} />
+        <button onClick={() => onSave(owner.trim())}
+          style={{ width: "100%", padding: "10px", borderRadius: 9, border: "none", cursor: "pointer", background: T.navy, color: "#fff", fontSize: 13, fontWeight: 700 }}>
+          Save
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TimelinePage({ objectives, streams, editable, canEditInitiativeOwner, canSubmitCheckpoint, canApproveCheckpoint, role, currentOwner, onAddActivity, onUpdateActivity, onDeleteActivity, onAddSub, onUpdateSub, onToggleSub, onDeleteSub, onAddMilestone, onUpdateMilestone, onDeleteMilestone, onUpdateInitiativeOwner }) {
   const [view, setView] = useState("Month");
   const [activityView, setActivityView] = useState("Quarterly");
   const [modalCtx, setModalCtx] = useState(null); // { mode, kind, objectiveId, initiativeId, activity/activityId/sub, kpi, subMetrics }
   const [hoverIdx, setHoverIdx] = useState(null);
+  const [ownerModal, setOwnerModal] = useState(null); // { objectiveId, initiative }
 
   const isQuarterAxis = view === "Quarter";
   // Always span the full planning horizon (Jul 2026 – Jun 2027 / all 4
@@ -3488,7 +3572,7 @@ function TimelinePage({ objectives, streams, editable, canSubmitCheckpoint, canA
                   <span style={{ fontSize: 11.5, color: T.inkMuted }}>{o.owner}</span>
                 </div>
                 {o.initiatives.map(init => (
-                  <InitiativeTimelineBlock key={init.id} initiative={init} editable={editable} viewMode={activityView}
+                  <InitiativeTimelineBlock key={init.id} initiative={init} editable={editable} canEditOwner={canEditInitiativeOwner} viewMode={activityView}
                     onToggleSub={(activityId, subId) => onToggleSub(o.id, init.id, activityId, subId)}
                     onDeleteSub={(activityId, subId) => onDeleteSub(o.id, init.id, activityId, subId)}
                     onQuickUpdate={(activityId, patch) => onUpdateActivity(o.id, init.id, activityId, patch)}
@@ -3496,6 +3580,7 @@ function TimelinePage({ objectives, streams, editable, canSubmitCheckpoint, canA
                     onRequestEdit={(activity) => setModalCtx({ mode: "edit", kind: "activity", objectiveId: o.id, initiativeId: init.id, activity })}
                     onRequestAddSub={(activityId) => setModalCtx({ mode: "add", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub: null })}
                     onRequestEditSub={(activityId, sub) => setModalCtx({ mode: "edit", kind: "sub", objectiveId: o.id, initiativeId: init.id, activityId, sub })}
+                    onRequestEditOwner={() => setOwnerModal({ objectiveId: o.id, initiative: init })}
                   />
                 ))}
               </div>
@@ -3542,6 +3627,16 @@ function TimelinePage({ objectives, streams, editable, canSubmitCheckpoint, canA
             onDeleteSub(modalCtx.objectiveId, modalCtx.initiativeId, modalCtx.activityId, modalCtx.sub.id);
             setModalCtx(null);
           } : undefined}
+        />
+      )}
+      {ownerModal && (
+        <EditOwnerModal
+          initiative={ownerModal.initiative}
+          onClose={() => setOwnerModal(null)}
+          onSave={(ownerName) => {
+            onUpdateInitiativeOwner(ownerModal.objectiveId, ownerModal.initiative.id, ownerName);
+            setOwnerModal(null);
+          }}
         />
       )}
     </div>
@@ -3753,6 +3848,7 @@ function MilestonesCard({ objectives, editable, canSubmitCheckpoint, canApproveC
 ============================================================================ */
 function RisksPage({ objectives, forecastOverrides, risks, editable, onAddRisk, onUpdateRisk, onDeleteRisk }) {
   const [riskModal, setRiskModal] = useState(null); // { mode, risk }
+  const [detailRisk, setDetailRisk] = useState(null); // the risk currently being viewed in full
   const items = buildAttentionItems(objectives, forecastOverrides);
   const objById = Object.fromEntries(objectives.map(o => [o.id, o]));
   const scopedRisks = risks.filter(r => objById[r.objective]);
@@ -3777,7 +3873,8 @@ function RisksPage({ objectives, forecastOverrides, risks, editable, onAddRisk, 
         ) : scopedRisks.map((r, i) => {
           const o = objById[r.objective];
           return (
-            <div key={r.id} style={{ display: "grid", gridTemplateColumns: "90px minmax(0, 1fr) 100px 100px 32px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}` }}>
+            <div key={r.id} onClick={() => setDetailRisk(r)}
+              style={{ display: "grid", gridTemplateColumns: editable ? "90px minmax(0, 1fr) 100px 100px 32px" : "90px minmax(0, 1fr) 100px 100px", gap: 12, alignItems: "center", padding: "12px 16px", borderTop: i === 0 ? "none" : `1px solid ${T.border}`, cursor: "pointer" }}>
               <StatusChip status={r.severity} />
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, color: T.ink, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.issue}</div>
@@ -3786,7 +3883,7 @@ function RisksPage({ objectives, forecastOverrides, risks, editable, onAddRisk, 
               <div style={{ fontSize: 12.5, color: T.inkMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.owner}</div>
               <div style={{ fontSize: 12.5, color: T.inkMuted, fontFamily: MONO }}>{r.due}</div>
               {editable && (
-                <button onClick={() => setRiskModal({ mode: "edit", risk: r })} title="Edit risk"
+                <button onClick={(e) => { e.stopPropagation(); setRiskModal({ mode: "edit", risk: r }); }} title="Edit risk"
                   style={{ border: "none", background: "none", cursor: "pointer", color: T.inkFaint, padding: 2, display: "flex" }}>
                   <Pencil size={13} />
                 </button>
@@ -3795,6 +3892,16 @@ function RisksPage({ objectives, forecastOverrides, risks, editable, onAddRisk, 
           );
         })}
       </Card>
+      {detailRisk && (
+        <RiskDetailModal
+          risk={detailRisk}
+          objective={objById[detailRisk.objective]}
+          initiative={(objById[detailRisk.objective]?.initiatives || []).find(i => i.id === detailRisk.initiative)}
+          canEdit={editable}
+          onClose={() => setDetailRisk(null)}
+          onEdit={() => { setRiskModal({ mode: "edit", risk: detailRisk }); setDetailRisk(null); }}
+        />
+      )}
       {riskModal && (
         <RiskFormModal
           mode={riskModal.mode} risk={riskModal.risk} objectives={objectives}
@@ -4181,12 +4288,12 @@ function getRoleFromUrl() {
 const PERMISSIONS = {
   admin: {
     tabs: ["overview", "streams", "objectives", "kpis", "initiatives", "timeline", "risks", "compliance", "settings"],
-    editTimeline: true, editInitiatives: true, submitCheckpoint: true, approveCheckpoint: true,
+    editTimeline: true, editInitiatives: true, editInitiativeOwner: true, submitCheckpoint: true, approveCheckpoint: true,
     editKpiDefinition: true, editRisks: true, forecast: true,
   },
   lead: {
     tabs: ["overview", "objectives", "kpis", "compliance"],
-    editTimeline: false, editInitiatives: false, submitCheckpoint: false, approveCheckpoint: true,
+    editTimeline: false, editInitiatives: false, editInitiativeOwner: false, submitCheckpoint: false, approveCheckpoint: true,
     // The BA Lead owns the metric set itself — she can add/edit/delete
     // KPIs and Sub-Metrics (their definitions), separate from approving
     // the quarterly measured values, which stays a checkpoint action.
@@ -4195,13 +4302,15 @@ const PERMISSIONS = {
   leader: {
     tabs: ["objectives", "initiatives", "timeline", "risks"],
     // Timeline itself (activities/sub-activities) is view-only for leaders,
-    // but they can add/edit the initiatives that sit under their objectives.
-    editTimeline: false, editInitiatives: true, submitCheckpoint: true, approveCheckpoint: false,
-    editKpiDefinition: false, editRisks: true, forecast: false,
+    // and so is who owns a given initiative — that assignment belongs to
+    // the Objective Owner (member), not the Leader. Logging Risks &
+    // Blockers is likewise the Objective Owner's call — Leaders view only.
+    editTimeline: false, editInitiatives: true, editInitiativeOwner: false, submitCheckpoint: true, approveCheckpoint: false,
+    editKpiDefinition: false, editRisks: false, forecast: false,
   },
   member: {
     tabs: ["objectives", "timeline", "risks"],
-    editTimeline: true, editInitiatives: false, submitCheckpoint: false, approveCheckpoint: false,
+    editTimeline: true, editInitiatives: false, editInitiativeOwner: true, submitCheckpoint: false, approveCheckpoint: false,
     editKpiDefinition: false, editRisks: true, forecast: false,
   },
 };
@@ -4267,6 +4376,14 @@ export default function App() {
       }),
     })));
     setToast("Update saved");
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const updateInitiativeOwner = useCallback((objectiveId, initId, ownerName) => {
+    setLiveObjectives(prev => prev.map(o => o.id !== objectiveId ? o : {
+      ...o, initiatives: o.initiatives.map(i => i.id === initId ? { ...i, owner: ownerName } : i),
+    }));
+    setToast("Owner updated");
     setTimeout(() => setToast(null), 2000);
   }, []);
 
@@ -4553,15 +4670,17 @@ export default function App() {
               {page === "kpis" && <KpisPage {...pageProps} />}
               {page === "initiatives" && (
                 <InitiativesPage objectives={filteredObjectives} onEdit={perms.editInitiatives ? setEditingInitiative : undefined}
-                  editable={perms.editInitiatives} currentOwner={person} onAddInitiative={addInitiative} />
+                  editable={perms.editInitiatives} canEditOwner={perms.editInitiativeOwner} currentOwner={person} onAddInitiative={addInitiative} />
               )}
               {page === "timeline" && (
                 <TimelinePage objectives={filteredObjectives} streams={RAW.streams}
-                  editable={perms.editTimeline} canSubmitCheckpoint={perms.submitCheckpoint} canApproveCheckpoint={perms.approveCheckpoint}
+                  editable={perms.editTimeline} canEditInitiativeOwner={perms.editInitiativeOwner}
+                  canSubmitCheckpoint={perms.submitCheckpoint} canApproveCheckpoint={perms.approveCheckpoint}
                   role={role} currentOwner={person}
                   onAddActivity={addActivity} onUpdateActivity={updateActivity} onDeleteActivity={deleteActivity}
                   onAddSub={addSubActivity} onUpdateSub={updateSubActivity} onToggleSub={toggleSubActivity} onDeleteSub={deleteSubActivity}
-                  onAddMilestone={addMilestone} onUpdateMilestone={updateMilestone} onDeleteMilestone={deleteMilestone} />
+                  onAddMilestone={addMilestone} onUpdateMilestone={updateMilestone} onDeleteMilestone={deleteMilestone}
+                  onUpdateInitiativeOwner={updateInitiativeOwner} />
               )}
               {page === "risks" && (
                 <RisksPage objectives={filteredObjectives} forecastOverrides={activeOverrides} risks={liveRisks} editable={perms.editRisks}
@@ -4579,6 +4698,7 @@ export default function App() {
 
       {editingInitiative && (
         <EditInitiativeModal initiative={editingInitiative} onClose={() => setEditingInitiative(null)}
+          canEditOwner={perms.editInitiativeOwner}
           onSave={(id, patch) => saveInitiativeUpdate(id, patch)} />
       )}
 
